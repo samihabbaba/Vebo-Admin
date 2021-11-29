@@ -1,0 +1,204 @@
+<div class="header">
+  <div class="logo">
+    <a href="">
+      <img src="assets/images/logo/logo-fold.png" alt="Logo" />
+
+      <img
+        class="logo-fold"
+        src="assets/images/logo/logo-fold.png"
+        alt="Logo"
+      />
+    </a>
+  </div>
+  <div class="nav-wrap">
+    <ul class="nav-left">
+      <!-- <li class="desktop-toggle">
+                <a (click)="toggleFold()">
+                    <i nz-icon [nzType]="isFolded? 'menu-unfold':'menu-fold'" theme="outline"></i>
+                </a>
+            </li>
+            <li class="mobile-toggle">
+                <a (click)="toggleExpand()">
+                    <i nz-icon [nzType]="isExpand? 'menu-fold': 'menu-unfold'" theme="outline"></i>
+                </a>
+            </li>
+            <li>
+                <a (click)="searchToggle()">
+                    <i nz-icon nzType="search" theme="outline"></i>
+                </a>
+                <nz-drawer [nzWidth]="380" nzTitle="Search" [nzVisible]="searchVisible" nzPlacement="left" (nzOnClose)="searchToggle()">
+                    <app-search></app-search>
+                </nz-drawer>
+            </li> -->
+
+      <div class="desktop-toggle">
+        <ul nz-menu nzMode="horizontal" style="border: none">
+          <ng-container *ngFor="let item of navItems">
+            <li
+              *ngIf="item.submenu.length === 0"
+              nz-menu-item
+              routerLinkActive="ant-menu-item-selected"
+              [routerLink]="item.path"
+            >
+              <i nz-icon [nzType]="item.icon"></i>
+              {{ item.title }}
+            </li>
+
+            <li
+              *ngIf="item.submenu.length !== 0"
+              nz-submenu
+              [nzTitle]="item.title"
+              [nzIcon]="item.icon"
+            >
+              <ul>
+                <ul>
+                  <li
+                    nz-menu-item
+                    *ngFor="let subItem of item.submenu"
+                    [routerLink]="subItem.path"
+                  >
+                    {{ subItem.title }}
+                  </li>
+                </ul>
+              </ul>
+            </li>
+          </ng-container>
+
+          <!-- <li nz-menu-item nzSelected>
+            <i nz-icon nzType="dashboard"></i>
+            Dashboard
+          </li>
+          <li nz-submenu nzTitle="Users" nzIcon="setting">
+            <ul>
+              <ul>
+                <li nz-menu-item>Option 1</li>
+                <li nz-menu-item>Option 2</li>
+              </ul>
+            </ul>
+          </li> -->
+        </ul>
+      </div>
+
+      <li class="mobile-toggle">
+        <a (click)="toggleExpand()">
+          <i
+            nz-icon
+            [nzType]="isExpand ? 'menu-fold' : 'menu-unfold'"
+            theme="outline"
+          ></i>
+        </a>
+      </li>
+    </ul>
+    <ul class="nav-right">
+      <li>
+        <a
+          nz-dropdown
+          nzTrigger="click"
+          [nzDropdownMenu]="popNotification"
+          [nzPlacement]="'bottomRight'"
+        >
+          <nz-badge>
+            <i nz-icon nzType="global" theme="outline"></i>
+          </nz-badge>
+        </a>
+        <nz-dropdown-menu #popNotification="nzDropdownMenu">
+          <div nz-menu class="pop-notification">Language</div>
+        </nz-dropdown-menu>
+      </li>
+      <li>
+        <span
+          class="p-h-10 pointer"
+          nz-dropdown
+          [nzDropdownMenu]="profile"
+          [nzTrigger]="'click'"
+          [nzPlacement]="'bottomRight'"
+        >
+          <nz-avatar [nzIcon]="'user'"></nz-avatar>
+        </span>
+        <nz-dropdown-menu #profile="nzDropdownMenu">
+          <ul nz-menu class="p-b-15 p-t-20">
+            <h5 class="m-b-0 m-l-10">Main Color</h5>
+            <div class="m-t-10 theme-color-container">
+              <nz-radio-group
+                class="color-selector"
+                [(ngModel)]="selectedHeaderColor"
+                (ngModelChange)="changeHeaderColor()"
+              >
+                <label class="bg-primary" nz-radio nzValue="default"></label>
+                <label class="bg-success" nz-radio nzValue="success"></label>
+                <label
+                  class="bg-secondary"
+                  nz-radio
+                  nzValue="secondary"
+                ></label>
+                <label class="bg-danger" nz-radio nzValue="danger"></label>
+              </nz-radio-group>
+            </div>
+            <nz-divider style="margin: 12px 0"></nz-divider>
+            <!-- <li class="p-h-20 p-b-15 m-b-10 border-bottom">
+                            <div class="d-flex m-r-50">
+                                <nz-avatar nzSize="large" nzSrc="assets/images/avatars/thumb-3.jpg"></nz-avatar>
+                                <div class="m-l-10">
+                                    <p class="m-b-0 text-dark font-weight-semibold">Marshall Nichols</p>
+                                    <p class="m-b-0 opacity-07">UI/UX Desinger</p>
+                                </div>
+                            </div>
+                        </li> -->
+            <li nz-menu-item>
+              <a
+                class="p-v-5 d-flex align-items-center justify-content-between"
+              >
+                <div>
+                  <i
+                    class="opacity-04 font-size-16"
+                    nz-icon
+                    nzType="lock"
+                    theme="outline"
+                  ></i>
+                  <span class="m-l-10">Account Setting</span>
+                </div>
+                <i
+                  class="font-size-10"
+                  nz-icon
+                  nzType="right"
+                  theme="outline"
+                ></i>
+              </a>
+            </li>
+            <li nz-menu-item>
+              <a
+                class="p-v-5 d-flex align-items-center justify-content-between"
+              >
+                <div>
+                  <i
+                    class="opacity-04 font-size-16"
+                    nz-icon
+                    nzType="logout"
+                    theme="outline"
+                  ></i>
+                  <span class="m-l-10">Logout</span>
+                </div>
+                <i
+                  class="font-size-10"
+                  nz-icon
+                  nzType="right"
+                  theme="outline"
+                ></i>
+              </a>
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+      </li>
+      <!-- <li>
+                <a (click)="quickViewToggle()">
+                    <i nz-icon nzType="appstore" theme="outline"></i>
+                </a>
+                <nz-drawer [nzWidth]="280" nzTitle="Theme Config" [nzClosable]="false" [nzVisible]="quickViewVisible" nzPlacement="right" (nzOnClose)="quickViewToggle()">
+                    <ng-container *nzDrawerContent>
+                        <app-quick-view></app-quick-view>
+                    </ng-container>
+                </nz-drawer>
+            </li> -->
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,116 @@
+<nz-card>
+  <div class="row m-b-30">
+    <div class="col-lg-8">
+      <div class="d-md-flex">
+        <div class="m-b-10 m-r-20">
+          <nz-input-group [nzPrefix]="prefixTemplate">
+            <input
+              type="text"
+              nz-input
+              placeholder="Search"
+              [(ngModel)]="searchInput"
+              (ngModelChange)="search()"
+            />
+          </nz-input-group>
+          <ng-template #prefixTemplate>
+            <i nz-icon nzType="search" class="opacity-05"></i>
+          </ng-template>
+        </div>
+        <div class="m-b-10 m-r-20 d-flex align-items-center">
+          <nz-select
+            style="min-width: 220px"
+            class="w-100"
+            nzPlaceHolder="Status"
+            [(ngModel)]="selectedStatus"
+            (ngModelChange)="statusChange($event)"
+          >
+            <nz-option nzLabel="All" nzValue=""></nz-option>
+            <nz-option
+              [nzLabel]="item.label"
+              [nzValue]="item.value"
+              *ngFor="let item of dropdownOptions"
+            ></nz-option>
+          </nz-select>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 text-right">
+      <a nz-button nzType="primary" (click)="showModal()">
+        <i nz-icon nzType="plus-circle" theme="outline"></i>
+        <span>Add Product</span>
+      </a>
+    </div>
+  </div>
+  <nz-table #table [nzData]="productsList">
+    <thead>
+      <tr>
+        <th *ngFor="let column of orderColumn" [nzSortFn]="column.compare">
+          {{ column.title }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let item of table.data; let i = index">
+        <tr (click)="onExpandChange(item.id, $event)" style="cursor: pointer">
+          <td>#{{ item.id }}</td>
+          <td>
+            <div class="d-flex align-items-center">
+              <nz-avatar
+                nzShape="square"
+                [nzSize]="60"
+                nzIcon="picture"
+                [nzSrc]="item.avatar"
+              ></nz-avatar>
+              <span class="m-l-10">{{ item.name }}</span>
+            </div>
+          </td>
+          <td>{{ item.category }}</td>
+          <td>${{ item.price | number: "3.2-5" }}</td>
+          <td>
+            {{ item.quantity }}
+          </td>
+          <td>
+            <nz-badge
+              *ngIf="item.status == 'in stock'"
+              nzStatus="success"
+            ></nz-badge>
+            <nz-badge
+              *ngIf="item.status == 'out of stock'"
+              nzStatus="error"
+            ></nz-badge>
+            <span class="text-capitalize">{{ item.status }}</span>
+          </td>
+          <td class="text-md-right">
+            <button
+              nz-button
+              nzType="default"
+              nzShape="circle"
+              nz-tooltip
+              nzTooltipTitle="Options"
+              (click)="$event.stopPropagation()"
+            >
+              <i nz-icon nzType="more" theme="outline"></i>
+            </button>
+          </td>
+        </tr>
+
+        <tr [nzExpand]="expandSet.has(item.id)">
+          <span>FFFF</span>
+        </tr>
+      </ng-container>
+    </tbody>
+  </nz-table>
+</nz-card>
+
+
+<!-- Modal Starts Here -->
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="Create New Master"
+  (nzOnCancel)="modalCancel()"
+  (nzOnOk)="submit()"
+  [nzOkLoading]="isOkLoading"
+>
+  <p>Modal Content</p>
+</nz-modal>

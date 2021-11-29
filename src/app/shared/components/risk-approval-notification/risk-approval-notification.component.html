@@ -1,0 +1,25 @@
+<ng-template #template let-notification>
+  <div class="ant-notification-notice-content">
+    <div >
+      <!-- <span class="ant-notification-notice-icon"
+        ><i nz-icon nzType="warning" style="color: #ffc107"></i
+      ></span> -->
+      <div class="ant-notification-notice-message">Risk Approval</div>
+      <div class="ant-notification-notice-description">
+        New Bet is Awaiting Approval
+      </div>
+      <span class="ant-notification-notice-btn">
+        <button
+          nz-button
+          nzType="primary"
+          nzSize="small"
+          (click)="
+            router.navigate(['/bets/risk-approval']); notification.close()
+          "
+        >
+          <span>Confirm</span>
+        </button>
+      </span>
+    </div>
+  </div>
+</ng-template>
