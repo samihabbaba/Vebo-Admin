@@ -1,12 +1,9 @@
-import { Injectable, Inject, Injector, Component } from '@angular/core';
+import { Injectable, Inject, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 // import * as signalR from "@aspnet/signalr";
 import * as signalR from '@microsoft/signalr';
-import { TranslateService } from '@ngx-translate/core';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { RiskApprovalNotificationComponent } from '../components/risk-approval-notification/risk-approval-notification.component';
 
 @Injectable({
   providedIn: 'root',
@@ -15,13 +12,12 @@ export class SignalRService {
   private hubConnection: signalR.HubConnection;
   public behaviorSubject = new BehaviorSubject(null);
   public riskApproveIsOpen = false;
+  pushNotification =  new BehaviorSubject(false);
 
 
   constructor(
     @Inject(Injector) private injector: Injector,
     private router: Router,
-    private translate: TranslateService,
-    private notification: NzNotificationService
   ) {}
   audio = new Audio('../../../assets/voice/got-it-done.mp3');
 
@@ -59,7 +55,8 @@ export class SignalRService {
   showNew(bet) {
     // this.toastr.clear();
 
-    const msg = this.translate.instant('New Bet is Awaiting Approval');
+    // const msg = this.translate.instant('New Bet is Awaiting Approval');
+    this.pushNotification.next(true)
 
     // const toast = this.toastr.warning(msg);
 
@@ -78,7 +75,6 @@ export class SignalRService {
     // toast.onTap.subscribe(() => {
     //   this.router.navigate(["bets/riskApprove"]);
     // });
-    this.notification.template(RiskApprovalNotificationComponent.prototype.template);
     this.behaviorSubject.next({ status: 'new', bet: JSON.parse(bet) });
   }
 }

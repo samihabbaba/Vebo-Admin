@@ -1,22 +1,29 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { RiskApprovalNotificationComponent } from './shared/components/risk-approval-notification/risk-approval-notification.component';
+import { AuthenticationService } from './shared/services/authentication.service';
+import { SignalRService } from './shared/services/signal-r.service';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html'
+  selector: 'app-root',
+  templateUrl: './app.component.html',
 })
 export class AppComponent {
-  @ViewChild('template') template: TemplateRef<any>
+  constructor(
+    private notification: NzNotificationService,
+    private signalService: SignalRService,
+    private authService: AuthenticationService
+  ) {}
 
-
-@ViewChild('notification') comp: RiskApprovalNotificationComponent
-constructor( private notification: NzNotificationService) {
-
-}
-
-
-ngOnInit() {
-this.notification.template(this.template)
-}
+  ngOnInit() {
+    this.authService.setCurrentUser();
+    this.signalService.pushNotification.subscribe((value) => {
+      if (value) {
+        this.notification.create(
+          'info',
+          'Risk Approval',
+          'New Bet is Awaiting Approval'
+        );
+      }
+    });
+  }
 }

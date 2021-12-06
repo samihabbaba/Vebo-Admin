@@ -1,5 +1,6 @@
 import { Component, HostListener, ViewEncapsulation } from '@angular/core';
 import { SideNavInterface } from '../../interfaces/side-nav.type';
+import { AuthenticationService } from '../../services/authentication.service';
 import { ThemeConstantService } from '../../services/theme-constant.service';
 import { NAVITEMS } from '../side-nav/side-nav-routes.config';
 
@@ -15,7 +16,7 @@ export class HeaderComponent {
   isFolded: boolean;
   isExpand: boolean;
 
-  moreObj:any = {
+  moreObj: any = {
     path: '',
     title: 'More',
     iconTheme: 'outline',
@@ -27,7 +28,6 @@ export class HeaderComponent {
   scrHeight;
   scrWidth;
 
-
   selectedHeaderColor: string;
 
   @HostListener('window:resize', ['$event'])
@@ -36,7 +36,10 @@ export class HeaderComponent {
     this.scrWidth = window.innerWidth;
   }
 
-  constructor(private themeService: ThemeConstantService) {
+  constructor(
+    private themeService: ThemeConstantService,
+    private authService: AuthenticationService
+  ) {
     if (
       localStorage.getItem('theme') &&
       localStorage.getItem('theme') !== 'default'
@@ -109,5 +112,9 @@ export class HeaderComponent {
   changeHeaderColor() {
     localStorage.setItem('theme', this.selectedHeaderColor);
     this.themeService.changeHeaderColor(this.selectedHeaderColor);
+  }
+
+  logOut() {
+    this.authService.logout();
   }
 }

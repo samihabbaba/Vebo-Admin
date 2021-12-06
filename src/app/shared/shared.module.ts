@@ -60,7 +60,8 @@ const antdModule = [
   NzDatePickerModule,
   NzCheckboxModule,
   NzMessageModule,
-  NzToolTipModule
+  NzToolTipModule,
+
 ]
 
 @NgModule({
