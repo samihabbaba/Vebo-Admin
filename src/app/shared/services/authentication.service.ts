@@ -8,6 +8,7 @@ import { SignalRService } from './signal-r.service';
 import { DataService } from './data.service';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 const USER_AUTH_API_URL = '/api-url';
 
@@ -83,7 +84,11 @@ export class AuthenticationService {
         }
       }),
       catchError((err) => {
-        debugger;
+        this.notification.create(
+          'error',
+          'Error',
+          'Check your credential and try again'
+        );
         return null;
         // console.error('err', err);
         // return of(undefined);
@@ -200,7 +205,8 @@ export class AuthenticationService {
     private router: Router,
     private http: HttpClient,
     private dataService: DataService,
-    private signalR: SignalRService
+    private signalR: SignalRService,
+    private notification: NzNotificationService
   ) {
     this.isLoadingSubject = new BehaviorSubject<boolean>(false);
     this.currentUserSubject = new BehaviorSubject<any>(undefined);

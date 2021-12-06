@@ -2,18 +2,21 @@
   <div class="row m-b-30">
     <div class="col-lg-8">
       <div class="d-md-flex">
-        <div class="m-b-10 m-r-20">
-          <nz-input-group [nzPrefix]="prefixTemplate">
+        <div class="m-b-10 m-r-20" style="flex: 1">
+          <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
             <input
               type="text"
               nz-input
               placeholder="Search"
               [(ngModel)]="searchInput"
-              (ngModelChange)="search()"
+              (keydown)="search($event)"
             />
           </nz-input-group>
-          <ng-template #prefixTemplate>
-            <i nz-icon nzType="search" class="opacity-05"></i>
+          <ng-template #suffixIconButton>
+            <button nz-button nzType="primary" nzSearch (click)="search()">
+              <i nz-icon nzType="search" *ngIf="!isSearchLoading"></i>
+              <i nz-icon nzType="loading" *ngIf="isSearchLoading"></i>
+            </button>
           </ng-template>
         </div>
         <div class="m-b-10 m-r-20 d-flex align-items-center">
@@ -35,13 +38,13 @@
       </div>
     </div>
     <div class="col-lg-4 text-right">
-      <a nz-button nzType="primary" (click)="showModal()">
+      <a nz-button nzType="primary" (click)="showAddModal()">
         <i nz-icon nzType="plus-circle" theme="outline"></i>
         <span>Add Product</span>
       </a>
     </div>
   </div>
-  <nz-table #table [nzData]="productsList">
+  <nz-table #table [nzData]="dataSource">
     <thead>
       <tr>
         <th *ngFor="let column of orderColumn" [nzSortFn]="column.compare">
@@ -52,41 +55,61 @@
     <tbody>
       <ng-container *ngFor="let item of table.data; let i = index">
         <tr (click)="onExpandChange(item.id, $event)" style="cursor: pointer">
-          <td>#{{ item.id }}</td>
+          <td>{{ item.username }}</td>
           <td>
-            <div class="d-flex align-items-center">
-              <nz-avatar
-                nzShape="square"
-                [nzSize]="60"
-                nzIcon="picture"
-                [nzSrc]="item.avatar"
-              ></nz-avatar>
-              <span class="m-l-10">{{ item.name }}</span>
-            </div>
+            {{ item.name }}
           </td>
-          <td>{{ item.category }}</td>
-          <td>${{ item.price | number: "3.2-5" }}</td>
-          <td>
-            {{ item.quantity }}
+          <td>{{ item.email }}</td>
+          <td>{{ item.mobile }}</td>
+          <td style="text-align: center !important">
+            <i
+              *ngIf="item.isActive"
+              nz-icon
+              [nzType]="'check-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#04d992'"
+              style="font-size: 18px"
+            ></i>
+
+            <i
+              *ngIf="!item.isActive"
+              nz-icon
+              [nzType]="'close-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#de4436'"
+              style="font-size: 18px"
+            ></i>
           </td>
-          <td>
-            <nz-badge
-              *ngIf="item.status == 'in stock'"
-              nzStatus="success"
-            ></nz-badge>
-            <nz-badge
-              *ngIf="item.status == 'out of stock'"
-              nzStatus="error"
-            ></nz-badge>
-            <span class="text-capitalize">{{ item.status }}</span>
+
+          <td style="text-align: center !important">
+            <i
+              *ngIf="item.isSuspended"
+              nz-icon
+              [nzType]="'check-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#04d992'"
+              style="font-size: 18px"
+            ></i>
+
+            <i
+              *ngIf="!item.isSuspended"
+              nz-icon
+              [nzType]="'close-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#de4436'"
+              style="font-size: 18px"
+            ></i>
           </td>
           <td class="text-md-right">
             <button
               nz-button
+              nz-dropdown
               nzType="default"
               nzShape="circle"
               nz-tooltip
               nzTooltipTitle="Options"
+              nzTrigger="click"
+              [nzDropdownMenu]="menu"
               (click)="$event.stopPropagation()"
             >
               <i nz-icon nzType="more" theme="outline"></i>
@@ -97,20 +120,348 @@
         <tr [nzExpand]="expandSet.has(item.id)">
           <span>FFFF</span>
         </tr>
+
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu>
+            <li nz-menu-item (click)="showDetailModal(item)">
+              <i
+                nz-icon
+                nzType="edit"
+                nzTheme="outline"
+                style="padding-right: 8px"
+              ></i
+              >Details
+            </li>
+            <li nz-menu-item (click)="showPasswordModal(item)">
+              <i
+                nz-icon
+                nzType="lock"
+                nzTheme="outline"
+                style="padding-right: 8px"
+              ></i>
+              Change Password
+            </li>
+            <li
+              nz-menu-item
+              *ngIf="!item.isSuspended"
+              (click)="suspendConfirm(item)"
+            >
+              <i
+                nz-icon
+                nzType="stop"
+                nzTheme="outline"
+                style="padding-right: 8px"
+              ></i>
+              Suspend
+            </li>
+            <li
+              nz-menu-item
+              *ngIf="item.isSuspended"
+              (click)="unsuspendConfirm(item)"
+            >
+              <i
+                nz-icon
+                nzType="undo"
+                nzTheme="outline"
+                style="padding-right: 8px"
+              ></i>
+              Unsuspend
+            </li>
+
+            <li nz-menu-divider></li>
+            <li nz-menu-item nzDanger (click)="showDeleteConfirm(item)">
+              <i
+                nz-icon
+                nzType="delete"
+                nzTheme="outline"
+                style="padding-right: 8px"
+              ></i>
+              Delete
+            </li>
+          </ul>
+        </nz-dropdown-menu>
       </ng-container>
     </tbody>
   </nz-table>
 </nz-card>
 
-
 <!-- Modal Starts Here -->
 
+<!-- Add Modal -->
 <nz-modal
-  [(nzVisible)]="isVisible"
+  [nzStyle]="{ width: '60vw' }"
+  [(nzVisible)]="isAddVisible"
   nzTitle="Create New Master"
-  (nzOnCancel)="modalCancel()"
-  (nzOnOk)="submit()"
+  (nzOnCancel)="isAddVisible = false"
+  (nzOnOk)="submitAddForm()"
+  [nzOkText]="'Add'"
   [nzOkLoading]="isOkLoading"
+  [nzOkDisabled]="addForm?.invalid"
 >
-  <p>Modal Content</p>
+  <ng-container *nzModalContent>
+    <form [formGroup]="addForm" class="d-grid" autocomplete="off">
+      <div>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group [nzPrefix]="prefixTemplateUser">
+            <input
+              formControlName="name"
+              type="text"
+              nz-input
+              placeholder="Name"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+      </div>
+
+      <div>
+        <nz-form-control [nzErrorTip]="usernameAvi">
+          <nz-input-group [nzPrefix]="prefixTemplateUser">
+            <input
+              formControlName="username"
+              type="text"
+              nz-input
+              placeholder="Username"
+              (input)="usernameAvailable()"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+      </div>
+
+      <div>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group [nzPrefix]="prefixTemplateUser">
+            <input
+              formControlName="email"
+              type="text"
+              nz-input
+              placeholder="Email"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+      </div>
+
+      <div>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group
+            [nzSuffix]="suffixTemplateInfo"
+            [nzPrefix]="prefixTemplateUser"
+          >
+            <input
+              formControlName="password"
+              type="password"
+              nz-input
+              placeholder="Password"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+        <ng-template #suffixTemplateInfo>
+          <i
+            nz-icon
+            nz-tooltip
+            nzTooltipTitle="Password must contain more than 8 characters, 1 numeric, 1 upper case letter, and 1 special character."
+            nzType="info-circle"
+          ></i>
+        </ng-template>
+      </div>
+
+      <div>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group [nzPrefix]="prefixTemplateUser">
+            <input
+              formControlName="mobile"
+              type="number"
+              nz-input
+              placeholder="Mobile"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+      </div>
+
+      <div style="display: flex">
+        <label nz-checkbox formControlName="isActive">Active</label>
+
+        <label nz-checkbox formControlName="isMaster">Master</label>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<!-- Details Modal -->
+<nz-modal
+  [nzStyle]="{ width: '60vw' }"
+  [(nzVisible)]="isDetailVisible"
+  nzTitle="Master Details"
+  (nzOnCancel)="isDetailVisible = false"
+  (nzOnOk)="submitDetailForm()"
+  [nzOkText]="'Save'"
+  [nzOkLoading]="isOkLoading"
+  [nzOkDisabled]="detailForm?.invalid"
+>
+  <ng-container *nzModalContent>
+    <form [formGroup]="detailForm" class="d-grid" autocomplete="off">
+      <div>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group [nzPrefix]="prefixTemplateUser">
+            <input
+              formControlName="name"
+              type="text"
+              nz-input
+              placeholder="Name"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+      </div>
+
+      <div>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group [nzPrefix]="prefixTemplateUser">
+            <input
+              formControlName="email"
+              type="text"
+              nz-input
+              placeholder="Email"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+      </div>
+
+      <div>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group [nzPrefix]="prefixTemplateUser">
+            <input
+              formControlName="mobile"
+              type="number"
+              nz-input
+              placeholder="Mobile"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+      </div>
+
+      <div style="display: flex">
+        <label nz-checkbox formControlName="isActive">Active</label>
+
+        <label nz-checkbox formControlName="isMaster">Master</label>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<!-- Change Password Modal -->
+<nz-modal
+  [nzStyle]="{ width: '60vw' }"
+  [(nzVisible)]="isPasswordVisible"
+  nzTitle="Change Password"
+  (nzOnCancel)="isPasswordVisible = false"
+  (nzOnOk)="submitPasswordForm()"
+  [nzOkText]="'Change'"
+  [nzOkLoading]="isOkLoading"
+  [nzOkDisabled]="
+    passwordForm?.invalid ||
+    passwordForm?.get('password').value !==
+      passwordForm?.get('passwordConfirm').value
+  "
+>
+  <ng-container *nzModalContent>
+    <form [formGroup]="passwordForm" class="d-grid" autocomplete="off">
+      <div>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group
+            [nzSuffix]="suffixTemplateInfo"
+            [nzPrefix]="prefixTemplateUser"
+          >
+            <input
+              formControlName="password"
+              type="password"
+              nz-input
+              placeholder="Password"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+        <ng-template #suffixTemplateInfo>
+          <i
+            nz-icon
+            nz-tooltip
+            nzTooltipTitle="Password must contain more than 8 characters, 1 numeric, 1 upper case letter, and 1 special character."
+            nzType="info-circle"
+          ></i>
+        </ng-template>
+      </div>
+
+      <div>
+        <nz-form-control [nzErrorTip]="'Invalid Input'">
+          <nz-input-group
+            [nzSuffix]="suffixTemplateInfo"
+            [nzPrefix]="prefixTemplateUser"
+          >
+            <input
+              formControlName="passwordConfirm"
+              type="password"
+              nz-input
+              placeholder="Password Confirm"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+        <ng-template #suffixTemplateInfo>
+          <i
+            nz-icon
+            nz-tooltip
+            nzTooltipTitle="Password must contain more than 8 characters, 1 numeric, 1 upper case letter, and 1 special character."
+            nzType="info-circle"
+          ></i>
+        </ng-template>
+      </div>
+    </form>
+
+    <nz-alert
+      style="margin-top: 1rem"
+      *ngIf="
+        passwordForm.get('password').value !==
+        passwordForm.get('passwordConfirm').value
+      "
+      nzType="error"
+      nzMessage="Passwords not matching"
+    ></nz-alert>
+
+    <nz-alert
+      style="margin-top: 1rem"
+      *ngIf="
+        passwordForm.get('password').value ===
+          passwordForm.get('passwordConfirm').value &&
+        passwordForm.get('password').value
+      "
+      nzType="success"
+      nzMessage="Passwords are matching"
+    ></nz-alert>
+  </ng-container>
 </nz-modal>

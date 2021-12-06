@@ -900,7 +900,7 @@ export const NAVITEMS: SideNavInterface[] = [
 
   {
     path: '',
-    title: 'Risk Management',
+    title: 'Risk',
     iconTheme: 'outline',
     iconType: 'nzIcon',
     icon: 'warning',
@@ -1017,7 +1017,7 @@ export const NAVITEMS: SideNavInterface[] = [
 
   {
     path: '/transaction-history',
-    title: 'Transaction History',
+    title: 'Transaction',
     iconTheme: 'outline',
     iconType: 'nzIcon',
     icon: 'history',

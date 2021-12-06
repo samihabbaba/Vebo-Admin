@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from "@angular/common";
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
 import { RouterModule } from "@angular/router";
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -34,6 +34,8 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { TableService } from './services/table.service';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
+
 
 
 const antdModule = [
@@ -61,13 +63,14 @@ const antdModule = [
   NzCheckboxModule,
   NzMessageModule,
   NzToolTipModule,
-
+  NzAlertModule
 ]
 
 @NgModule({
     exports: [
         CommonModule,
         FormsModule,
+        ReactiveFormsModule,
         HttpClientModule,
         HttpClientJsonpModule,
         NzIconModule,
@@ -81,6 +84,8 @@ const antdModule = [
         CommonModule,
         NzIconModule,
         PerfectScrollbarModule,
+        ReactiveFormsModule,
+        FormsModule,
         ...antdModule
     ],
     declarations: [
