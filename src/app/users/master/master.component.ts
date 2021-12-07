@@ -3,7 +3,6 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
-  PatternValidator,
   Validators,
 } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -234,6 +233,7 @@ export class MasterComponent implements OnInit {
           );
         } else {
           this.usernameAvi = 'This username is not available';
+          this.addForm.get('username').setErrors({ incorrect: true });
         }
       });
   }
@@ -271,6 +271,7 @@ export class MasterComponent implements OnInit {
         .subscribe((response) => {
           if (!response.body) {
             this.usernameAvi = 'This username is not available';
+            this.addForm.get('username').setErrors({ incorrect: true });
           }
         });
     }

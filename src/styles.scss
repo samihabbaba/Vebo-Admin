@@ -16,3 +16,38 @@
   grid-template-columns: 1fr 1fr;
   gap: 20px 15px;
 }
+
+@media screen and (max-width:1000px) {
+  .d-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ant-form-item-label > label::after  {
+  content: none;
+}
+
+
+.link-hover {
+  text-decoration: underline;
+  cursor: pointer;
+  &:hover {
+    color: #0b5edc;
+  }
+}
+
+
+.ant-tabs-tab  {
+  margin: 8px 0 !important;
+  padding: 8px 24px !important;
+}
+
+
+.ant-row {
+  justify-content: center;
+}
+nz-list-item {
+  .ant-card-body {
+    padding: 16px 0;
+  }
+}

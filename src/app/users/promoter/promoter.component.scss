@@ -1,0 +1,11 @@
+.filters-container {
+  display: flex;
+  padding-bottom: 16px;
+}
+
+@media screen and (max-width: 550px) {
+  .filters-container {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+}

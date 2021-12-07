@@ -35,7 +35,7 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { TableService } from './services/table.service';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
-
+import { NzDividerModule } from 'ng-zorro-antd/divider';
 
 
 const antdModule = [
@@ -63,7 +63,8 @@ const antdModule = [
   NzCheckboxModule,
   NzMessageModule,
   NzToolTipModule,
-  NzAlertModule
+  NzAlertModule,
+  NzDividerModule,
 ]
 
 @NgModule({
