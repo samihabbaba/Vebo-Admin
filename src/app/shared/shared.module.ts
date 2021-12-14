@@ -36,7 +36,17 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
 import { TableService } from './services/table.service';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
-
+import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
+import { UserTransactionsComponent } from './components/user-transactions/user-transactions.component';
+import { UserBetsComponent } from './components/user-bets/user-bets.component';
+import { UserBetsActivityComponent } from './components/user-bets-activity/user-bets-activity.component';
+import { SubAccountPromoterComponent } from './components/sub-account-promoter/sub-account-promoter.component';
+import { SubAccountShopComponent } from './components/sub-account-shop/sub-account-shop.component';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { PrintSelectionComponent } from './components/print-selection/print-selection.component';
+import { NgxPrintModule } from 'ngx-print';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 
 const antdModule = [
   NzButtonModule,
@@ -65,6 +75,10 @@ const antdModule = [
   NzToolTipModule,
   NzAlertModule,
   NzDividerModule,
+  NzDescriptionsModule,
+  NzSwitchModule,
+  NzPopconfirmModule,
+  NzInputNumberModule
 ]
 
 @NgModule({
@@ -78,6 +92,11 @@ const antdModule = [
         PerfectScrollbarModule,
         SearchPipe,
         ...antdModule,
+        UserTransactionsComponent,
+        UserBetsComponent,
+        UserBetsActivityComponent,
+        SubAccountPromoterComponent,
+        SubAccountShopComponent,
 
     ],
     imports: [
@@ -87,10 +106,17 @@ const antdModule = [
         PerfectScrollbarModule,
         ReactiveFormsModule,
         FormsModule,
+        NgxPrintModule,
         ...antdModule
     ],
     declarations: [
         SearchPipe,
+        UserTransactionsComponent,
+        UserBetsComponent,
+        UserBetsActivityComponent,
+        SubAccountPromoterComponent,
+        SubAccountShopComponent,
+        PrintSelectionComponent,
     ],
     providers: [
         ThemeConstantService,

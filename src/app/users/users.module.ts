@@ -20,7 +20,7 @@ import { SharedModule } from '../shared/shared.module';
     ShopComponent,
     CustomerComponent,
     BetOfficeComponent,
-    OnlineCustomerComponent
+    OnlineCustomerComponent,
   ],
   imports: [
     CommonModule,

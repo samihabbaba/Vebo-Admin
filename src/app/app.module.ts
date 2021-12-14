@@ -27,6 +27,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { RiskApprovalNotificationComponent } from './shared/components/risk-approval-notification/risk-approval-notification.component';
 import { AuthComponent } from './auth/auth.component';
 import { AuthenticationService } from './shared/services/authentication.service';
+import { UserInfoComponent } from './users/user-info/user-info.component';
 
 registerLocaleData(en);
 
@@ -36,7 +37,8 @@ registerLocaleData(en);
     CommonLayoutComponent,
     FullLayoutComponent,
     RiskApprovalNotificationComponent,
-    AuthComponent
+    AuthComponent,
+    UserInfoComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,186 @@
+<button
+  styleSheetFile="../../../../assets/printSlipStyle.css"
+  id="printBtn"
+  style="display: none"
+  printTitle=""
+  printSectionId="print-section"
+  ngxPrint
+>
+  print
+</button>
+
+<div id="print-section" style="display: none">
+  <div
+    class="row boldIt"
+    style="
+      text-align: center;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 34;
+    "
+  >
+    VEBO BET
+  </div>
+
+  <br />
+
+  <div
+    style="border-bottom: 1px; border-color: black; border-style: solid"
+  ></div>
+  <br />
+
+  <div
+    style="
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      justify-content: space-between;
+    "
+  >
+    <div style="display: flex; flex: 1; justify-content: space-between">
+      <span style="display: flex; flex: 1">
+        ID :
+        <span style="display: flex; flex: 1">
+          {{ modalToPrint.id }}
+        </span>
+      </span>
+
+      <span style="display: flex; flex: 1">
+        Username :
+        <span style="display: flex; flex: 1">
+          {{ modalToPrint.userName }}
+        </span>
+      </span>
+
+      <span style="display: flex; flex: 1">
+        Bet type :
+        <span style="display: flex; flex: 1">
+          {{ returnBetType(modalToPrint.betType) }}
+        </span>
+      </span>
+
+      <span style="display: flex; flex: 1">
+        Sel. mode :
+        <span style="display: flex; flex: 1">
+          {{ modalToPrint.selectionType }}
+        </span>
+      </span>
+
+      <!-- <span>
+        Selections : {{ modalToPrint.totalSelections }}
+
+       </span> -->
+    </div>
+    <br />
+
+    <div style="display: flex; flex: 1; justify-content: space-between">
+      <span style="display: flex; flex: 1">
+        Status :
+        <span style="display: flex; flex: 1">
+          {{ modalToPrint.status }}
+        </span>
+      </span>
+
+      <span style="display: flex; flex: 1">
+        Stake :
+        <span style="display: flex; flex: 1">
+          {{ this.dataService.formatNumber(modalToPrint.stake) }}
+          {{ modalToPrint.symbol }}
+        </span>
+      </span>
+
+      <span style="display: flex; flex: 1">
+        E. Win :
+        <span style="display: flex; flex: 1">
+          {{ displayFormattedNumber(modalToPrint.payout) }}
+          {{ modalToPrint.symbol }}
+        </span>
+      </span>
+
+      <span style="display: flex; flex: 1">
+        E. Win + Bonus :
+        <span style="display: flex; flex: 1">
+          {{ this.dataService.formatNumber(modalToPrint.maxPayout) }}
+          {{ modalToPrint.symbol }}
+        </span>
+      </span>
+    </div>
+    <br />
+
+    <div style="display: flex; flex: 1; justify-content: space-between">
+      <span style="display: flex; flex: 1">
+        Real Win :
+        <span style="display: flex; flex: 1">
+          {{ this.dataService.formatNumber(modalToPrint.realWin) }}
+          {{ modalToPrint.symbol }}
+        </span>
+      </span>
+
+      <span style="display: flex; flex: 1">
+        Net :
+        <span style="display: flex; flex: 1">
+          {{ this.dataService.formatNumber(modalToPrint.net) }}
+          {{ modalToPrint.symbol }}
+        </span>
+      </span>
+
+      <span style="display: flex; flex: 1">
+        Date :
+        <span style="display: flex; flex: 1">
+          {{ modalToPrint.date }}
+        </span>
+      </span>
+
+      <span style="display: flex; flex: 1">
+        Time :
+        <span style="display: flex; flex: 1">
+          {{ modalToPrint.time }}
+        </span>
+      </span>
+    </div>
+
+    <br />
+    <br />
+    <br />
+
+    <!-- selections -->
+
+    <table>
+      <tr>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Event</th>
+        <th>Market</th>
+        <th>Odds</th>
+        <th>Rate</th>
+        <th style="min-width: 1cm">1H</th>
+        <th style="min-width: 1cm">2H</th>
+        <th>Status</th>
+      </tr>
+
+      <tr *ngFor="let sel of modalToPrint.selections; let i = index">
+        <td>{{ sel.eventDate }}</td>
+        <td>{{ sel.eventTime }}</td>
+        <td>{{ sel.eventName }}</td>
+        <td>{{ sel.marketName }}</td>
+        <td>{{ sel.oddsName }}</td>
+        <td>{{ sel.rate }}</td>
+        <td style="min-width: 1cm">
+          {{ this.displayScore(sel.firstHalfScore) }}
+        </td>
+        <td style="min-width: 1cm">
+          {{ this.displayScore(sel.secondHalfScore) }}
+        </td>
+        <td>{{ returnSelectionStatus(sel) }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- end of selections -->
+
+  <!-- <div style="width: 100%; height: 60px; color:white;">
+  </div>
+
+  <div >
+   ِ
+  </div> -->
+</div>

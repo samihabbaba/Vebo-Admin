@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { UserInfoComponent } from 'src/app/users/user-info/user-info.component';
 import { ComponentsComponent } from '../../components/components.component';
 
 export const CommonLayout_ROUTES: Routes = [
@@ -94,9 +95,12 @@ export const CommonLayout_ROUTES: Routes = [
 
   // HERE IS MY PART
 
+  { path: 'user-info/:id', component: UserInfoComponent },
+
   {
     path: 'home',
-    loadChildren: () => import('../../home/home.module').then((m) => m.HomeModule),
+    loadChildren: () =>
+      import('../../home/home.module').then((m) => m.HomeModule),
   },
 
   {
@@ -115,7 +119,8 @@ export const CommonLayout_ROUTES: Routes = [
 
   {
     path: 'bets',
-    loadChildren: () => import('../../bets/bets.module').then((m) => m.BetsModule),
+    loadChildren: () =>
+      import('../../bets/bets.module').then((m) => m.BetsModule),
   },
 
   {
@@ -132,7 +137,8 @@ export const CommonLayout_ROUTES: Routes = [
 
   {
     path: 'logs',
-    loadChildren: () => import('../../logs/logs.module').then((m) => m.LogsModule),
+    loadChildren: () =>
+      import('../../logs/logs.module').then((m) => m.LogsModule),
   },
 
   {
@@ -148,7 +154,6 @@ export const CommonLayout_ROUTES: Routes = [
     loadChildren: () =>
       import('../../payment/payment.module').then((m) => m.PaymentModule),
   },
-
 
   {
     path: 'reports',

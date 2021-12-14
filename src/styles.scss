@@ -1,8 +1,7 @@
-@import url('./assets/lib/hljs/styles/atom-one-light.css');
+@import url("./assets/lib/hljs/styles/atom-one-light.css");
 // @import url('../node_modules/ng-zorro-antd/src/ng-zorro-antd.min.css');
-@import url('../node_modules/@fortawesome/fontawesome-free/css/all.min.css');
-@import './assets/scss/app.scss';
-
+@import url("../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
+@import "./assets/scss/app.scss";
 
 // .ant-menu-vertical .ant-menu-item {
 //   &:hover {
@@ -10,23 +9,21 @@
 //   }
 // }
 
-
 .d-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px 15px;
 }
 
-@media screen and (max-width:1000px) {
+@media screen and (max-width: 1000px) {
   .d-grid {
     grid-template-columns: 1fr;
   }
 }
 
-.ant-form-item-label > label::after  {
+.ant-form-item-label > label::after {
   content: none;
 }
-
 
 .link-hover {
   text-decoration: underline;
@@ -36,12 +33,10 @@
   }
 }
 
-
-.ant-tabs-tab  {
+.ant-tabs-tab {
   margin: 8px 0 !important;
   padding: 8px 24px !important;
 }
-
 
 .ant-row {
   justify-content: center;
@@ -50,4 +45,54 @@ nz-list-item {
   .ant-card-body {
     padding: 16px 0;
   }
+}
+
+.ant-table-content {
+  overflow: auto;
+}
+
+app-user-info .ant-tabs-tab {
+  display: flex !important;
+}
+
+app-user-info nz-tabs-nav {
+  height: 300px;
+}
+
+app-user-info .bet-tabs nz-tabs-nav {
+  height: auto !important;
+}
+
+.greenText {
+  color: #04d992;
+}
+
+.redText {
+  color: #de4436;
+}
+
+.yellowText {
+  color: #ffc107;
+}
+
+.purpleText {
+  color: #886cff;
+}
+
+.blueText {
+  color: #3f87f5;
+}
+.disabledText {
+  color: #EBEBE4;
+  cursor: not-allowed;
+  pointer-events: none;
+  &:hover {
+    color: #EBEBE4;
+    cursor: not-allowed;
+  }
+}
+
+tr.no-pad-top td {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }

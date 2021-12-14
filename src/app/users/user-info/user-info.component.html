@@ -1,0 +1,46 @@
+<nz-tabset
+  nzTabPosition="left"
+  [(nzSelectedIndex)]="selectedIndex"
+  style="height: max-content"
+  *ngIf="currentUser"
+>
+  <nz-tab [nzTitle]="titleTemplate">
+    <ng-template #titleTemplate>
+      <i nz-icon nzType="user"></i>
+      User Info
+    </ng-template>
+
+    content1
+  </nz-tab>
+  <nz-tab [nzTitle]="titleTemplate2">
+    <ng-template #titleTemplate2>
+      <i nz-icon nzType="transaction"></i>
+      Transactions
+    </ng-template>
+
+    <app-user-transactions [currentUser]="currentUser"></app-user-transactions>
+  </nz-tab>
+  <nz-tab [nzTitle]="titleTemplate3">
+    <ng-template #titleTemplate3>
+      <i nz-icon nzType="dollar"></i>
+      Bets
+    </ng-template>
+
+    <app-user-bets [currentUser]="currentUser"></app-user-bets>
+  </nz-tab>
+  <nz-tab [nzTitle]="titleTemplate4">
+    <ng-template #titleTemplate4>
+      <i nz-icon nzType="swap"></i>
+      Bets Activity
+    </ng-template>
+
+    content4
+  </nz-tab>
+  <nz-tab [nzTitle]="titleTemplate5">
+    <ng-template #titleTemplate5>
+      <i nz-icon nzType="subnode"></i>
+      Sub Accounts
+    </ng-template>
+    content5
+  </nz-tab>
+</nz-tabset>

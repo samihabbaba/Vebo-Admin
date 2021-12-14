@@ -1,0 +1,154 @@
+<nz-card>
+  <div class="filters-container">
+    <nz-range-picker
+      nzFormat="dd-MM-yyyy"
+      [(ngModel)]="userTransactionsDate"
+      [nzAllowClear]="false"
+    ></nz-range-picker>
+
+    <nz-select
+      [(ngModel)]="userTransactionsType"
+      style="width: 120px; margin-left: 1rem"
+    >
+      <nz-option nzValue="All" nzLabel="All"></nz-option>
+      <nz-option nzValue="Deposit" nzLabel="Deposit"></nz-option>
+      <nz-option nzValue="Withdraw" nzLabel="Withdraw"></nz-option>
+    </nz-select>
+
+    <button
+      style="width: 200px; margin-left: 1.5rem"
+      (click)="getUserTransactions()"
+      nz-button
+      nzType="primary"
+      [nzLoading]="userTransactionsLoading"
+    >
+      <i nz-icon nzType="search"></i>
+      Search
+    </button>
+  </div>
+
+  <nz-table #table2 [nzData]="userTransactionsData">
+    <thead>
+      <tr>
+        <th
+          *ngFor="let column of orderColumnTransactions"
+          [nzSortFn]="column.compare"
+        >
+          {{ column.title }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let item of table2.data; let i = index">
+        <tr
+          (click)="onExpandChange(item.id, $event)"
+          style="cursor: pointer"
+        >
+          <td>
+            {{ item.amount | number: "1.2-2" }}{{ " " + item.symbole }}
+          </td>
+          <td>
+            {{ item.paymentType }}
+          </td>
+          <td *ngIf="item.isDeposite" style="color: #04d992">Deposit</td>
+          <td *ngIf="!item.isDeposite" style="color: #de4436">Withdraw</td>
+          <td>{{ item.date | date: "medium" }}</td>
+          <td>{{ item.refrence }}</td>
+        </tr>
+
+        <!-- TABLE EXPANSION -->
+
+        <tr [nzExpand]="expandSet.has(item.id)">
+          <nz-list nzGrid>
+            <div nz-row [nzGutter]="4">
+              <div nz-col [nzSpan]="4" style="margin-right: 16px">
+                <nz-list-item>
+                  <nz-card
+                    [nzTitle]="'Cash Balance (' + item.symbole + ')'"
+                    style="text-align: center"
+                  >
+                    <span style="color: #de4436">
+                      {{ item.prevCashBalance | number: "1.2-2" }}
+                    </span>
+                    <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+                    <span style="color: #04d992">
+                      {{ item.newCashBalance | number: "1.2-2" }}
+                    </span>
+                  </nz-card>
+                </nz-list-item>
+              </div>
+
+              <div nz-col [nzSpan]="4" style="margin-right: 16px">
+                <nz-list-item>
+                  <nz-card
+                    [nzTitle]="'Bonus Balance (' + item.symbole + ')'"
+                    style="text-align: center"
+                  >
+                    <span style="color: #de4436">
+                      {{ item.prevBonusBalance | number: "1.2-2" }}
+                    </span>
+                    <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+                    <span style="color: #04d992">
+                      {{ item.newBonusBalance | number: "1.2-2" }}
+                    </span>
+                  </nz-card>
+                </nz-list-item>
+              </div>
+
+              <div nz-col [nzSpan]="4" style="margin-right: 16px">
+                <nz-list-item>
+                  <nz-card
+                    [nzTitle]="'Credit Limit (' + item.symbole + ')'"
+                    style="text-align: center"
+                  >
+                    <span style="color: #de4436">
+                      {{ item.prevCreditLimit | number: "1.2-2" }}
+                    </span>
+                    <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+                    <span style="color: #04d992">
+                      {{ item.newCreditLimit | number: "1.2-2" }}
+                    </span>
+                  </nz-card>
+                </nz-list-item>
+              </div>
+
+              <div nz-col [nzSpan]="4" style="margin-right: 16px">
+                <nz-list-item>
+                  <nz-card
+                    [nzTitle]="'Used Credit (' + item.symbole + ')'"
+                    style="text-align: center"
+                  >
+                    <span style="color: #de4436">
+                      {{ item.prevUsedCredit | number: "1.2-2" }}
+                    </span>
+                    <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+                    <span style="color: #04d992">
+                      {{ item.newUsedCredit | number: "1.2-2" }}
+                    </span>
+                  </nz-card>
+                </nz-list-item>
+              </div>
+
+              <div nz-col [nzSpan]="4" style="margin-right: 16px">
+                <nz-list-item>
+                  <nz-card
+                    [nzTitle]="'Real Balance (' + item.symbole + ')'"
+                    style="text-align: center"
+                  >
+                    <span style="color: #de4436">
+                      {{ item.prevRealBalance | number: "1.2-2" }}
+                    </span>
+                    <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+                    <span style="color: #04d992">
+                      {{ item.newRealBalance | number: "1.2-2" }}
+                    </span>
+                  </nz-card>
+                </nz-list-item>
+              </div>
+            </div>
+          </nz-list>
+        </tr>
+      </ng-container>
+    </tbody>
+  </nz-table>
+</nz-card>

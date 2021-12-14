@@ -59,6 +59,9 @@ export class PromoterComponent implements OnInit {
   depositForm: FormGroup;
   withdrawForm: FormGroup;
 
+  // balance form
+  balanceModel: any;
+
   // User Transactions variables
   userTransactionsDate: any = [new Date(), new Date()];
   userTransactionsType: string = 'All';
@@ -136,7 +139,7 @@ export class PromoterComponent implements OnInit {
     },
     {
       title: 'Type',
-      compare: (a: any, b: any) => a.isDeposite.localeCompare(b.isDeposite),
+      compare: (a: any, b: any) => a.isDeposite - b.isDeposite,
     },
     {
       title: 'Date',
@@ -152,9 +155,9 @@ export class PromoterComponent implements OnInit {
     private tableSvc: TableService,
     private message: NzMessageService,
     private modalService: NzModalService,
-    private dataService: DataService,
-    private fb: FormBuilder,
-    private cdr: ChangeDetectorRef
+    public dataService: DataService,
+    private fb: FormBuilder
+
   ) {}
 
   ngOnInit() {
@@ -590,32 +593,30 @@ export class PromoterComponent implements OnInit {
   showBalanceModal(item: any): void {
     this.editingUser = item;
     this.initializeBalanceForm();
-    this.isBalanceVisible = true;
   }
 
   initializeBalanceForm() {
-    this.withdrawForm = this.fb.group({
-
-    });
+    this.dataService
+      .getBalanceForUser(this.editingUser.id)
+      .subscribe((resp) => {
+        console.log(resp);
+        this.balanceModel = resp;
+        this.isBalanceVisible = true;
+      });
   }
 
   submitBalanceForm() {
     this.isOkLoading = true;
-    let obj = this.withdrawForm.getRawValue();
-    this.dataService.submitDepositForm(obj).subscribe(
-      (response) => {
-        this.LoadUsers();
-        if (obj.paymentType === 'Cash') {
-          this.message.create('success', `Cash withdraw successful`);
-        } else {
-          this.message.create('success', `Credit withdraw successful`);
-        }
+
+    this.dataService
+      .collectBalanceForUser(this.balanceModel.userId)
+      .subscribe((resp) => {
+        this.initializeBalanceForm();
+        this.message.create('success', `Payment successful`);
         this.isOkLoading = false;
-      },
-      (error) => {
-        this.message.create('error', `Insufficient credit`);
+      },(err) => {
+        this.message.create('error', `Something went wrong`);
         this.isOkLoading = false;
-      }
-    );
+      });
   }
 }
