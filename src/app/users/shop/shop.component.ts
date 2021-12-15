@@ -316,7 +316,10 @@ export class ShopComponent implements OnInit {
               (x) => x.name === this.promoterAuto
             );
             if (!selectedPromoter) {
-              this.message.create('error', `Please choose promoter from the list`);
+              this.message.create(
+                'error',
+                `Please choose promoter from the list`
+              );
               this.isOkLoading = false;
               return;
             } else {
@@ -403,6 +406,7 @@ export class ShopComponent implements OnInit {
 
   showDetailModal(item: any): void {
     this.editingUser = item;
+    console.log(this.editingUser);
     this.initializeDetailForm();
     this.isDetailVisible = true;
   }
@@ -424,6 +428,8 @@ export class ShopComponent implements OnInit {
     this.editingUser.doubleMinOdd = obj.doubleMinOdd;
     this.editingUser.tripleComissionRate = obj.tripleComissionRate;
     this.editingUser.tripleMinOdd = obj.tripleMinOdd;
+    this.editingUser.comissionRate = obj.comissionRate;
+    this.editingUser.minimumOdd = obj.minimumOdd;
 
     this.dataService.submitChangesForUser(this.editingUser).subscribe(
       (response) => {
@@ -451,6 +457,12 @@ export class ShopComponent implements OnInit {
       localComissionSetting: new FormControl(
         this.editingUser.localComissionSetting
       ),
+      minimumOdd: new FormControl(this.editingUser.minimumOdd, [
+        Validators.required,
+      ]),
+      comissionRate: new FormControl(this.editingUser.comissionRate, [
+        Validators.required,
+      ]),
       betsNo: new FormControl(this.editingUser.betsNo, [Validators.required]),
       totalStack: new FormControl(this.editingUser.totalStack, [
         Validators.required,
@@ -642,35 +654,4 @@ export class ShopComponent implements OnInit {
       );
   }
 
-  // BALANCE FORM
-  showBalanceModal(item: any): void {
-    this.editingUser = item;
-    this.initializeBalanceForm();
-  }
-
-  initializeBalanceForm() {
-    this.dataService
-      .getBalanceForUser(this.editingUser.id)
-      .subscribe((resp) => {
-        console.log(resp);
-        this.balanceModel = resp;
-        this.isBalanceVisible = true;
-      });
-  }
-
-  submitBalanceForm() {
-    this.isOkLoading = true;
-
-    this.dataService.collectBalanceForUser(this.balanceModel.userId).subscribe(
-      (resp) => {
-        this.initializeBalanceForm();
-        this.message.create('success', `Payment successful`);
-        this.isOkLoading = false;
-      },
-      (err) => {
-        this.message.create('error', `Something went wrong`);
-        this.isOkLoading = false;
-      }
-    );
-  }
 }

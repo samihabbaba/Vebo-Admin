@@ -169,15 +169,6 @@
               >History
             </li>
 
-            <li nz-menu-item (click)="showBalanceModal(item)">
-              <i
-                nz-icon
-                nzType="dollar-circle"
-                nzTheme="outline"
-                style="padding-right: 8px"
-              ></i
-              >Balance
-            </li>
             <li nz-menu-item (click)="showPasswordModal(item)">
               <i
                 nz-icon
@@ -573,7 +564,7 @@
 <nz-modal
   [nzStyle]="{ width: '60vw' }"
   [(nzVisible)]="isDetailVisible"
-  nzTitle="Master Details"
+  nzTitle="Shop Details"
   (nzOnCancel)="isDetailVisible = false"
   (nzOnOk)="submitDetailForm()"
   [nzOkText]="'Save'"
@@ -653,9 +644,6 @@
       <div style="display: flex">
         <label nz-checkbox formControlName="isActive">Active</label>
 
-        <label nz-checkbox formControlName="localComissionSetting"
-          >Local Comission</label
-        >
       </div>
     </form>
 
@@ -663,6 +651,43 @@
 
     <h5 nz-typography>Commission Information</h5>
     <form [formGroup]="detailForm" class="d-grid" autocomplete="off">
+      <div>
+        <nz-form-label [nzSpan]="12">Commission Rate (0-100)</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group [nzPrefix]="prefixTemplateUser" nzAddOnAfter="%">
+            <input
+              formControlName="comissionRate"
+              type="number"
+              nz-input
+              [min]="0"
+              [max]="100"
+              placeholder="Commission Rate"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i+ nz-icon nzType="folder"></i+
+        ></ng-template>
+      </div>
+
+      <div>
+        <nz-form-label [nzSpan]="12">Minimum Odd</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group [nzPrefix]="prefixTemplateUser">
+            <input
+              formControlName="minimumOdd"
+              type="number"
+              nz-input
+              placeholder="Minimum Odd"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+      </div>
+
+
       <div>
         <nz-form-label [nzSpan]="12">Bets Number</nz-form-label>
         <nz-form-control nzErrorTip="Invalid Input">
@@ -1030,6 +1055,7 @@
   <ng-container *nzModalContent>
     <div class="filters-container">
       <nz-range-picker
+       [nzAllowClear]="false"
         nzFormat="dd-MM-yyyy"
         [(ngModel)]="userTransactionsDate"
       ></nz-range-picker>
@@ -1176,193 +1202,4 @@
     </nz-table>
   </ng-container>
   <ng-container *nzModalFooter> </ng-container>
-</nz-modal>
-
-<!-- Balance Modal -->
-<nz-modal
-  [nzStyle]="{ width: '80vw' }"
-  [(nzVisible)]="isBalanceVisible"
-  [nzTitle]="'Balance for ' + editingUser?.name"
-  (nzOnCancel)="isBalanceVisible = false"
-  (nzOnOk)="submitBalanceForm()"
-  [nzOkText]="'Pay'"
-  [nzOkLoading]="isOkLoading"
->
-  <ng-container *nzModalContent>
-    <nz-descriptions
-      nzBordered
-      [nzSize]="'middle'"
-      [nzColumn]="{ xxl: 3, xl: 3, lg: 2, md: 2, sm: 1, xs: 1 }"
-    >
-      <nz-descriptions-item nzTitle="Cash">
-        {{ this.dataService.formatNumber(balanceModel.cashWallet) }}
-        {{ balanceModel.symbol }}
-      </nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Credit"
-        >{{ this.dataService.formatNumber(balanceModel.remainingLimit) }}/{{
-          this.dataService.formatNumber(balanceModel.creditLimit)
-        }}
-        {{ balanceModel.symbol }}</nz-descriptions-item
-      >
-      <nz-descriptions-item nzTitle="Real"
-        >{{ this.dataService.formatNumber(balanceModel.realBalance) }}
-        {{ balanceModel.symbol }}</nz-descriptions-item
-      >
-      <nz-descriptions-item nzTitle="Bets Number"
-        >{{ this.dataService.formatNumber(balanceModel.betsNo, false) }}
-      </nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Total Bets">{{
-        this.dataService.formatNumber(balanceModel.totalBets, false)
-      }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="User Minimum Stake"
-        >{{ this.dataService.formatNumber(balanceModel.userMinStake) }}
-        {{ balanceModel.symbol }}</nz-descriptions-item
-      >
-    </nz-descriptions>
-
-    <div style="padding: 30px 0">
-      <div nz-row [nzGutter]="8" class="cards-container">
-        <div nz-col [nzSpan]="8">
-          <nz-card
-            [nzTitle]="
-              'Single Comission Rate (' +
-              balanceModel.singleComissionAmount +
-              balanceModel.symbol +
-              ')'
-            "
-          >
-            <p>
-              Single Comission Rate:
-              {{
-                this.dataService.formatNumber(balanceModel.singleComissionRate)
-              }}%
-            </p>
-
-            <p>
-              Single Valid Comission Stake:
-              {{
-                this.dataService.formatNumber(
-                  balanceModel.singleValidComissionStack
-                )
-              }}
-              {{ balanceModel.symbol }}
-            </p>
-
-            <p>
-              Total Stake Single:
-              {{ this.dataService.formatNumber(balanceModel.totalStakeSingle) }}
-              {{ balanceModel.symbol }}
-            </p>
-          </nz-card>
-        </div>
-        <div nz-col [nzSpan]="8">
-          <nz-card
-            [nzTitle]="
-              'Double Comission Amount (' +
-              balanceModel.doubleComissionAmount +
-              balanceModel.symbol +
-              ')'
-            "
-          >
-            <p>
-              Double Comission Rate:
-              {{
-                this.dataService.formatNumber(balanceModel.doubleComissionRate)
-              }}%
-            </p>
-            <p>
-              Double Valid Comission Stake:
-              {{
-                this.dataService.formatNumber(
-                  balanceModel.doubleValidComissionStack
-                )
-              }}
-              {{ balanceModel.symbol }}
-            </p>
-            <p>
-              Total Stake Double:
-              {{ this.dataService.formatNumber(balanceModel.totalStakeDouble) }}
-              {{ balanceModel.symbol }}
-            </p>
-          </nz-card>
-        </div>
-        <div nz-col [nzSpan]="8">
-          <nz-card
-            [nzTitle]="
-              'Triple Comission Amount (' +
-              balanceModel.tripleComissionAmount +
-              balanceModel.symbol +
-              ')'
-            "
-          >
-            <p>
-              Triple Comission Rate:
-              {{
-                this.dataService.formatNumber(balanceModel.tripleComissionRate)
-              }}%
-            </p>
-            <p>
-              Triple Valid Comission Stake:
-              {{
-                this.dataService.formatNumber(
-                  balanceModel.tripleValidComissionStack
-                )
-              }}
-              {{ balanceModel.symbol }}
-            </p>
-            <p>
-              Total Stake Triple:
-              {{ this.dataService.formatNumber(balanceModel.totalStakeTriple) }}
-              {{ balanceModel.symbol }}
-            </p>
-          </nz-card>
-        </div>
-      </div>
-    </div>
-
-    <div nz-row [nzGutter]="8" class="cards-container">
-      <div nz-col [nzSpan]="8">
-        <nz-card>
-          <p>
-            Total Stake:
-            {{ this.dataService.formatNumber(balanceModel.totalStack) }}
-            {{ balanceModel.symbol }}
-          </p>
-        </nz-card>
-      </div>
-      <div nz-col [nzSpan]="8">
-        <nz-card>
-          <p>
-            Comission Amount:
-            {{ this.dataService.formatNumber(balanceModel.comissionAmount) }}
-            {{ balanceModel.symbol }}
-          </p>
-        </nz-card>
-      </div>
-      <div nz-col [nzSpan]="8">
-        <nz-card>
-          <p>
-            Valid:
-            <i
-              *ngIf="balanceModel.isValid"
-              nz-icon
-              [nzType]="'check-circle'"
-              [nzTheme]="'twotone'"
-              [nzTwotoneColor]="'#04d992'"
-              style="font-size: 20px"
-            ></i>
-
-            <i
-              *ngIf="!balanceModel.isValid"
-              nz-icon
-              [nzType]="'close-circle'"
-              [nzTheme]="'twotone'"
-              [nzTwotoneColor]="'#de4436'"
-              style="font-size: 20px"
-            ></i>
-          </p>
-        </nz-card>
-      </div>
-    </div>
-  </ng-container>
 </nz-modal>

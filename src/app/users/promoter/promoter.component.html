@@ -527,7 +527,7 @@
 <nz-modal
   [nzStyle]="{ width: '60vw' }"
   [(nzVisible)]="isDetailVisible"
-  nzTitle="Master Details"
+  nzTitle="Promoter Details"
   (nzOnCancel)="isDetailVisible = false"
   (nzOnOk)="submitDetailForm()"
   [nzOkText]="'Save'"
@@ -985,6 +985,7 @@
     <div class="filters-container">
       <nz-range-picker
         nzFormat="dd-MM-yyyy"
+        [nzAllowClear]="false"
         [(ngModel)]="userTransactionsDate"
       ></nz-range-picker>
 
