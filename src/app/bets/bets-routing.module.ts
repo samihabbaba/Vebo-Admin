@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { BetOfficeComponent } from '../users/bet-office/bet-office.component';
+import { BetOfficeComponent } from './bet-office/bet-office.component';
 import { RiskApprovalComponent } from './risk-approval/risk-approval.component';
 import { ViewBetsComponent } from './view-bets/view-bets.component';
 

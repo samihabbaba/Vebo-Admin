@@ -27,8 +27,8 @@ export class AuthenticationService {
       username: email,
       password: password,
     };
-    // return this.http.post('http://193.140.43.71/api/v1/auth/admin/login', model).pipe(
-    return this.http.post(`${environment.apiUrl}auth/master/login`, model).pipe(
+    // return this.http.post(`${environment.apiUrl}auth/admin/login`, model).pipe(
+      return this.http.post(`${environment.apiUrl}auth/master/login`, model).pipe(
       map((response: any) => {
         console.log('reallogin  got from api back 3 - ' + new Date());
 

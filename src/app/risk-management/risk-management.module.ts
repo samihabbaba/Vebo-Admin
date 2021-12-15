@@ -8,6 +8,7 @@ import { RiskCalculationComponent } from './risk-calculation/risk-calculation.co
 import { PlayerModeComponent } from './player-mode/player-mode.component';
 import { IpRestrictionComponent } from './ip-restriction/ip-restriction.component';
 import { LoginIpsComponent } from './login-ips/login-ips.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { LoginIpsComponent } from './login-ips/login-ips.component';
   ],
   imports: [
     CommonModule,
-    RiskManagementRoutingModule
+    RiskManagementRoutingModule,
+    SharedModule
   ]
 })
 export class RiskManagementModule { }

@@ -157,7 +157,6 @@ export class PromoterComponent implements OnInit {
     private modalService: NzModalService,
     public dataService: DataService,
     private fb: FormBuilder
-
   ) {}
 
   ngOnInit() {
@@ -263,6 +262,20 @@ export class PromoterComponent implements OnInit {
     });
   }
 
+  setCurrency(symbol) {
+    if (symbol == '₺') {
+      return 'TL';
+    }
+    if (symbol == '$') {
+      return 'USD';
+    }
+    if (symbol == '£') {
+      return 'STG';
+    } else {
+      return 'EURO';
+    }
+  }
+
   // ADD FORM
 
   showAddModal(): void {
@@ -277,6 +290,7 @@ export class PromoterComponent implements OnInit {
         if (response.body) {
           this.isOkLoading = true;
           const obj = this.addForm.getRawValue();
+          obj.currency = this.setCurrency(obj.symbol);
           this.dataService.submitNewUserForm(obj).subscribe(
             (response) => {
               if (response.status == 201) {
@@ -608,15 +622,16 @@ export class PromoterComponent implements OnInit {
   submitBalanceForm() {
     this.isOkLoading = true;
 
-    this.dataService
-      .collectBalanceForUser(this.balanceModel.userId)
-      .subscribe((resp) => {
+    this.dataService.collectBalanceForUser(this.balanceModel.userId).subscribe(
+      (resp) => {
         this.initializeBalanceForm();
         this.message.create('success', `Payment successful`);
         this.isOkLoading = false;
-      },(err) => {
+      },
+      (err) => {
         this.message.create('error', `Something went wrong`);
         this.isOkLoading = false;
-      });
+      }
+    );
   }
 }
