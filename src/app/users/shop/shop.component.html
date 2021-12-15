@@ -370,19 +370,18 @@
         </nz-select>
       </div> -->
 
-      <div class="example-input">
+      <div class="example-input" *ngIf="!userIsPromoter">
+        <nz-form-label [nzSpan]="12">Promoter</nz-form-label>
         <input
-          placeholder='Select Promoter"'
+          placeholder="Select Promoter"
           nz-input
           [ngModelOptions]="{ standalone: true }"
           [(ngModel)]="promoterAuto"
-          (ngModelChange)="onChange($event)"
+          (ngModelChange)="promoterChange($event)"
           [nzAutocomplete]="auto"
         />
-        <nz-autocomplete
-          [nzDataSource]="filteredOptions"
-          #auto
-        ></nz-autocomplete>
+        <nz-autocomplete [nzDataSource]="filteredPromotersList" #auto>
+        </nz-autocomplete>
       </div>
 
       <div style="display: flex">
@@ -394,6 +393,42 @@
 
     <h5 nz-typography>Commission Information</h5>
     <form [formGroup]="addForm" class="d-grid" autocomplete="off">
+      <div>
+        <nz-form-label [nzSpan]="12">Commission Rate (0-100)</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group [nzPrefix]="prefixTemplateUser" nzAddOnAfter="%">
+            <input
+              formControlName="comissionRate"
+              type="number"
+              nz-input
+              [min]="0"
+              [max]="100"
+              placeholder="Commission Rate"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i+ nz-icon nzType="folder"></i+
+        ></ng-template>
+      </div>
+
+      <div>
+        <nz-form-label [nzSpan]="12">Minimum Odd</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group [nzPrefix]="prefixTemplateUser">
+            <input
+              formControlName="minimumOdd"
+              type="number"
+              nz-input
+              placeholder="Minimum Odd"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+      </div>
+
       <div>
         <nz-form-label [nzSpan]="12">Bets Number</nz-form-label>
         <nz-form-control nzErrorTip="Invalid Input">

@@ -36,7 +36,10 @@ export class ShopComponent implements OnInit {
 
   expandSet = new Set<number>();
   promoterAuto: any;
-
+  promotersList: any[] = [];
+  allPromoters: any;
+  filteredPromotersList: any[] = [];
+  userIsPromoter: boolean = false;
 
   isOkLoading: boolean = false;
   // Modal Variables
@@ -162,6 +165,11 @@ export class ShopComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    if (this.dataService.currentUser.role === 'Promoter') {
+      this.userIsPromoter = true;
+    } else {
+      this.userIsPromoter = false;
+    }
     this.LoadUsers();
   }
 
@@ -266,18 +274,32 @@ export class ShopComponent implements OnInit {
 
   // Get Promoters
   LoadPromoters() {
-    const component = this;
     this.dataService.getUsers('Promoter').subscribe(
       (response: any) => {
-        console.log(response.body.userList);
+        this.promotersList = [];
+        this.allPromoters = response.body.userList;
+        response.body.userList.forEach((x) => {
+          this.promotersList.push(x.name);
+        });
+        this.filteredPromotersList = this.promotersList;
+        if (this.promotersList.length > 0) {
+          this.promoterAuto = this.promotersList[0];
+        }
       },
       (error) => {}
+    );
+  }
+
+  promoterChange(value) {
+    this.filteredPromotersList = this.promotersList.filter(
+      (option) => option.toLowerCase().indexOf(value.toLowerCase()) !== -1
     );
   }
 
   // ADD FORM
 
   showAddModal(): void {
+    this.LoadPromoters();
     this.initializeAddForm();
     this.isAddVisible = true;
   }
@@ -289,6 +311,20 @@ export class ShopComponent implements OnInit {
         if (response.body) {
           this.isOkLoading = true;
           const obj = this.addForm.getRawValue();
+          if (!this.userIsPromoter) {
+            let selectedPromoter = this.allPromoters.find(
+              (x) => x.name === this.promoterAuto
+            );
+            if (!selectedPromoter) {
+              this.message.create('error', `Please choose promoter from the list`);
+              this.isOkLoading = false;
+              return;
+            } else {
+              console.log(selectedPromoter);
+              obj.parentId = selectedPromoter.id;
+              obj.parentName = selectedPromoter.name;
+            }
+          }
           this.dataService.submitNewUserForm(obj).subscribe(
             (response) => {
               if (response.status == 201) {
@@ -321,18 +357,23 @@ export class ShopComponent implements OnInit {
       isMasterAccount: new FormControl(false, [Validators.required]),
       isSuspended: new FormControl(false, [Validators.required]),
       comissionRate: new FormControl(null, [Validators.required]),
+      minimumOdd: new FormControl(null, [Validators.required]),
       maxUserLimit: new FormControl(null, [Validators.required]),
       mobile: new FormControl('05', [Validators.required]),
       name: new FormControl('', [Validators.required]),
-      parentId: new FormControl(this.dataService.currentUser.id),
-      parentName: new FormControl(this.dataService.currentUser.name),
+      parentId: new FormControl(
+        this.userIsPromoter ? this.dataService.currentUser.id : null
+      ),
+      parentName: new FormControl(
+        this.userIsPromoter ? this.dataService.currentUser.name : null
+      ),
       password: new FormControl('', [
         Validators.required,
         Validators.pattern(
           new RegExp('^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')
         ),
       ]),
-      role: new FormControl('Promoter'),
+      role: new FormControl('Shop'),
       singleComissionRate: new FormControl(4, [Validators.required]),
       singleMinOdd: new FormControl(1.5, [Validators.required]),
       symbol: new FormControl('₺', [Validators.required]),
