@@ -46,7 +46,6 @@ export class UserTransactionsComponent implements OnInit {
     this.getUserTransactions();
   }
 
-
   onExpandChange(id: number, event?: any): void {
     if (!this.expandSet.has(id)) {
       this.expandSet.add(id);
@@ -59,8 +58,8 @@ export class UserTransactionsComponent implements OnInit {
     this.userTransactionsLoading = true;
     this.dataService
       .getTransactionForUser(
-        this.dataService.convertDateTimeToIso(this.userTransactionsDate[0]),
-        this.dataService.convertDateTimeToIso(this.userTransactionsDate[1]),
+        this.userTransactionsDate[0].toISOString().slice(0, -14),
+        this.userTransactionsDate[1].toISOString().slice(0, -14),
         this.currentUser.id,
         1,
         10000,

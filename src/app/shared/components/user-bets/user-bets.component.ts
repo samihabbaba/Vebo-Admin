@@ -15,6 +15,7 @@ import * as _ from 'lodash';
 export class UserBetsComponent implements OnInit {
   expandSet = new Set<number>();
   @Input() currentUser: any;
+  @Input() isModal: any;
   userTransactionsDate: any = [new Date(), new Date()];
   userTransactionsType: string = '';
   userTransactionsData: any[] = [];
@@ -154,7 +155,6 @@ export class UserBetsComponent implements OnInit {
             const obj = { name: combo, ref: item.grouped[combo] };
             item.combos.push(obj);
           }
-          console.log(item);
           this.expandSet.add(item.id);
         },
         (error) => {}
@@ -186,7 +186,6 @@ export class UserBetsComponent implements OnInit {
           }
           this.userTransactionsData = resp.body.betList;
           this.userTransactionsLoading = false;
-          console.log(this.userTransactionsData);
         },
         (error) => {
           this.message.create('error', `Insufficient credit`);
@@ -199,8 +198,8 @@ export class UserBetsComponent implements OnInit {
     this.dataService
       .getTotalBets(
         '',
-        this.dataService.convertDateTimeToIso(this.userTransactionsDate[0]),
-        this.dataService.convertDateTimeToIso(this.userTransactionsDate[1]),
+this.userTransactionsDate[0].toISOString().slice(0,-14),
+this.userTransactionsDate[1].toISOString().slice(0,-14),
         this.customerId,
         '',
         this.userTransactionsType,
@@ -225,8 +224,8 @@ export class UserBetsComponent implements OnInit {
     if (seletions) {
       this.dataService
         .getCustomerSelectionsReport(
-          this.dataService.convertDateTimeToIso(this.userTransactionsDate[0]),
-          this.dataService.convertDateTimeToIso(this.userTransactionsDate[1]),
+          this.userTransactionsDate[0],
+          this.userTransactionsDate[1],
           this.currentUser.id,
           this.switchValue
         )
@@ -247,8 +246,8 @@ export class UserBetsComponent implements OnInit {
 
       this.excel.generateBetsReport(
         this.betsReportObj,
-        this.dataService.convertDateTimeToIso(this.userTransactionsDate[0]),
-        this.dataService.convertDateTimeToIso(this.userTransactionsDate[1])
+          this.userTransactionsDate[0].toISOString().slice(0,-14),
+          this.userTransactionsDate[1].toISOString().slice(0,-14)
       );
     }
   }
@@ -258,8 +257,8 @@ export class UserBetsComponent implements OnInit {
       this.dataService
         .GetBetsReport(
           '',
-          this.dataService.convertDateTimeToIso(this.userTransactionsDate[0]),
-          this.dataService.convertDateTimeToIso(this.userTransactionsDate[1]),
+          this.userTransactionsDate[0].toISOString().slice(0,-14),
+          this.userTransactionsDate[1].toISOString().slice(0,-14),
           this.customerId,
           '',
           this.userTransactionsType,
@@ -292,8 +291,8 @@ export class UserBetsComponent implements OnInit {
       this.dataService
         .getTotalBets(
           '',
-          this.dataService.convertDateTimeToIso(this.userTransactionsDate[0]),
-          this.dataService.convertDateTimeToIso(this.userTransactionsDate[1]),
+this.userTransactionsDate[0].toISOString().slice(0,-14),
+this.userTransactionsDate[1].toISOString().slice(0,-14),
           this.customerId,
           '',
           this.userTransactionsType,
@@ -404,7 +403,6 @@ export class UserBetsComponent implements OnInit {
 
   showModal(bet: any): void {
     this.selectedBet = bet;
-    console.log(this.selectedBet);
     this.isVisible = true;
     this.newOdd = this.selectedBet.rate;
   }

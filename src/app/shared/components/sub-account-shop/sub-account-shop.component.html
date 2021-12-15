@@ -1,1 +1,57 @@
-<p>sub-account-shop works!</p>
+<nz-card>
+  <nz-table #table2 [nzData]="userTransactionsData" [nzShowPagination]="false">
+    <thead>
+      <tr>
+        <th
+          *ngFor="let column of orderColumnTransactions"
+          [nzSortFn]="column.compare"
+        >
+          {{ column.title }}
+        </th>
+        <th>Show Bets</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let item of table2.data; let i = index">
+        <tr>
+          <td>
+            {{ item.userName }}
+          </td>
+          <td>
+            {{ item.name }}
+          </td>
+
+          <td>
+            {{ item.balance | number: "1.2-2" }}
+          </td>
+
+          <td>
+            <button
+              nz-button
+              nzType="primary"
+              nzSize="small"
+              nzShape="circle"
+              (click)="showModal(item)"
+            >
+              <i nz-icon nzType="expand-alt"></i>
+            </button>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </nz-table>
+</nz-card>
+
+<nz-modal
+  [nzStyle]="{ width: '90vw' }"
+  [(nzVisible)]="isVisible"
+  nzTitle="Customer Bets"
+  (nzOnCancel)="isVisible = false"
+>
+  <ng-container *nzModalContent>
+    <app-user-bets [currentUser]="currentUser" [isModal]="true"></app-user-bets>
+  </ng-container>
+
+  <ng-container *nzModalFooter>
+  </ng-container>
+</nz-modal>

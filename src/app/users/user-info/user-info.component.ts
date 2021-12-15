@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { DataService } from 'src/app/shared/services/data.service';
@@ -13,13 +13,25 @@ export class UserInfoComponent implements OnInit {
   userId: string;
   SubAccountsDetails: any;
   currentUser: any;
+  tabsPosition: string = 'left';
+
+  @HostListener('window:resize', ['$event'])
+  getScreenSize() {
+    if (window.innerWidth < 980) {
+      this.tabsPosition = 'top';
+    } else {
+      this.tabsPosition = 'left';
+    }
+  }
 
   constructor(
     private route: ActivatedRoute,
     private dataService: DataService,
     private router: Router,
     private message: NzMessageService
-  ) {}
+  ) {
+    this.getScreenSize();
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -58,7 +70,6 @@ export class UserInfoComponent implements OnInit {
     this.dataService.getSubAccounts(userId).subscribe(
       (resp) => {
         this.SubAccountsDetails = resp.body;
-        console.log(this.SubAccountsDetails);
       },
       (error) => {
         this.router.navigate(['/home']);

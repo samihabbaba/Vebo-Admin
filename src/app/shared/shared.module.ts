@@ -47,6 +47,7 @@ import { PrintSelectionComponent } from './components/print-selection/print-sele
 import { NgxPrintModule } from 'ngx-print';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 
 const antdModule = [
   NzButtonModule,
@@ -78,7 +79,8 @@ const antdModule = [
   NzDescriptionsModule,
   NzSwitchModule,
   NzPopconfirmModule,
-  NzInputNumberModule
+  NzInputNumberModule,
+  NzAutocompleteModule
 ]
 
 @NgModule({

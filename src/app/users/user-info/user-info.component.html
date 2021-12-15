@@ -1,5 +1,5 @@
 <nz-tabset
-  nzTabPosition="left"
+  [nzTabPosition]="tabsPosition"
   [(nzSelectedIndex)]="selectedIndex"
   style="height: max-content"
   *ngIf="currentUser"
@@ -10,7 +10,293 @@
       User Info
     </ng-template>
 
-    content1
+    <div class="page-starter">
+      <div class="d-md-flex align-items-md-center justify-content-between">
+        <div class="media m-v-10 align-items-center">
+          <nz-avatar
+            nzIcon="user"
+            [nzSize]="50"
+            nzSrc="assets/images/user.jpeg"
+          ></nz-avatar>
+          <div class="media-body m-l-15">
+            <h4 class="m-b-0">Welcome to {{ currentUser.name }}'s profile</h4>
+            <span class="text-gray"
+              >Parent Name: {{ currentUser.parentName }} &nbsp;& &nbsp;
+              Username: {{ currentUser.username }}</span
+            >
+          </div>
+        </div>
+        <div class="d-md-flex align-items-center d-none">
+          <div class="media align-items-center m-r-40 m-v-5">
+            <div class="font-size-27">
+              <i class="text-primary" nz-icon nzType="user" theme="outline"></i>
+            </div>
+            <div class="d-flex align-items-center m-l-10">
+              <span class="text-gray">{{ currentUser.role }}</span>
+            </div>
+          </div>
+          <div class="media align-items-center m-r-40 m-v-5">
+            <div class="font-size-27">
+              <i class="text-danger" nz-icon nzType="mail" theme="outline"></i>
+            </div>
+            <div class="d-flex align-items-center m-l-10">
+              <span class="text-gray">{{ currentUser.email }}</span>
+            </div>
+          </div>
+          <div class="media align-items-center m-v-5">
+            <div class="font-size-27">
+              <i
+                class="text-success"
+                nz-icon
+                nzType="phone"
+                theme="outline"
+              ></i>
+            </div>
+            <div class="d-flex align-items-center m-l-10">
+              <span class="text-gray">{{ currentUser.mobile }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 col-lg-4">
+        <nz-card>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="m-b-0">Cash balance</p>
+              <h2 class="m-b-0">
+                <span
+                  >{{ currentUser.cashBalance | number: "1.2-2" }}
+                  {{ currentUser.symbol }}</span
+                >
+              </h2>
+            </div>
+            <nz-avatar
+              [nzSize]="50"
+              nzIcon="dollar"
+              class="ant-avatar-blue"
+            ></nz-avatar>
+          </div>
+        </nz-card>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <nz-card>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="m-b-0">Bonus Balance</p>
+              <h2 class="m-b-0">
+                <span
+                  >{{ currentUser.bonusBalance | number: "1.2-2" }}
+                  {{ currentUser.symbol }}</span
+                >
+              </h2>
+            </div>
+            <nz-avatar
+              [nzSize]="50"
+              nzIcon="bar-chart"
+              class="ant-avatar-cyan"
+            ></nz-avatar>
+          </div>
+        </nz-card>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <nz-card>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="m-b-0">Real Balance</p>
+              <h2 class="m-b-0">
+                <span
+                  >{{ currentUser.realBalance | number: "1.2-2" }}
+                  {{ currentUser.symbol }}</span
+                >
+              </h2>
+            </div>
+            <nz-avatar
+              [nzSize]="50"
+              nzIcon="profile"
+              class="ant-avatar-red"
+            ></nz-avatar>
+          </div>
+        </nz-card>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <nz-card>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="m-b-0">Credit Balance</p>
+              <h2 class="m-b-0">
+                <span
+                  >{{ currentUser.creditBalance | number: "1.2-2" }}
+                  {{ currentUser.symbol }}</span
+                >
+              </h2>
+            </div>
+            <nz-avatar
+              [nzSize]="50"
+              nzIcon="bar-chart"
+              class="ant-avatar-gold"
+            ></nz-avatar>
+          </div>
+        </nz-card>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <nz-card>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="m-b-0">Casino Credit</p>
+              <h2 class="m-b-0">
+                <span
+                  >{{ currentUser.casinoCredit | number: "1.2-2" }}
+                  {{ currentUser.symbol }}</span
+                >
+              </h2>
+            </div>
+            <nz-avatar
+              [nzSize]="50"
+              nzIcon="pie-chart"
+              class="ant-avatar-blue"
+            ></nz-avatar>
+          </div>
+        </nz-card>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <nz-card>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="m-b-0">Virtual Credit</p>
+              <h2 class="m-b-0">
+                <span
+                  >{{ currentUser.virtualCredit | number: "1.2-2" }}
+                  {{ currentUser.symbol }}</span
+                >
+              </h2>
+            </div>
+            <nz-avatar
+              [nzSize]="50"
+              nzIcon="dot-chart"
+              class="ant-avatar-cyan"
+            ></nz-avatar>
+          </div>
+        </nz-card>
+      </div>
+    </div>
+
+    <div class="row" style="padding: 0 9px">
+      <nz-card>
+        <nz-descriptions nzTitle="Minimum Odds">
+          <nz-descriptions-item nzTitle="Single Minimum Odd">{{
+            currentUser.singleMinOdd
+          }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Double Minimum Odd">{{
+            currentUser.doubleMinOdd
+          }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Triple Minimum Odd">{{
+            currentUser.tripleMinOdd
+          }}</nz-descriptions-item>
+        </nz-descriptions>
+
+        <nz-descriptions nzTitle="Commission Rates" style="padding-top: 1rem">
+          <nz-descriptions-item nzTitle="Single Commission Rate">{{
+            currentUser.singleComissionRate
+          }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Double Commission Rate">{{
+            currentUser.doubleComissionRate
+          }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Triple Commission Rate">{{
+            currentUser.tripleComissionRate
+          }}</nz-descriptions-item>
+        </nz-descriptions>
+
+        <nz-descriptions nzTitle="Status" style="padding-top: 1rem">
+          <nz-descriptions-item nzTitle="Active">
+            <i
+              *ngIf="!currentUser.isActive"
+              nz-icon
+              [nzType]="'close-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#eb2f96'"
+            ></i>
+            <i
+              *ngIf="currentUser.isActive"
+              nz-icon
+              [nzType]="'check-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#52c41a'"
+            ></i>
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Suspended"
+            ><i
+              *ngIf="!currentUser.isSuspended"
+              nz-icon
+              [nzType]="'close-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#eb2f96'"
+            ></i>
+            <i
+              *ngIf="currentUser.isSuspended"
+              nz-icon
+              [nzType]="'check-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#52c41a'"
+            ></i
+          ></nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Master Account"
+            ><i
+              *ngIf="!currentUser.isMasterAccount"
+              nz-icon
+              [nzType]="'close-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#eb2f96'"
+            ></i>
+            <i
+              *ngIf="currentUser.isMasterAccount"
+              nz-icon
+              [nzType]="'check-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#52c41a'"
+            ></i
+          ></nz-descriptions-item>
+
+          <nz-descriptions-item nzTitle="Local Commission Setting"
+            ><i
+              *ngIf="!currentUser.localComissionSetting"
+              nz-icon
+              [nzType]="'close-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#eb2f96'"
+            ></i>
+            <i
+              *ngIf="currentUser.localComissionSetting"
+              nz-icon
+              [nzType]="'check-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#52c41a'"
+            ></i
+          ></nz-descriptions-item>
+        </nz-descriptions>
+
+        <nz-descriptions nzTitle="Other" style="padding-top: 1rem">
+          <nz-descriptions-item nzTitle="Bonus">{{
+            currentUser.bonus
+          }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Total Stake"
+            >{{ currentUser.totalStack }}
+            {{ currentUser.symbol }}</nz-descriptions-item
+          >
+          <nz-descriptions-item nzTitle="Maximum User Limit">{{
+            currentUser.maxUserLimit
+          }}</nz-descriptions-item>
+
+          <nz-descriptions-item nzTitle="Bets Number">{{
+            currentUser.betsNo
+          }}</nz-descriptions-item>
+        </nz-descriptions>
+      </nz-card>
+    </div>
   </nz-tab>
   <nz-tab [nzTitle]="titleTemplate2">
     <ng-template #titleTemplate2>
@@ -26,7 +312,10 @@
       Bets
     </ng-template>
 
-    <app-user-bets [currentUser]="currentUser"></app-user-bets>
+    <app-user-bets
+      [currentUser]="currentUser"
+      [isModal]="false"
+    ></app-user-bets>
   </nz-tab>
   <nz-tab [nzTitle]="titleTemplate4">
     <ng-template #titleTemplate4>
@@ -34,13 +323,25 @@
       Bets Activity
     </ng-template>
 
-    content4
+    <app-user-bets-activity
+      [currentUser]="currentUser"
+    ></app-user-bets-activity>
   </nz-tab>
-  <nz-tab [nzTitle]="titleTemplate5">
+  <nz-tab
+    [nzTitle]="titleTemplate5"
+    *ngIf="currentUser.role === 'Shop' || currentUser.role === 'Promoter'"
+  >
     <ng-template #titleTemplate5>
       <i nz-icon nzType="subnode"></i>
       Sub Accounts
     </ng-template>
-    content5
+    <app-sub-account-shop
+      [subAccounts]="SubAccountsDetails"
+      *ngIf="SubAccountsDetails && currentUser.role === 'Shop'"
+    ></app-sub-account-shop>
+    <app-sub-account-promoter
+      [subAccounts]="SubAccountsDetails"
+      *ngIf="SubAccountsDetails && currentUser.role === 'Promoter'"
+    ></app-sub-account-promoter>
   </nz-tab>
 </nz-tabset>

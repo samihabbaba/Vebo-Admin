@@ -1,1 +1,44 @@
-<p>sub-account-promoter works!</p>
+<nz-card>
+  <nz-table #table2 [nzData]="userTransactionsData" >
+    <thead>
+      <tr>
+        <th
+          *ngFor="let column of orderColumnTransactions"
+          [nzSortFn]="column.compare"
+        >
+          {{ column.title }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let item of table2.data; let i = index">
+        <tr
+          (click)="onExpandChange(item.id, $event)"
+          style="cursor: pointer"
+        >
+          <td>
+            {{ item.userName }}
+          </td>
+          <td>
+            {{ item.name }}
+          </td>
+
+          <td>
+            {{ item.balance | number: "1.2-2" }}
+          </td>
+
+
+          <td>
+            {{ item.networkBalance | number: "1.2-2" }}
+          </td>
+        </tr>
+
+        <!-- TABLE EXPANSION -->
+
+        <tr [nzExpand]="expandSet.has(item.id)">
+          <app-sub-account-shop [subAccounts]="item" class="applyStyle"></app-sub-account-shop>
+        </tr>
+      </ng-container>
+    </tbody>
+  </nz-table>
+</nz-card>

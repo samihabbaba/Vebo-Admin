@@ -1,5 +1,8 @@
 <nz-card>
-  <div class="filters-container">
+  <div
+    class="filters-container"
+    style="display: flex; align-items: center; flex-wrap: wrap"
+  >
     <nz-range-picker
       nzFormat="dd-MM-yyyy"
       [(ngModel)]="userTransactionsDate"
@@ -32,32 +35,31 @@
       Search
     </button>
 
-    <button
-      style="margin: 0.3rem"
-      nz-button
-      nzType="primary"
-      nzSize="small"
-      nzShape="round"
-      (click)="this.extractBetReport(true)"
-    >
-      <i nz-icon nzType="download"></i>
-      Selections
-    </button>
+    <div style="margin-left: auto" *ngIf="!isModal">
+      <button
+        nz-button
+        nzType="primary"
+        nzSize="small"
+        (click)="this.extractBetReport(true)"
+      >
+        <i nz-icon nzType="download"></i>
+        Selections
+      </button>
 
-    <button
-      style="margin: 0.3rem"
-      nz-button
-      nzType="primary"
-      nzSize="small"
-      nzShape="round"
-      (click)="this.extractBetReport(false)"
-    >
-      <i nz-icon nzType="download"></i>
-      Bets
-    </button>
+      <button
+        style="margin: 0.3rem"
+        nz-button
+        nzType="primary"
+        nzSize="small"
+        (click)="this.extractBetReport(false)"
+      >
+        <i nz-icon nzType="download"></i>
+        Bets
+      </button>
+    </div>
   </div>
 
-  <nz-table #table2 [nzData]="userTransactionsData">
+  <nz-table #table2 [nzData]="userTransactionsData" style="padding-top: 1rem">
     <thead>
       <tr>
         <th
@@ -67,35 +69,6 @@
           {{ column.title }}
         </th>
         <th *ngIf="isMasterUser">Print</th>
-      </tr>
-
-      <tr>
-        <th>Total:</th>
-        <th>-</th>
-        <th>
-          {{ this.dataService.formatNumber(this.total.totalSelections, false) }}
-        </th>
-        <th>-</th>
-        <th>
-          {{ this.dataService.formatNumber(this.total.stake) }}
-          {{ this.symbol }}
-        </th>
-        <th>
-          {{ this.dataService.formatNumber(this.total.eb) }} {{ this.symbol }}
-        </th>
-        <th>
-          {{ this.dataService.formatNumber(this.total.ewb) }} {{ this.symbol }}
-        </th>
-        <th>
-          {{ this.dataService.formatNumber(this.total.rwb) }} {{ this.symbol }}
-        </th>
-        <th>
-          {{ this.dataService.formatNumber(this.total.net) }} {{ this.symbol }}
-        </th>
-        <th>-</th>
-        <th>-</th>
-        <th>-</th>
-        <th *ngIf="isMasterUser">-</th>
       </tr>
     </thead>
     <tbody>
@@ -146,7 +119,11 @@
           <nz-tabset class="bet-tabs">
             <nz-tab nzTitle="Selections">
               <nz-table
-              style="padding: 8px 0;"
+                style="
+                  margin: 8px;
+                  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px,
+                    rgba(0, 0, 0, 0.24) 0px 1px 2px !important;
+                "
                 #basicTable
                 [nzData]="item.selections"
                 [nzShowPagination]="false"
@@ -180,7 +157,7 @@
                   <tr *ngFor="let data of basicTable.data">
                     <td>{{ data.eventDate }}</td>
                     <td>{{ data.eventTime }}</td>
-                    <td>{{ data.eventName }}</td>
+                    <td nzEllipsis>{{ data.eventName }}</td>
                     <td>{{ data.leagueName }}</td>
                     <td>{{ data.marketName }}</td>
                     <td>{{ data.oddsName }}</td>
@@ -261,8 +238,12 @@
             >
               <div *ngFor="let ref of combo.ref">
                 <nz-table
-                style="padding: 8px 0;"
-                nzBordered
+                  style="
+                    margin: 8px;
+                    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px,
+                      rgba(0, 0, 0, 0.24) 0px 1px 2px;
+                  "
+                  nzBordered
                   #basicTable2
                   [nzData]="ref.selections"
                   [nzShowPagination]="false"
@@ -286,7 +267,7 @@
                     <tr *ngFor="let data of basicTable2.data">
                       <td>{{ data.eventDate }}</td>
                       <td>{{ data.eventTime }}</td>
-                      <td>{{ data.eventName }}</td>
+                      <td nzEllipsis>{{ data.eventName }}</td>
                       <td>{{ data.marketName }}</td>
                       <td>{{ data.oddsName }}</td>
                       <td>{{ data.rate | number: "1.2-2" }}</td>
@@ -311,6 +292,36 @@
         </tr>
       </ng-container>
     </tbody>
+    <tfoot>
+      <tr>
+        <th>Total:</th>
+        <th>-</th>
+        <th>
+          {{ this.dataService.formatNumber(this.total.totalSelections, false) }}
+        </th>
+        <th>-</th>
+        <th>
+          {{ this.dataService.formatNumber(this.total.stake) }}
+          {{ this.symbol }}
+        </th>
+        <th>
+          {{ this.dataService.formatNumber(this.total.eb) }} {{ this.symbol }}
+        </th>
+        <th>
+          {{ this.dataService.formatNumber(this.total.ewb) }} {{ this.symbol }}
+        </th>
+        <th>
+          {{ this.dataService.formatNumber(this.total.rwb) }} {{ this.symbol }}
+        </th>
+        <th>
+          {{ this.dataService.formatNumber(this.total.net) }} {{ this.symbol }}
+        </th>
+        <th>-</th>
+        <th>-</th>
+        <th>-</th>
+        <th *ngIf="isMasterUser">-</th>
+      </tr>
+    </tfoot>
   </nz-table>
 </nz-card>
 
