@@ -6,18 +6,15 @@ import { BetsComponent } from './bets.component';
 import { ViewBetsComponent } from './view-bets/view-bets.component';
 import { BetOfficeComponent } from './bet-office/bet-office.component';
 import { RiskApprovalComponent } from './risk-approval/risk-approval.component';
-
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
     BetsComponent,
     ViewBetsComponent,
     BetOfficeComponent,
-    RiskApprovalComponent
+    RiskApprovalComponent,
   ],
-  imports: [
-    CommonModule,
-    BetsRoutingModule
-  ]
+  imports: [CommonModule, BetsRoutingModule, SharedModule],
 })
-export class BetsModule { }
+export class BetsModule {}

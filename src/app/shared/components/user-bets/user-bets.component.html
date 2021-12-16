@@ -247,6 +247,7 @@
                   #basicTable2
                   [nzData]="ref.selections"
                   [nzShowPagination]="false"
+                  [nzTableLayout]="combo.name == 1 ? 'fixed' : 'auto'"
                 >
                   <thead>
                     <tr>
@@ -331,7 +332,7 @@
 <nz-modal
   [(nzVisible)]="isVisible"
   nzTitle="Change Bet Rate"
-  (nzOnCancel)="(isVisible)"
+  (nzOnCancel)="isVisible = false"
   (nzOnOk)="applyOddChange()"
 >
   <ng-container *nzModalContent>

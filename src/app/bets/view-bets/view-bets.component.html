@@ -1,1 +1,442 @@
-<p>view-bets works!</p>
+<nz-card>
+  <div style="display: flex; align-items: center; flex-wrap: wrap">
+    <div class="table-filter">
+      <span>Bet ID / Team name</span>
+      <input nz-input placeholder="Bet ID / Team name" [(ngModel)]="betId" />
+    </div>
+
+    <div class="table-filter">
+      <span>Username</span>
+      <div class="example-input">
+        <input
+          placeholder="Username"
+          nz-input
+          [(ngModel)]="usernameValue"
+          (ngModelChange)="usernameChange($event)"
+          [nzAutocomplete]="auto"
+        />
+        <nz-autocomplete #auto>
+          <nz-auto-option
+            *ngFor="let option of filteredUsernames"
+            [nzValue]="option"
+            [nzLabel]="option.username"
+            (selectionChange)="onUsernameSelection($event)"
+          >
+            {{ option.username }}
+          </nz-auto-option>
+        </nz-autocomplete>
+      </div>
+    </div>
+
+    <div class="table-filter">
+      <span>Date Range</span>
+      <nz-range-picker
+        nzFormat="dd-MM-yyyy"
+        [(ngModel)]="userTransactionsDate"
+        [nzAllowClear]="false"
+      ></nz-range-picker>
+    </div>
+
+    <div class="table-filter">
+      <span>Selection Mode</span>
+
+      <nz-select [(ngModel)]="selectionMode" style="width: 120px">
+        <nz-option nzValue="" nzLabel="All"></nz-option>
+        <nz-option nzValue="Live" nzLabel="Live"></nz-option>
+        <nz-option nzValue="Pre-Match" nzLabel="Pre-Match"></nz-option>
+        <nz-option nzValue="Mixed" nzLabel="Mixed"></nz-option>
+      </nz-select>
+    </div>
+
+    <div class="table-filter">
+      <span>Bet Type</span>
+
+      <nz-select [(ngModel)]="betType" style="width: 120px">
+        <nz-option nzValue="" nzLabel="All"></nz-option>
+        <nz-option nzValue="1" nzLabel="Single"></nz-option>
+        <nz-option nzValue="2" nzLabel="Multiple"></nz-option>
+        <nz-option nzValue="3" nzLabel="System"></nz-option>
+      </nz-select>
+    </div>
+
+    <div class="table-filter">
+      <span>Status</span>
+
+      <nz-select [(ngModel)]="status" style="width: 120px">
+        <nz-option nzValue="" nzLabel="All"></nz-option>
+        <nz-option nzValue="Win" nzLabel="Win"></nz-option>
+        <nz-option nzValue="Lose" nzLabel="Lose"></nz-option>
+        <nz-option nzValue="Pending" nzLabel="Pending"></nz-option>
+        <nz-option nzValue="Settled" nzLabel="Settled"></nz-option>
+        <nz-option nzValue="Void" nzLabel="Void"></nz-option>
+      </nz-select>
+    </div>
+
+    <div class="table-filter">
+      <span>Lower Stake</span>
+      <nz-input-number
+        [(ngModel)]="lowerStake"
+        [nzMin]="0"
+        [nzStep]="1"
+      ></nz-input-number>
+    </div>
+
+    <div class="table-filter">
+      <span>Higher Stake</span>
+      <nz-input-number
+        [(ngModel)]="higherStake"
+        [nzMin]="0"
+        [nzStep]="1"
+      ></nz-input-number>
+    </div>
+
+    <div class="table-filter">
+      <span>Lower Payout</span>
+      <nz-input-number
+        [(ngModel)]="lowerPayout"
+        [nzMin]="0"
+        [nzStep]="1"
+      ></nz-input-number>
+    </div>
+
+    <div class="table-filter">
+      <span>Higher Payout</span>
+      <nz-input-number
+        [(ngModel)]="higherPayout"
+        [nzMin]="0"
+        [nzStep]="1"
+      ></nz-input-number>
+    </div>
+
+    <div style="margin-left: auto; display: flex; align-items: center">
+      <button
+        (click)="getBets()"
+        nz-button
+        nzType="primary"
+        nzSize="medium"
+        [nzLoading]="userTransactionsLoading"
+      >
+        <i nz-icon nzType="search"></i>
+        Search
+      </button>
+
+      <button
+        nz-tooltip
+        nzTooltipTitle="Download Bets"
+        style="margin: 0.3rem"
+        nz-button
+        nzType="primary"
+        nzSize="medium"
+        (click)="this.extractBetReport(false)"
+      >
+        <i nz-icon nzType="download"></i>
+        Bets
+      </button>
+
+      <div style="display: flex; flex-direction: column; align-items: center">
+        <nz-switch [(ngModel)]="switchValue"></nz-switch>
+        Action Date
+      </div>
+    </div>
+  </div>
+
+  <nz-table #table2 [nzData]="userTransactionsData" style="padding-top: 1rem">
+    <thead>
+      <tr>
+        <th
+          *ngFor="let column of orderColumnTransactions"
+          [nzSortFn]="column.compare"
+        >
+          {{ column.title }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let item of table2.data; let i = index">
+        <tr (click)="onExpandChange(item, $event)" style="cursor: pointer">
+          <td>
+            <button
+              nz-tooltip
+              [nzTooltipTitle]="'Void bet with the Id : ' + item.id"
+              nz-button
+              nzType="default"
+              nzSize="small"
+            >
+              <i nz-icon nzType="stop"></i>
+              {{ item.id }}
+            </button>
+          </td>
+          <td>
+            {{ item.userName }}
+          </td>
+          <td>{{ item.parentName }}</td>
+          <td>{{ item.betsNo }}</td>
+          <td>{{ item.betType }}</td>
+          <td>{{ item.selectionType }}</td>
+          <td>{{ item.totalSelections }}</td>
+          <td>{{ item.winningSelections }}</td>
+          <td>{{ item.odds | number: "1.2-2" }}</td>
+          <td>{{ item.stake | number: "1.2-2" }}</td>
+          <td>{{ item.payout.toFixed(2) | number: "1.2-2" }}</td>
+          <td>{{ item.bonus.toFixed(2) | number: "1.2-2" }}</td>
+          <td>{{ item.maxPayout.toFixed(2) | number: "1.2-2" }}</td>
+          <td>{{ item.realWin.toFixed(2) | number: "1.2-2" }}</td>
+          <td [ngClass]="{ greenText: item.net >= 0, redText: item.net < 0 }">
+            {{ item.net | number: "1.2-2" }}
+          </td>
+          <td
+            [ngClass]="{
+              greenText: item.status === 'Win',
+              redText: item.status === 'Loss',
+              yellowText: item.status === 'Pending',
+              blueText: item.status === 'Settled',
+              purpleText: item.status === 'Void'
+            }"
+          >
+            {{ item.status }}
+          </td>
+          <td>{{ item.actionDate }}</td>
+          <td>{{ item.date }}</td>
+          <td>{{ item.time }}</td>
+        </tr>
+
+        <!-- TABLE EXPANSION -->
+
+        <tr [nzExpand]="expandSet.has(item.id)" class="no-pad-top">
+          <nz-tabset class="bet-tabs">
+            <nz-tab nzTitle="Selections">
+              <nz-table
+                style="
+                  margin: 8px;
+                  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px,
+                    rgba(0, 0, 0, 0.24) 0px 1px 2px !important;
+                "
+                #basicTable
+                [nzData]="item.selections"
+                [nzShowPagination]="false"
+                nzBordered
+              >
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Event</th>
+                    <th>League</th>
+                    <th>Market</th>
+                    <th>Odds</th>
+                    <th>Rate</th>
+                    <th>1.Half</th>
+                    <th>2.Half</th>
+                    <th>Status</th>
+                    <th *ngIf="isSuperMaster">Action</th>
+                    <th
+                      *ngIf="
+                        isSuperMaster &&
+                        item.selections.length === 1 &&
+                        item.selections[0].isPending
+                      "
+                    >
+                      Odd
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of basicTable.data">
+                    <td>{{ data.eventDate }}</td>
+                    <td>{{ data.eventTime }}</td>
+                    <td nzEllipsis>{{ data.eventName }}</td>
+                    <td>{{ data.leagueName }}</td>
+                    <td>{{ data.marketName }}</td>
+                    <td>{{ data.oddsName }}</td>
+                    <td>{{ data.rate }}</td>
+                    <td>{{ data.firstHalfScore }}</td>
+                    <td>{{ data.secondHalfScore }}</td>
+
+                    <td
+                      [ngClass]="{
+                        redText: returnSelectionStatus(data) == 'Lose',
+                        greenText: returnSelectionStatus(data) == 'Win',
+                        purpleText: returnSelectionStatus(data) == 'Void',
+                        yellowText: returnSelectionStatus(data) == 'Pending'
+                      }"
+                    >
+                      {{ returnSelectionStatus(data) }}
+                    </td>
+
+                    <td *ngIf="isSuperMaster">
+                      <a
+                        [ngClass]="{
+                          disabledText:
+                            returnSelectionStatus(data) !== 'Pending'
+                        }"
+                        nz-popconfirm
+                        nzPopconfirmTitle="Are you sure you want to set the selection to win ?"
+                        (nzOnConfirm)="setAsWin(data)"
+                        >Win</a
+                      >
+                      <nz-divider nzType="vertical"></nz-divider>
+                      <a
+                        [ngClass]="{
+                          disabledText:
+                            returnSelectionStatus(data) !== 'Pending'
+                        }"
+                        nz-popconfirm
+                        nzPopconfirmTitle="Are you sure you want to set the selection to loss ?"
+                        (nzOnConfirm)="setAsLoss(data)"
+                        >Loss</a
+                      >
+                      <nz-divider nzType="vertical"></nz-divider>
+                      <a
+                        [ngClass]="{
+                          disabledText:
+                            returnSelectionStatus(data) !== 'Pending'
+                        }"
+                        nz-popconfirm
+                        nzPopconfirmTitle="Are you sure you want to void the selection ?"
+                        (nzOnConfirm)="setAsVoid(data)"
+                        >Void</a
+                      >
+                    </td>
+
+                    <td
+                      *ngIf="
+                        isSuperMaster &&
+                        item.selections.length === 1 &&
+                        data.isPending
+                      "
+                    >
+                      <i
+                        (click)="showModal(data)"
+                        nz-tooltip
+                        nzTooltipTitle="Change Odd"
+                        style="cursor: pointer"
+                        nz-icon
+                        [nzType]="'calculator'"
+                        [nzTheme]="'twotone'"
+                      ></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </nz-table>
+            </nz-tab>
+            <nz-tab
+              *ngFor="let combo of item.combos"
+              nzTitle="Combo {{ combo.name }}"
+            >
+              <div *ngFor="let ref of combo.ref">
+                <nz-table
+                  style="
+                    margin: 8px;
+                    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px,
+                      rgba(0, 0, 0, 0.24) 0px 1px 2px;
+                  "
+                  nzBordered
+                  #basicTable2
+                  [nzData]="ref.selections"
+                  [nzShowPagination]="false"
+                  [nzTableLayout]="combo.name == 1 ? 'fixed' : 'auto'"
+                >
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Time</th>
+                      <th>
+                        Event - {{ returnExpectedWin(ref) | number: "1.2-2" }}
+                      </th>
+                      <th>Market</th>
+                      <th>Odds</th>
+                      <th>Rate</th>
+                      <th>1.Half</th>
+                      <th>2.Half</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of basicTable2.data">
+                      <td>{{ data.eventDate }}</td>
+                      <td>{{ data.eventTime }}</td>
+                      <td nzEllipsis>{{ data.eventName }}</td>
+                      <td>{{ data.marketName }}</td>
+                      <td>{{ data.oddsName }}</td>
+                      <td>{{ data.rate | number: "1.2-2" }}</td>
+                      <td>{{ data.firstHalfScore }}</td>
+                      <td>{{ data.secondHalfScore }}</td>
+                      <td
+                        [ngClass]="{
+                          redText: returnSelectionStatus(data) == 'Lose',
+                          greenText: returnSelectionStatus(data) == 'Win',
+                          purpleText: returnSelectionStatus(data) == 'Void',
+                          yellowText: returnSelectionStatus(data) == 'Pending'
+                        }"
+                      >
+                        {{ returnSelectionStatus(data) }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+              </div>
+            </nz-tab>
+          </nz-tabset>
+        </tr>
+      </ng-container>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>Total:</th>
+        <th>-</th>
+        <th>-</th>
+        <th>
+          {{ this.dataService.formatNumber(this.total.totalBets, false) }}
+        </th>
+        <th>-</th>
+        <th>-</th>
+        <th>
+          {{ this.dataService.formatNumber(this.total.totalSelections, false) }}
+        </th>
+        <th>
+          {{
+            this.dataService.formatNumber(this.total.winningSelection, false)
+          }}
+        </th>
+        <th>-</th>
+        <th>
+          {{ this.dataService.formatNumber(this.total.stake) }}
+        </th>
+        <th>
+          {{ this.dataService.formatNumber(this.total.ew) }}
+        </th>
+        <th>
+          {{ this.dataService.formatNumber(this.total.eb) }}
+        </th>
+        <th>
+          {{ this.dataService.formatNumber(this.total.ewb) }}
+        </th>
+        <th>
+          {{ this.dataService.formatNumber(this.total.rwb) }}
+        </th>
+        <th>
+          {{ this.dataService.formatNumber(this.total.net) }} {{ this.symbol }}
+        </th>
+        <th>-</th>
+        <th>-</th>
+        <th>-</th>
+        <th>-</th>
+      </tr>
+    </tfoot>
+  </nz-table>
+</nz-card>
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="Change Bet Rate"
+  (nzOnCancel)="isVisible = false"
+  (nzOnOk)="applyOddChange()"
+>
+  <ng-container *nzModalContent>
+    <nz-input-number
+      [(ngModel)]="newOdd"
+      [nzMin]="1"
+      [nzStep]="1"
+    ></nz-input-number>
+  </ng-container>
+</nz-modal>

@@ -1,15 +1,550 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { Subject } from 'rxjs';
+import { AuthenticationService } from 'src/app/shared/services/authentication.service';
+import { DataService } from 'src/app/shared/services/data.service';
+import { ExcelService } from 'src/app/shared/services/excel.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-view-bets',
   templateUrl: './view-bets.component.html',
-  styleUrls: ['./view-bets.component.scss']
+  styleUrls: ['./view-bets.component.scss'],
 })
 export class ViewBetsComponent implements OnInit {
+  expandSet = new Set<number>();
+  @Input() currentUser: any;
+  @Input() isModal: any;
+  userTransactionsDate: any = [new Date(), new Date()];
+  userTransactionsType: string = '';
 
-  constructor() { }
+  userTransactionsData: any[] = [];
+  userTransactionsLoading: boolean = false;
+  switchValue: boolean = false;
+  parentId: string = '';
+  promoterId: string = '';
+  userId: string = '';
+  shopId: string = '';
+  customerId: string = '';
+  isSuperMaster: boolean = false;
 
-  ngOnInit(): void {
+  // Queries
+  betType: string = '';
+  selectionMode: string = '';
+  status: string = '';
+  lowerStake: number = 0;
+  higherStake: number = 250;
+  lowerPayout: number = 0;
+  higherPayout: number = 500;
+  usernameValue: string;
+  filteredUsernames: any[] = [];
+  usernames: any[] = [];
+  betId: any = '';
+
+  usernameChange(value) {
+    this.userId = '';
+    this.parentId = '';
+    this.promoterId = '';
+    this.dataService.getUsersSearch('', value).subscribe((resp) => {
+      this.filteredUsernames = resp.body.userList;
+    });
   }
 
+  onUsernameSelection(ev) {
+    // Event will emit if the user selected an input
+    if (ev.isUserInput) {
+      const user = ev.source.nzValue;
+      if (
+        user.role == 'Online' ||
+        user.role == 'Customer' ||
+        user.role == 'Office'
+      ) {
+        this.userId = user.id;
+        this.getBets();
+      } else if (user.role == 'Master' || user.role == 'Shop') {
+        this.parentId = user.id;
+        this.getBets();
+      } else if (user.role == 'Promoter') {
+        this.promoterId = user.id;
+        this.getBets();
+      }
+    }
+  }
+
+  orderColumnTransactions = [
+    {
+      title: 'Id',
+      compare: (a: any, b: any) => a.id.localeCompare(b.id),
+    },
+    {
+      title: 'Username',
+      compare: (a: any, b: any) => a.username.localeCompare(b.username),
+    },
+    {
+      title: 'Parent',
+      compare: (a: any, b: any) => a.parentName.localeCompare(b.parentName),
+    },
+
+    {
+      title: 'Total Bets',
+      compare: (a: any, b: any) => a.betsNo.localeCompare(b.betsNo),
+    },
+
+    {
+      title: 'Bet Type',
+      compare: (a: any, b: any) => a.betType.localeCompare(b.betType),
+    },
+
+    {
+      title: 'Sel. Mode',
+      compare: (a: any, b: any) =>
+        a.selectionType.localeCompare(b.selectionType),
+    },
+
+    {
+      title: 'Total Sel.',
+      compare: (a: any, b: any) =>
+        a.totalSelections.localeCompare(b.totalSelections),
+    },
+
+    {
+      title: 'Winning Sel.',
+      compare: (a: any, b: any) =>
+        a.winningSelections.localeCompare(b.winningSelections),
+    },
+
+    {
+      title: 'Odds',
+      compare: (a: any, b: any) => a.odds.localeCompare(b.odds),
+    },
+
+    {
+      title: 'Stake',
+      compare: (a: any, b: any) => a.stake.localeCompare(b.stake),
+    },
+
+    // {
+    //   title: 'Bonus',
+    //   compare: (a: any, b: any) => a.bonus.localeCompare(b.bonus),
+    // },
+
+    {
+      title: 'E. Payout',
+      compare: (a: any, b: any) => a.payout.localeCompare(b.payout),
+    },
+
+    {
+      title: 'E. Bonus',
+      compare: (a: any, b: any) => a.bonus.localeCompare(b.bonus),
+    },
+
+    {
+      title: 'Max Payout',
+      compare: (a: any, b: any) => a.maxPayout.localeCompare(b.maxPayout),
+    },
+
+    {
+      title: 'Real Win',
+      compare: (a: any, b: any) => a.realWin.localeCompare(b.realWin),
+    },
+
+    {
+      title: 'Net',
+      compare: (a: any, b: any) => a.net.localeCompare(b.net),
+    },
+
+    {
+      title: 'Status',
+      compare: (a: any, b: any) => a.status.localeCompare(b.status),
+    },
+
+    {
+      title: 'Action Date',
+      compare: (a: any, b: any) => a.actionDate.localeCompare(b.actionDate),
+    },
+
+    {
+      title: 'Date',
+      compare: (a: any, b: any) => a.date.localeCompare(b.date),
+    },
+
+    {
+      title: 'Time',
+      compare: (a: any, b: any) => a.time.localeCompare(b.time),
+    },
+  ];
+
+  betsReportObj = {
+    bets: [],
+    total: {},
+  };
+
+  total: any = {
+    totalBets: 0,
+    ew: 0,
+    eb: 0,
+    ewb: 0,
+    rwb: 0,
+    net: 0,
+    totalSelections: 0,
+    winningSelection: 0,
+    stake: 0,
+  };
+  symbol: string = '';
+  isMasterUser: boolean = false;
+
+  eventsSubject: Subject<number> = new Subject<number>();
+  emitEventToChild(id) {
+    this.eventsSubject.next(id);
+  }
+
+  constructor(
+    public dataService: DataService,
+    private message: NzMessageService,
+    private excel: ExcelService,
+    public authService: AuthenticationService
+  ) {}
+
+  ngOnInit(): void {
+    if (this.authService.decodedToken.role === 'Master') {
+      this.isMasterUser = true;
+    }
+    if (this.authService.decodedToken.master == 'True') {
+      this.isSuperMaster = true;
+    }
+
+    // if (this.currentUser.role && this.currentUser.role == 'Promoter') {
+    //   this.parentId = this.currentUser.id;
+    //   // this.obj.selectedUserId = '';
+    // } else if (this.currentUser.role && this.currentUser.role == 'Shop') {
+    //   this.shopId = this.currentUser.id;
+    //   // this.obj.selectedUserId = '';
+    // } else {
+    //   this.customerId = this.currentUser.id;
+    // }
+
+    this.getBets();
+  }
+
+  onExpandChange(item: any, event?: any): void {
+    if (!this.expandSet.has(item.id)) {
+      this.dataService.GetBetById(item.id).subscribe(
+        (resp) => {
+          item.selections = resp.selections;
+          item.systemBetRefrence = resp.systemBetRefrence;
+
+          item.grouped = {};
+          item.combos = [];
+          item.grouped = _.mapValues(
+            _.groupBy(item.systemBetRefrence, 'combo'),
+            (clist) => clist.map((events) => _.omit(events, 'combo'))
+          );
+          for (const combo in item.grouped) {
+            const obj = { name: combo, ref: item.grouped[combo] };
+            item.combos.push(obj);
+          }
+          this.expandSet.add(item.id);
+        },
+        (error) => {}
+      );
+    } else {
+      this.expandSet.delete(item.id);
+    }
+  }
+
+  getBets() {
+    this.userTransactionsLoading = true;
+    // this.updateTotal();
+    this.dataService
+      .GetBets(
+        this.betId,
+        this.userTransactionsDate[0].toISOString().slice(0, -14),
+        this.userTransactionsDate[1].toISOString().slice(0, -14),
+        this.userId,
+        this.betType,
+        this.status,
+        '',
+        this.lowerStake * 1000,
+        this.higherStake * 1000,
+        this.lowerPayout * 1000,
+        this.higherPayout * 1000,
+        99999,
+        1,
+        this.promoterId,
+        this.parentId,
+        this.switchValue,
+        this.selectionMode
+      )
+      .subscribe(
+        (resp) => {
+          // if (resp.body.betList.length !== 0) {
+          //   this.symbol = resp.betList[0].symbol;
+          // }
+          this.userTransactionsData = resp.betList;
+          console.log(resp)
+          this.userTransactionsLoading = false;
+        },
+        (error) => {
+          this.message.create('error', `Something went wrong`);
+          this.userTransactionsLoading = false;
+        }
+      );
+      this.updateTotal();
+  }
+
+  updateTotal() {
+    this.dataService
+      .getTotalBets(
+        this.betId,
+        this.userTransactionsDate[0].toISOString().slice(0, -14),
+        this.userTransactionsDate[1].toISOString().slice(0, -14),
+        this.userId,
+        this.betType,
+        this.status,
+        '',
+        this.lowerStake * 1000,
+        this.higherStake * 1000,
+        this.lowerPayout * 1000,
+        this.higherPayout * 1000,
+        99999,
+        1,
+        this.promoterId,
+        this.parentId,
+        this.switchValue,
+        this.selectionMode
+      )
+      .subscribe((bets: any) => {
+        this.total = bets;
+      });
+  }
+
+  async extractBetReport(seletions = false) {
+    if (seletions) {
+      this.dataService
+        .getCustomerSelectionsReport(
+          this.userTransactionsDate[0],
+          this.userTransactionsDate[1],
+          this.currentUser.id,
+          this.switchValue
+        )
+        .subscribe(
+          (resp) => {
+            this.excel.generateCustomerSelectionReport(
+              resp,
+              this.userTransactionsDate[0],
+              this.userTransactionsDate[1]
+            );
+          },
+          (error) => {}
+        );
+    } else {
+      // bets ( not selectoins )
+      await this.getBetsForReport();
+      await this.getTotalForReport();
+
+      this.excel.generateBetsReport(
+        this.betsReportObj,
+        this.userTransactionsDate[0].toISOString().slice(0, -14),
+        this.userTransactionsDate[1].toISOString().slice(0, -14)
+      );
+    }
+  }
+
+  getBetsForReport() {
+    return new Promise((resolve, reject) => {
+      this.dataService
+        .GetBetsReport(
+          '',
+          this.userTransactionsDate[0].toISOString().slice(0, -14),
+          this.userTransactionsDate[1].toISOString().slice(0, -14),
+          this.customerId,
+          '',
+          this.userTransactionsType,
+          '',
+          0,
+          0,
+          0,
+          0,
+          99999,
+          1,
+          this.parentId,
+          this.shopId,
+          this.switchValue,
+          ''
+        )
+        .subscribe(
+          (resp) => {
+            this.betsReportObj.bets = resp;
+            resolve(true);
+          },
+          (error) => {
+            reject(false);
+          }
+        );
+    });
+  }
+
+  getTotalForReport() {
+    return new Promise((resolve, reject) => {
+      this.dataService
+        .getTotalBets(
+          '',
+          this.userTransactionsDate[0].toISOString().slice(0, -14),
+          this.userTransactionsDate[1].toISOString().slice(0, -14),
+          this.customerId,
+          '',
+          this.userTransactionsType,
+          '',
+          0,
+          0,
+          0,
+          0,
+          99999,
+          0,
+          this.parentId, // here is parent id, but we want to send the parent id as shop id in the query,
+          // that's why i sent the parent id in the shop id place
+          this.shopId, // shop
+          this.switchValue,
+          ''
+        )
+        .subscribe(
+          (bets: any) => {
+            this.betsReportObj.total = bets;
+            resolve(true);
+          },
+          (error) => {
+            reject(false);
+          }
+        );
+    });
+  }
+
+  // Selection section
+
+  returnSelectionStatus(s) {
+    if (s.isVoid) {
+      return 'Void';
+    }
+
+    if (s.isPending) {
+      return 'Pending';
+    }
+    if (s.isWin) {
+      return 'Win';
+    }
+    return 'Lose';
+  }
+
+  setAsWin(bet: any) {
+    this.dataService.setBetSelectionWin(bet.betId, bet.id).subscribe(
+      (resp) => {
+        if (resp.status === 200) {
+          bet.isWin = true;
+          bet.isPending = false;
+        }
+      },
+      (error) => {
+        if (error.error.errors != undefined) {
+          error.error.errors.forEach((err) => {
+            this.message.create('error', `${err.message}  "\n"`);
+          });
+        } else {
+          this.message.create('error', `${error.message}`);
+        }
+      }
+    );
+  }
+
+  setAsLoss(bet: any) {
+    this.dataService.setBetSelectionLoss(bet.betId, bet.id).subscribe(
+      (resp) => {
+        if (resp.status === 200) {
+          bet.isWin = false;
+          bet.isPending = false;
+        }
+      },
+      (error) => {
+        if (error.error.errors != undefined) {
+          error.error.errors.forEach((err) => {
+            this.message.create('error', `${err.message}  "\n"`);
+          });
+        } else {
+          this.message.create('error', `${error.message}`);
+        }
+      }
+    );
+  }
+
+  setAsVoid(bet: any) {
+    this.dataService.setBetSelectionVoid(bet.betId, bet.id).subscribe(
+      (resp) => {
+        if (resp.status === 200) {
+          bet.isVoid = true;
+          bet.isPending = false;
+        }
+      },
+      (error) => {
+        if (error.error.errors != undefined) {
+          error.error.errors.forEach((err) => {
+            this.message.create('error', `${err.message}  "\n"`);
+          });
+        } else {
+          this.message.create('error', `${error.message}`);
+        }
+      }
+    );
+  }
+
+  isVisible = false;
+  selectedBet: any;
+  newOdd = 0;
+
+  showModal(bet: any): void {
+    this.selectedBet = bet;
+    this.isVisible = true;
+    this.newOdd = this.selectedBet.rate;
+  }
+  applyOddChange() {
+    let bet = this.selectedBet;
+    this.dataService.changeBetsOdds(bet.betId, this.newOdd).subscribe(
+      (resp: any) => {
+        if (resp.status === 200) {
+          bet.rate = resp.body.selections[0].rate;
+
+          this.dataService.reloadBetsObs.next({
+            doIt: true,
+            betId: bet.betId,
+            actionDate: resp.body.actionDate,
+            odds: resp.body.odds,
+            bonus: resp.body.bonus,
+            payout: resp.body.payout,
+            maxPayout: resp.body.maxPayout,
+            realWin: resp.body.realWin,
+            net: resp.body.net,
+          });
+          this.dataService.reloadBetsObs.next({
+            doIt: false,
+          });
+
+          this.message.create('success', `Odd changed successfully`);
+          this.isVisible = false;
+        }
+      },
+      (error) => {
+        if (error.error.errors != undefined) {
+          error.error.errors.forEach((err) => {
+            this.message.create('error', `${err.message}  "\n"`);
+          });
+        } else {
+          this.message.create('error', `${error.message}`);
+        }
+      }
+    );
+  }
+
+  // Combo section
+  returnExpectedWin(ref): number {
+    let result: any = ref.stake * ref.rate;
+    return result.toFixed(2);
+  }
 }
