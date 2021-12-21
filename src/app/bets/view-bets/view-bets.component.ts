@@ -211,7 +211,7 @@ export class ViewBetsComponent implements OnInit {
     public authService: AuthenticationService
   ) {
     this.debounceSubject
-      .pipe(debounceTime(700), distinctUntilChanged())
+      .pipe(debounceTime(500), distinctUntilChanged())
       .subscribe((value) => {
         this.getBets();
       });
