@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { Subject } from 'rxjs';
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
 import { DataService } from 'src/app/shared/services/data.service';
 import { ExcelService } from 'src/app/shared/services/excel.service';
 import * as _ from 'lodash';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-view-bets',
@@ -41,13 +42,18 @@ export class ViewBetsComponent implements OnInit {
   usernames: any[] = [];
   betId: any = '';
 
+  debounceSubject = new Subject<any>();
+
   usernameChange(value) {
-    this.userId = '';
-    this.parentId = '';
-    this.promoterId = '';
-    this.dataService.getUsersSearch('', value).subscribe((resp) => {
-      this.filteredUsernames = resp.body.userList;
-    });
+    if (typeof value === 'string') {
+      console.log(value);
+      this.userId = '';
+      this.parentId = '';
+      this.promoterId = '';
+      this.dataService.getUsersSearch('', value).subscribe((resp) => {
+        this.filteredUsernames = resp.body.userList;
+      });
+    }
   }
 
   onUsernameSelection(ev) {
@@ -203,7 +209,13 @@ export class ViewBetsComponent implements OnInit {
     private message: NzMessageService,
     private excel: ExcelService,
     public authService: AuthenticationService
-  ) {}
+  ) {
+    this.debounceSubject
+      .pipe(debounceTime(700), distinctUntilChanged())
+      .subscribe((value) => {
+        this.getBets();
+      });
+  }
 
   ngOnInit(): void {
     if (this.authService.decodedToken.role === 'Master') {
@@ -255,6 +267,7 @@ export class ViewBetsComponent implements OnInit {
   getBets() {
     this.userTransactionsLoading = true;
     // this.updateTotal();
+
     this.dataService
       .GetBets(
         this.betId,
@@ -281,7 +294,10 @@ export class ViewBetsComponent implements OnInit {
           //   this.symbol = resp.betList[0].symbol;
           // }
           this.userTransactionsData = resp.betList;
-          console.log(resp)
+          console.log(resp);
+          if (typeof this.usernameValue === 'string') {
+            this.usernameValue = '';
+          }
           this.userTransactionsLoading = false;
         },
         (error) => {
@@ -289,7 +305,7 @@ export class ViewBetsComponent implements OnInit {
           this.userTransactionsLoading = false;
         }
       );
-      this.updateTotal();
+    this.updateTotal();
   }
 
   updateTotal() {
@@ -319,58 +335,37 @@ export class ViewBetsComponent implements OnInit {
   }
 
   async extractBetReport(seletions = false) {
-    if (seletions) {
-      this.dataService
-        .getCustomerSelectionsReport(
-          this.userTransactionsDate[0],
-          this.userTransactionsDate[1],
-          this.currentUser.id,
-          this.switchValue
-        )
-        .subscribe(
-          (resp) => {
-            this.excel.generateCustomerSelectionReport(
-              resp,
-              this.userTransactionsDate[0],
-              this.userTransactionsDate[1]
-            );
-          },
-          (error) => {}
-        );
-    } else {
-      // bets ( not selectoins )
-      await this.getBetsForReport();
-      await this.getTotalForReport();
+    await this.getBetsForReport();
+    await this.getTotalForReport();
 
-      this.excel.generateBetsReport(
-        this.betsReportObj,
-        this.userTransactionsDate[0].toISOString().slice(0, -14),
-        this.userTransactionsDate[1].toISOString().slice(0, -14)
-      );
-    }
+    this.excel.generateBetsReport(
+      this.betsReportObj,
+      this.userTransactionsDate[0].toISOString().slice(0, -14),
+      this.userTransactionsDate[1].toISOString().slice(0, -14)
+    );
   }
 
   getBetsForReport() {
     return new Promise((resolve, reject) => {
       this.dataService
         .GetBetsReport(
-          '',
+          this.betId,
           this.userTransactionsDate[0].toISOString().slice(0, -14),
           this.userTransactionsDate[1].toISOString().slice(0, -14),
-          this.customerId,
+          this.userId,
+          this.betType,
+          this.status,
           '',
-          this.userTransactionsType,
-          '',
-          0,
-          0,
-          0,
-          0,
+          this.lowerStake * 1000,
+          this.higherStake * 1000,
+          this.lowerPayout * 1000,
+          this.higherPayout * 1000,
           99999,
           1,
+          '',
           this.parentId,
-          this.shopId,
           this.switchValue,
-          ''
+          this.selectionMode
         )
         .subscribe(
           (resp) => {
@@ -388,24 +383,23 @@ export class ViewBetsComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.dataService
         .getTotalBets(
-          '',
+          this.betId,
           this.userTransactionsDate[0].toISOString().slice(0, -14),
           this.userTransactionsDate[1].toISOString().slice(0, -14),
-          this.customerId,
+          this.userId,
+          this.betType,
+          this.status,
           '',
-          this.userTransactionsType,
-          '',
-          0,
-          0,
-          0,
-          0,
+          this.lowerStake * 1000,
+          this.higherStake * 1000,
+          this.lowerPayout * 1000,
+          this.higherPayout * 1000,
           99999,
-          0,
-          this.parentId, // here is parent id, but we want to send the parent id as shop id in the query,
-          // that's why i sent the parent id in the shop id place
-          this.shopId, // shop
+          1,
+          this.promoterId,
+          this.parentId,
           this.switchValue,
-          ''
+          this.selectionMode
         )
         .subscribe(
           (bets: any) => {
@@ -546,5 +540,70 @@ export class ViewBetsComponent implements OnInit {
   returnExpectedWin(ref): number {
     let result: any = ref.stake * ref.rate;
     return result.toFixed(2);
+  }
+
+  voidAvailable(date: any) {
+    const dateNowIso = new Date().toISOString();
+    const datenow2 = new Date(dateNowIso.toString());
+    const voidDate = new Date(date); // already converting so no need for the 60 * 3 ?
+    const offset = new Date().getTimezoneOffset();
+    voidDate.setMinutes(voidDate.getMinutes() - offset);
+    const diffMs = datenow2.getTime() - voidDate.getTime(); // the server time is 1h more
+    const resultInMinutes = Math.round(diffMs / 60000);
+    if (resultInMinutes > 10) {
+      return false;
+    }
+    return true;
+  }
+
+  voidBet() {
+    let modalObj = {
+      id: this.selectedBet.id,
+      isDeleted: false,
+      isVoid: this.selectedBet.isVoid,
+      isPayout: this.selectedBet.isPayout,
+      payout: !this.selectedBet.isPayout,
+      note: '',
+    };
+    if (this.authService.decodedToken.master === 'True') {
+      this.dataService.setBetVoidMaster(modalObj).subscribe(
+        (response) => {
+          if (response.status === 200) {
+            this.message.create('success', `Bet voided successfully`);
+          }
+          this.getBets();
+        },
+        (error) => {
+          if (error.error.errors != undefined) {
+            error.error.errors.forEach((err) => {
+              this.message.create('error', `${err.message}  "\n"`);
+            });
+          } else {
+            this.message.create('error', `${error.message}`);
+          }
+        }
+      );
+    } else {
+      modalObj.isVoid = !modalObj.isVoid;
+      modalObj.payout = !modalObj.payout;
+
+      this.dataService.setBetVoidMaster(modalObj).subscribe(
+        (response) => {
+          if (response.status === 200) {
+            this.message.create('success', `Bet voided successfully`);
+          }
+          this.getBets();
+        },
+        (error) => {
+          if (error.error.errors != undefined) {
+            error.error.errors.forEach((err) => {
+              this.message.create('error', `${err.message}  "\n"`);
+            });
+          } else {
+            this.message.create('error', `${error.message}`);
+          }
+        }
+      );
+    }
   }
 }

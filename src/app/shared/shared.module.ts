@@ -99,7 +99,7 @@ const antdModule = [
         UserBetsActivityComponent,
         SubAccountPromoterComponent,
         SubAccountShopComponent,
-
+        PrintSelectionComponent,
     ],
     imports: [
         RouterModule,

@@ -2,7 +2,12 @@
   <div style="display: flex; align-items: center; flex-wrap: wrap">
     <div class="table-filter">
       <span>Bet ID / Team name</span>
-      <input nz-input placeholder="Bet ID / Team name" [(ngModel)]="betId" />
+      <input
+        nz-input
+        placeholder="Bet ID / Team name"
+        [(ngModel)]="betId"
+        (keyup)="debounceSubject.next($event)"
+      />
     </div>
 
     <div class="table-filter">
@@ -156,6 +161,21 @@
         <tr (click)="onExpandChange(item, $event)" style="cursor: pointer">
           <td>
             <button
+              *ngIf="
+                !item.isVoid &&
+                voidAvailable(item.date) &&
+                this.authService.decodedToken.master === 'False'
+              "
+              nz-popconfirm
+              [nzPopconfirmTitle]="
+                'Are you sure you want to void the bet with the Id ' +
+                item.id +
+                ' ?'
+              "
+              (nzOnConfirm)="this.voidBet()"
+              (click)="selectedBet = item; $event.stopPropagation()"
+              class="voidButton"
+              [ngClass]="{ active: item.status === 'Pending' }"
               nz-tooltip
               [nzTooltipTitle]="'Void bet with the Id : ' + item.id"
               nz-button
@@ -165,6 +185,39 @@
               <i nz-icon nzType="stop"></i>
               {{ item.id }}
             </button>
+            <button
+              *ngIf="
+                !item.isVoid &&
+                item.status == 'Pending' &&
+                this.authService.decodedToken.master === 'True'
+              "
+              nz-popconfirm
+              [nzPopconfirmTitle]="
+                'Are you sure you want to void the bet with the Id ' +
+                item.id +
+                ' ?'
+              "
+              (nzOnConfirm)="this.voidBet()"
+              (click)="selectedBet = item; $event.stopPropagation()"
+              class="voidButton"
+              [ngClass]="{ active: item.status === 'Pending' }"
+              nz-tooltip
+              [nzTooltipTitle]="'Void bet with the Id : ' + item.id"
+              nz-button
+              nzType="default"
+              nzSize="small"
+            >
+              <i nz-icon nzType="stop"></i>
+              {{ item.id }}
+            </button>
+
+            <div
+            style="text-align: center;"
+              *ngIf="item.status !== 'Pending'"
+
+            >
+              {{ item.id }}
+            </div>
           </td>
           <td>
             {{ item.userName }}
@@ -440,3 +493,6 @@
     ></nz-input-number>
   </ng-container>
 </nz-modal>
+
+<app-print-selection [events]="eventsSubject.asObservable()">
+</app-print-selection>
