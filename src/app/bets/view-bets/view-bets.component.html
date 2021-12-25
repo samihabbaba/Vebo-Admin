@@ -146,7 +146,7 @@
       </div>
 
       <button
-      style="margin-right: 1rem;"
+        style="margin-right: 1rem"
         (click)="getBets()"
         nz-button
         nzType="primary"
@@ -257,7 +257,15 @@
           </td>
           <td>{{ item.betsNo }}</td>
           <td>{{ item.betType }}</td>
-          <td>{{ item.selectionType }}</td>
+          <td
+            [ngClass]="{
+              blackText: item.selectionType === 'Pre-Match',
+              blueText: item.selectionType === 'Live',
+              purpleText: item.selectionType === 'Mixed'
+            }"
+          >
+            {{ item.selectionType }}
+          </td>
           <td>{{ item.totalSelections }}</td>
           <td>{{ item.winningSelections }}</td>
           <td>{{ item.odds | number: "1.2-2" }}</td>
