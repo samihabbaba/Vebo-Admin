@@ -407,7 +407,7 @@ export class CustomerComponent implements OnInit {
     this.editingUser.email = obj.email;
     this.editingUser.mobile = String(obj.mobile);
     this.editingUser.isActive = obj.isActive;
-    
+
     this.dataService.submitChangesForUser(this.editingUser).subscribe(
       (response) => {
         this.LoadUsers();
@@ -514,7 +514,7 @@ export class CustomerComponent implements OnInit {
         this.isOkLoading = false;
       },
       (error) => {
-        this.message.create('error', `Something went wrong`);
+        this.message.create('error', `${error.error.errors[0].message}`);
         this.isOkLoading = false;
       }
     );

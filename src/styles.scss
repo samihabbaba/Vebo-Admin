@@ -9,6 +9,10 @@
 //   }
 // }
 
+app-sidenav {
+  display: none;
+}
+
 .d-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -103,4 +107,26 @@ app-sub-account-shop.applyStyle {
     box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px !important;
   }
 }
+
+.twoRow {
+  display: flex;
+  align-items: center;
+  & > div {
+    flex: 1;
+    & > * {
+      width: 100%;
+    }
+  }
+
+  & > button {
+    flex: 1;
+    height: 38.59px;
+  }
+}
+
+
+nz-notification {
+  cursor: pointer;
+}
+
 

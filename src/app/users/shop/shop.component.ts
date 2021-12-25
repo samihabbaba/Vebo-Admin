@@ -575,7 +575,7 @@ export class ShopComponent implements OnInit {
         this.isOkLoading = false;
       },
       (error) => {
-        this.message.create('error', `Something went wrong`);
+        this.message.create('error', `${error.error.errors[0].message}`);
         this.isOkLoading = false;
       }
     );

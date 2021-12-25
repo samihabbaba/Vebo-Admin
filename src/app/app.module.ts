@@ -24,7 +24,6 @@ import { ThemeConstantService } from './shared/services/theme-constant.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { RiskApprovalNotificationComponent } from './shared/components/risk-approval-notification/risk-approval-notification.component';
 import { AuthComponent } from './auth/auth.component';
 import { AuthenticationService } from './shared/services/authentication.service';
 import { UserInfoComponent } from './users/user-info/user-info.component';
@@ -36,7 +35,6 @@ registerLocaleData(en);
     AppComponent,
     CommonLayoutComponent,
     FullLayoutComponent,
-    RiskApprovalNotificationComponent,
     AuthComponent,
     UserInfoComponent
   ],

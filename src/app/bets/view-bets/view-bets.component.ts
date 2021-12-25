@@ -44,6 +44,8 @@ export class ViewBetsComponent implements OnInit {
 
   debounceSubject = new Subject<any>();
 
+  selectedParent: any = '';
+
   usernameChange(value) {
     if (typeof value === 'string') {
       console.log(value);
@@ -92,7 +94,7 @@ export class ViewBetsComponent implements OnInit {
     },
 
     {
-      title: 'Total Bets',
+      title: '# Bets',
       compare: (a: any, b: any) => a.betsNo.localeCompare(b.betsNo),
     },
 
@@ -108,13 +110,13 @@ export class ViewBetsComponent implements OnInit {
     },
 
     {
-      title: 'Total Sel.',
+      title: '# Sel.',
       compare: (a: any, b: any) =>
         a.totalSelections.localeCompare(b.totalSelections),
     },
 
     {
-      title: 'Winning Sel.',
+      title: 'Win. Sel.',
       compare: (a: any, b: any) =>
         a.winningSelections.localeCompare(b.winningSelections),
     },
@@ -135,7 +137,7 @@ export class ViewBetsComponent implements OnInit {
     // },
 
     {
-      title: 'E. Payout',
+      title: 'E. Pay',
       compare: (a: any, b: any) => a.payout.localeCompare(b.payout),
     },
 
@@ -145,7 +147,7 @@ export class ViewBetsComponent implements OnInit {
     },
 
     {
-      title: 'Max Payout',
+      title: 'Max Pay',
       compare: (a: any, b: any) => a.maxPayout.localeCompare(b.maxPayout),
     },
 
@@ -165,7 +167,7 @@ export class ViewBetsComponent implements OnInit {
     },
 
     {
-      title: 'Action Date',
+      title: 'Act. Date',
       compare: (a: any, b: any) => a.actionDate.localeCompare(b.actionDate),
     },
 
@@ -604,6 +606,36 @@ export class ViewBetsComponent implements OnInit {
           }
         }
       );
+    }
+  }
+
+  ShowUserBets(bet) {
+    if (this.selectedParent !== bet.userName) {
+      this.selectedParent = bet.userName;
+      this.parentId = '';
+      this.userId = bet.userId;
+      this.getBets();
+    } else {
+      this.selectedParent = '';
+      this.userId = '';
+      this.parentId = '';
+      this.getBets();
+    }
+  }
+
+  ShowParentBets(bet) {
+    if (this.selectedParent !== bet.parentName) {
+      this.selectedParent = bet.parentName;
+
+      this.userId = '';
+
+      this.parentId = bet.parentId;
+      this.getBets();
+    } else {
+      this.selectedParent = '';
+      this.userId = '';
+      this.parentId = '';
+      this.getBets();
     }
   }
 }

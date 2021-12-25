@@ -1,120 +1,152 @@
 <nz-card>
-  <div style="display: flex; align-items: center; flex-wrap: wrap">
-    <div class="table-filter">
-      <span>Bet ID / Team name</span>
-      <input
-        nz-input
-        placeholder="Bet ID / Team name"
-        [(ngModel)]="betId"
-        (keyup)="debounceSubject.next($event)"
-      />
-    </div>
-
-    <div class="table-filter">
-      <span>Username</span>
-      <div class="example-input">
+  <div class="table-filter-container">
+    <div class="twoRow">
+      <div class="table-filter">
+        <span>Bet ID / Team name</span>
         <input
-          placeholder="Username"
           nz-input
-          [(ngModel)]="usernameValue"
-          (ngModelChange)="usernameChange($event)"
-          [nzAutocomplete]="auto"
+          placeholder="Bet ID / Team name"
+          [(ngModel)]="betId"
+          (keyup)="debounceSubject.next($event)"
         />
-        <nz-autocomplete #auto>
-          <nz-auto-option
-            *ngFor="let option of filteredUsernames"
-            [nzValue]="option"
-            [nzLabel]="option.username"
-            (selectionChange)="onUsernameSelection($event)"
-          >
-            {{ option.username }}
-          </nz-auto-option>
-        </nz-autocomplete>
+      </div>
+
+      <div class="table-filter">
+        <span>Username</span>
+        <div class="example-input">
+          <input
+            placeholder="Username"
+            nz-input
+            [(ngModel)]="usernameValue"
+            (ngModelChange)="usernameChange($event)"
+            [nzAutocomplete]="auto"
+          />
+          <nz-autocomplete #auto>
+            <nz-auto-option
+              *ngFor="let option of filteredUsernames"
+              [nzValue]="option"
+              [nzLabel]="option.username"
+              (selectionChange)="onUsernameSelection($event)"
+            >
+              {{ option.username }}
+            </nz-auto-option>
+          </nz-autocomplete>
+        </div>
       </div>
     </div>
 
-    <div class="table-filter">
-      <span>Date Range</span>
-      <nz-range-picker
-        nzFormat="dd-MM-yyyy"
-        [(ngModel)]="userTransactionsDate"
-        [nzAllowClear]="false"
-      ></nz-range-picker>
+    <div class="twoRow">
+      <div class="table-filter">
+        <span>Date Range</span>
+        <nz-range-picker
+          nzFormat="dd-MM-yyyy"
+          [(ngModel)]="userTransactionsDate"
+          [nzAllowClear]="false"
+        ></nz-range-picker>
+      </div>
     </div>
 
-    <div class="table-filter">
-      <span>Selection Mode</span>
+    <div class="twoRow">
+      <div class="table-filter">
+        <span>Selection Mode</span>
 
-      <nz-select [(ngModel)]="selectionMode" style="width: 120px">
-        <nz-option nzValue="" nzLabel="All"></nz-option>
-        <nz-option nzValue="Live" nzLabel="Live"></nz-option>
-        <nz-option nzValue="Pre-Match" nzLabel="Pre-Match"></nz-option>
-        <nz-option nzValue="Mixed" nzLabel="Mixed"></nz-option>
-      </nz-select>
+        <nz-select [(ngModel)]="selectionMode">
+          <nz-option nzValue="" nzLabel="All"></nz-option>
+          <nz-option nzValue="Live" nzLabel="Live"></nz-option>
+          <nz-option nzValue="Pre-Match" nzLabel="Pre-Match"></nz-option>
+          <nz-option nzValue="Mixed" nzLabel="Mixed"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="table-filter">
+        <span>Bet Type</span>
+
+        <nz-select [(ngModel)]="betType">
+          <nz-option nzValue="" nzLabel="All"></nz-option>
+          <nz-option nzValue="1" nzLabel="Single"></nz-option>
+          <nz-option nzValue="2" nzLabel="Multiple"></nz-option>
+          <nz-option nzValue="3" nzLabel="System"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="table-filter">
+        <span>Status</span>
+
+        <nz-select [(ngModel)]="status">
+          <nz-option nzValue="" nzLabel="All"></nz-option>
+          <nz-option nzValue="Win" nzLabel="Win"></nz-option>
+          <nz-option nzValue="Lose" nzLabel="Lose"></nz-option>
+          <nz-option nzValue="Pending" nzLabel="Pending"></nz-option>
+          <nz-option nzValue="Settled" nzLabel="Settled"></nz-option>
+          <nz-option nzValue="Void" nzLabel="Void"></nz-option>
+        </nz-select>
+      </div>
     </div>
 
-    <div class="table-filter">
-      <span>Bet Type</span>
-
-      <nz-select [(ngModel)]="betType" style="width: 120px">
-        <nz-option nzValue="" nzLabel="All"></nz-option>
-        <nz-option nzValue="1" nzLabel="Single"></nz-option>
-        <nz-option nzValue="2" nzLabel="Multiple"></nz-option>
-        <nz-option nzValue="3" nzLabel="System"></nz-option>
-      </nz-select>
+    <div class="twoRow">
+      <div class="table-filter">
+        <span>Lower Stake</span>
+        <nz-input-number
+          [(ngModel)]="lowerStake"
+          [nzMin]="0"
+          [nzStep]="1"
+        ></nz-input-number>
+      </div>
+      <div class="table-filter">
+        <span>Higher Stake</span>
+        <nz-input-number
+          [(ngModel)]="higherStake"
+          [nzMin]="0"
+          [nzStep]="1"
+        ></nz-input-number>
+      </div>
     </div>
 
-    <div class="table-filter">
-      <span>Status</span>
+    <div class="twoRow">
+      <div class="table-filter">
+        <span>Lower Payout</span>
+        <nz-input-number
+          [(ngModel)]="lowerPayout"
+          [nzMin]="0"
+          [nzStep]="1"
+        ></nz-input-number>
+      </div>
 
-      <nz-select [(ngModel)]="status" style="width: 120px">
-        <nz-option nzValue="" nzLabel="All"></nz-option>
-        <nz-option nzValue="Win" nzLabel="Win"></nz-option>
-        <nz-option nzValue="Lose" nzLabel="Lose"></nz-option>
-        <nz-option nzValue="Pending" nzLabel="Pending"></nz-option>
-        <nz-option nzValue="Settled" nzLabel="Settled"></nz-option>
-        <nz-option nzValue="Void" nzLabel="Void"></nz-option>
-      </nz-select>
+      <div class="table-filter">
+        <span>Higher Payout</span>
+        <nz-input-number
+          [(ngModel)]="higherPayout"
+          [nzMin]="0"
+          [nzStep]="1"
+        ></nz-input-number>
+      </div>
     </div>
 
-    <div class="table-filter">
-      <span>Lower Stake</span>
-      <nz-input-number
-        [(ngModel)]="lowerStake"
-        [nzMin]="0"
-        [nzStep]="1"
-      ></nz-input-number>
-    </div>
+    <div class="twoRow">
+      <div style="display: flex">
+        <div class="actionDate">
+          <nz-switch
+            [(ngModel)]="switchValue"
+            style="text-align: center"
+          ></nz-switch>
+          Action Date
+        </div>
+        <button
+          nz-tooltip
+          nzTooltipTitle="Download Bets"
+          style="margin: 0.3rem"
+          nz-button
+          nzType="primary"
+          nzSize="medium"
+          (click)="this.extractBetReport(false)"
+        >
+          <i nz-icon nzType="download"></i>
+          Bets
+        </button>
+      </div>
 
-    <div class="table-filter">
-      <span>Higher Stake</span>
-      <nz-input-number
-        [(ngModel)]="higherStake"
-        [nzMin]="0"
-        [nzStep]="1"
-      ></nz-input-number>
-    </div>
-
-    <div class="table-filter">
-      <span>Lower Payout</span>
-      <nz-input-number
-        [(ngModel)]="lowerPayout"
-        [nzMin]="0"
-        [nzStep]="1"
-      ></nz-input-number>
-    </div>
-
-    <div class="table-filter">
-      <span>Higher Payout</span>
-      <nz-input-number
-        [(ngModel)]="higherPayout"
-        [nzMin]="0"
-        [nzStep]="1"
-      ></nz-input-number>
-    </div>
-
-    <div style="margin-left: auto; display: flex; align-items: center">
       <button
+      style="margin-right: 1rem;"
         (click)="getBets()"
         nz-button
         nzType="primary"
@@ -124,33 +156,23 @@
         <i nz-icon nzType="search"></i>
         Search
       </button>
-
-      <button
-        nz-tooltip
-        nzTooltipTitle="Download Bets"
-        style="margin: 0.3rem"
-        nz-button
-        nzType="primary"
-        nzSize="medium"
-        (click)="this.extractBetReport(false)"
-      >
-        <i nz-icon nzType="download"></i>
-        Bets
-      </button>
-
-      <div style="display: flex; flex-direction: column; align-items: center">
-        <nz-switch [(ngModel)]="switchValue"></nz-switch>
-        Action Date
-      </div>
     </div>
   </div>
 
-  <nz-table #table2 [nzData]="userTransactionsData" style="padding-top: 1rem">
+  <nz-table
+    #table2
+    [nzData]="userTransactionsData"
+    style="padding-top: 0.4rem"
+    [nzBordered]="true"
+    nzSize="medium"
+    nzTableLayout="auto"
+  >
     <thead>
       <tr>
         <th
           *ngFor="let column of orderColumnTransactions"
-          [nzSortFn]="column.compare"
+          style="padding: 0.4rem"
+          [ngStyle]="{ 'text-align': column.title == 'Id' ? 'center' : 'left' }"
         >
           {{ column.title }}
         </th>
@@ -158,8 +180,12 @@
     </thead>
     <tbody>
       <ng-container *ngFor="let item of table2.data; let i = index">
-        <tr (click)="onExpandChange(item, $event)" style="cursor: pointer">
-          <td>
+        <tr
+          (click)="onExpandChange(item, $event)"
+          style="cursor: pointer"
+          class="lowPadding"
+        >
+          <td style="text-align: center">
             <button
               *ngIf="
                 !item.isVoid &&
@@ -211,18 +237,24 @@
               {{ item.id }}
             </button>
 
-            <div
-            style="text-align: center;"
-              *ngIf="item.status !== 'Pending'"
-
-            >
+            <div style="text-align: center" *ngIf="item.status !== 'Pending'">
               {{ item.id }}
             </div>
           </td>
-          <td>
+          <td
+            (click)="ShowUserBets(item); $event.stopPropagation()"
+            class="selectedBet"
+            [ngClass]="{ active: selectedParent === item.userName }"
+          >
             {{ item.userName }}
           </td>
-          <td>{{ item.parentName }}</td>
+          <td
+            (click)="ShowParentBets(item); $event.stopPropagation()"
+            class="selectedBet"
+            [ngClass]="{ active: selectedParent === item.parentName }"
+          >
+            {{ item.parentName }}
+          </td>
           <td>{{ item.betsNo }}</td>
           <td>{{ item.betType }}</td>
           <td>{{ item.selectionType }}</td>
@@ -433,7 +465,7 @@
         </tr>
       </ng-container>
     </tbody>
-    <tfoot>
+    <tfoot class="noPadFooter">
       <tr>
         <th>Total:</th>
         <th>-</th>
