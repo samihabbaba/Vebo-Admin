@@ -249,7 +249,6 @@ export class RiskApprovalComponent implements OnInit {
       );
   }
 
-
   // Selection section
 
   returnSelectionStatus(s) {
@@ -472,5 +471,41 @@ export class RiskApprovalComponent implements OnInit {
       this.parentId = '';
       this.getBets();
     }
+  }
+
+  acceptBet() {
+    this.dataService.acceptBet(this.selectedBet).subscribe(
+      (resp) => {
+        this.message.create('info', `Bet approved`);
+        this.getBets();
+      },
+      (error) => {
+        if (error.error.errors != undefined) {
+          error.error.errors.forEach((err) => {
+            this.message.create('error', `${err.message}  "\n"`);
+          });
+        } else {
+          this.message.create('error', `${error.message}`);
+        }
+      }
+    );
+  }
+
+  rejectBet() {
+    this.dataService.rejectBet(this.selectedBet).subscribe(
+      (resp) => {
+        this.message.create('info', `Bet rejected`);
+        this.getBets();
+      },
+      (error) => {
+        if (error.error.errors != undefined) {
+          error.error.errors.forEach((err) => {
+            this.message.create('error', `${err.message}  "\n"`);
+          });
+        } else {
+          this.message.create('error', `${error.message}`);
+        }
+      }
+    );
   }
 }
