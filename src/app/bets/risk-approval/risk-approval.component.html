@@ -69,6 +69,7 @@
         >
           {{ column.title }}
         </th>
+        <th style="padding: 0.4rem">Action</th>
       </tr>
     </thead>
     <tbody>
@@ -131,6 +132,30 @@
           </td>
           <td>{{ item.date }}</td>
           <td>{{ item.time }}</td>
+          <td style="text-align: center">
+            <nz-button-group nzSize="small">
+              <button
+                *ngIf="item.status === 'Waiting Approval'"
+                nz-button
+                nzType="primary"
+                class="approveBtn"
+                nz-tooltip
+                nzTooltipTitle="Accept"
+              >
+                <i nz-icon nzType="check"></i>
+              </button>
+              <button
+                *ngIf="item.status === 'Waiting Approval'"
+                nz-button
+                nzType="primary"
+                class="rejectBtn"
+                nz-tooltip
+                nzTooltipTitle="Reject"
+              >
+                <i nz-icon nzType="close"></i>
+              </button>
+            </nz-button-group>
+          </td>
         </tr>
 
         <!-- TABLE EXPANSION -->

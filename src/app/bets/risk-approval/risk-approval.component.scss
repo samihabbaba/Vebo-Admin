@@ -86,3 +86,21 @@
     padding: 0.4rem;
   }
 }
+
+.rejectBtn {
+  margin-left: 0.5rem;
+  background-color: #de4436;
+  color: white;
+  border: none;
+  &:hover {
+    background-color: #fc3927;
+  }
+}
+
+.approveBtn {
+  background-color: #04d992;
+  border: none;
+  &:hover {
+    background-color: #00ffaa;
+  }
+}
