@@ -7,7 +7,6 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class DataService {
-  
   convertDateTimeToIso(dateTime) {
     const offset = new Date().getTimezoneOffset() / -60;
     dateTime.setTime(dateTime.getTime() + offset * 60 * 60 * 1000);
@@ -26,7 +25,6 @@ export class DataService {
   reloadBets = this.reloadBetsObs.asObservable();
 
   currentUser: any = {};
-
 
   timeOffsets = [
     {
@@ -698,7 +696,7 @@ export class DataService {
     );
   }
 
-  getBonus(promoter = '', shop = '') {
+  getBonus(promoter = '', shop = ''): any {
     return this.http.get(
       // `${environment.apiUrl}bonus/?Status=All`,
       `${environment.apiUrl}bonus/?parentId=${promoter}&ShopId=${shop}&IsOffice=false&IsOnline=false&Status=All`,
@@ -706,7 +704,7 @@ export class DataService {
     );
   }
 
-  getBonusNotShop(isOffice = 'flase', isOnline = 'flase') {
+  getBonusNotShop(isOffice = 'flase', isOnline = 'flase'): any {
     return this.http.get(
       // `${environment.apiUrl}bonus/?Status=All`,
       `${environment.apiUrl}bonus/?IsOffice=${isOffice}&IsOnline=${isOnline}&Status=All`,

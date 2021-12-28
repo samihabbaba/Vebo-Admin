@@ -11,6 +11,13 @@ import { AuthenticationService } from 'src/app/shared/services/authentication.se
 import { DataService } from 'src/app/shared/services/data.service';
 import { TableService } from 'src/app/shared/services/table.service';
 
+interface DataItem {
+  id: any;
+  percent: any;
+  minBetNo: any;
+  minAmount: any;
+  isActive: any;
+}
 
 interface DataItem {
   id: any;
@@ -26,17 +33,13 @@ interface DataItem {
 @Component({
   selector: 'app-bonus-online-customers',
   templateUrl: './bonus-online-customers.component.html',
-  styleUrls: ['./bonus-online-customers.component.css']
+  styleUrls: ['./bonus-online-customers.component.css'],
 })
 export class BonusOnlineCustomersComponent implements OnInit {
-
-  expandSet = new Set<number>();
-
   isOkLoading: boolean = false;
   // Modal Variables
   isAddVisible: boolean = false;
   isDetailVisible: boolean = false;
-  isPasswordVisible: boolean = false;
 
   isSearchLoading: boolean = false;
 
@@ -45,23 +48,6 @@ export class BonusOnlineCustomersComponent implements OnInit {
 
   detailForm: FormGroup;
   editingUser: any;
-
-  categoriesList = [
-    'A',
-    'B',
-    'C',
-    'D',
-    'AB',
-    'AC',
-    'AD',
-    'BC',
-    'BD',
-    'CD',
-    'ABC',
-    'ABD',
-    'BCD',
-    'ABCD',
-  ];
 
   dataSource = [];
 
@@ -72,40 +58,20 @@ export class BonusOnlineCustomersComponent implements OnInit {
     },
 
     {
-      title: 'Name',
-      compare: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name),
-    },
-    {
-      title: 'Max Bet. Amount',
-      compare: (a: DataItem, b: DataItem) =>
-        a.maxBettingAmount.localeCompare(b.maxBettingAmount),
-    },
-    {
-      title: 'Max Payout',
-      compare: (a: DataItem, b: DataItem) =>
-        a.maxPayout.localeCompare(b.maxPayout),
+      title: 'Percent',
+      compare: (a: DataItem, b: DataItem) => a.percent.localeCompare(b.percent),
     },
 
     {
-      title: 'Cate. High. Odd',
+      title: 'Min. Bet No.',
       compare: (a: DataItem, b: DataItem) =>
-        a.categoryHigherOdd - b.categoryHigherOdd,
-    },
-    {
-      title: 'Cate. High. Pay',
-      compare: (a: DataItem, b: DataItem) =>
-        a.categoryHigherPayout - b.categoryHigherPayout,
-    },
-    {
-      title: 'Cate. High. Num.',
-      compare: (a: DataItem, b: DataItem) =>
-        a.categoryHigherNumber - b.categoryHigherNumber,
+        a.minBetNo.localeCompare(b.minBetNo),
     },
 
     {
-      title: 'Categories',
+      title: 'Min. Amount',
       compare: (a: DataItem, b: DataItem) =>
-        a.categories.localeCompare(b.categories),
+        a.minAmount.localeCompare(b.minAmount),
     },
 
     {
@@ -132,9 +98,9 @@ export class BonusOnlineCustomersComponent implements OnInit {
 
   LoadUsers() {
     this.isSearchLoading = true;
-    this.dataService.GetRisksNotShops('false', 'true').subscribe(
+    this.dataService.getBonusNotShop('false', 'true').subscribe(
       (response) => {
-        this.dataSource = response;
+        this.dataSource = response.body;
         this.isSearchLoading = false;
       },
       (error) => {
@@ -144,30 +110,18 @@ export class BonusOnlineCustomersComponent implements OnInit {
     );
   }
 
-  search(event?: any): void {
-    if (!event) {
-      if (!this.isSearchLoading) {
-        this.LoadUsers();
-      }
-    } else {
-      if (!this.isSearchLoading && event.keyCode === 13) {
-        this.LoadUsers();
-      }
-    }
-  }
-
   activate(item: any): void {
     this.editingUser = item;
     this.modalService.confirm({
-      nzTitle: `Do you Want to activate the plan ${item.name}?`,
+      nzTitle: `Do you Want to activate the bonus ${item.id}?`,
       nzOkText: 'Yes',
       nzOnOk: () => {
         this.editingUser.isDeleted = false;
         this.editingUser.isActive = true;
-        this.dataService.updateRisk(this.editingUser).subscribe(
+        this.dataService.updateBonus(this.editingUser).subscribe(
           (response) => {
             this.LoadUsers();
-            this.message.create('success', `Plan activated successfully`);
+            this.message.create('success', `Bonus activated successfully`);
           },
           (error) => {
             this.message.create('error', `Something went wrong`);
@@ -180,15 +134,15 @@ export class BonusOnlineCustomersComponent implements OnInit {
   deactivate(item: any): void {
     this.editingUser = item;
     this.modalService.confirm({
-      nzTitle: `Do you Want to deactivate the plan ${item.name}?`,
+      nzTitle: `Do you Want to deactivate the bonus ${item.id}?`,
       nzOkText: 'Yes',
       nzOnOk: () => {
         this.editingUser.isDeleted = false;
         this.editingUser.isActive = false;
-        this.dataService.updateRisk(this.editingUser).subscribe(
+        this.dataService.updateBonus(this.editingUser).subscribe(
           (response) => {
             this.LoadUsers();
-            this.message.create('success', `Plan deactivated successfully`);
+            this.message.create('success', `Bonus deactivated successfully`);
           },
           (error) => {
             this.message.create('error', `Something went wrong`);
@@ -201,17 +155,17 @@ export class BonusOnlineCustomersComponent implements OnInit {
   showDeleteConfirm(item: any): void {
     this.editingUser = item;
     this.modalService.confirm({
-      nzTitle: `Are you sure delete the plan ${item.name}?`,
+      nzTitle: `Are you sure delete the bonus ${item.id}?`,
       nzOkText: 'Yes',
       nzOkType: 'primary',
       nzOkDanger: true,
       nzOnOk: () => {
         this.editingUser.isActive = false;
         this.editingUser.isDeleted = true;
-        this.dataService.updateRisk(this.editingUser).subscribe(
+        this.dataService.updateBonus(this.editingUser).subscribe(
           (response) => {
             this.LoadUsers();
-            this.message.create('success', `Plan deleted successfully`);
+            this.message.create('success', `Bonus deleted successfully`);
           },
           (error) => {
             this.message.create('error', `Something went wrong`);
@@ -232,11 +186,11 @@ export class BonusOnlineCustomersComponent implements OnInit {
   submitAddForm() {
     this.isOkLoading = true;
     const obj = this.addForm.getRawValue();
-    this.dataService.addRisk(obj).subscribe(
+    this.dataService.AddBonus(obj).subscribe(
       (response) => {
         if (response.status == 201) {
           this.LoadUsers();
-          this.message.create('success', `Plan added successfully`);
+          this.message.create('success', `Bonus added successfully`);
           this.isAddVisible = false;
         }
         this.isOkLoading = false;
@@ -253,18 +207,13 @@ export class BonusOnlineCustomersComponent implements OnInit {
 
   initializeAddForm() {
     this.addForm = this.fb.group({
-      // ShopIdToAdd: new FormControl('', [Validators.required]),
-      // shopId: new FormControl('', [Validators.required]),
-      categories: new FormControl('A', [Validators.required]),
-      categoryHigherNumber: new FormControl(false),
-      categoryHigherOdd: new FormControl(false),
-      categoryHigherPayout: new FormControl(false),
+      shopId: new FormControl(this.dataService.currentUser.id),
       isActive: new FormControl(true),
       isOffice: new FormControl(false),
       isOnline: new FormControl(true),
-      maxBettingAmount: new FormControl('', [Validators.required]),
-      maxPayout: new FormControl('', [Validators.required]),
-      name: new FormControl('', [Validators.required]),
+      minAmount: new FormControl('', [Validators.required]),
+      minBetNo: new FormControl('', [Validators.required]),
+      percent: new FormControl('', [Validators.required]),
     });
   }
 
@@ -279,18 +228,14 @@ export class BonusOnlineCustomersComponent implements OnInit {
   submitDetailForm() {
     this.isOkLoading = true;
     const obj = this.detailForm.getRawValue();
-    this.editingUser.name = obj.name;
-    this.editingUser.categories = obj.categories;
+    this.editingUser.minAmount = obj.minAmount;
+    this.editingUser.minBetNo = obj.minBetNo;
+    this.editingUser.percent = obj.percent;
     this.editingUser.isActive = obj.isActive;
-    this.editingUser.categoryHigherPayout = obj.categoryHigherPayout;
-    this.editingUser.categoryHigherNumber = obj.categoryHigherNumber;
-    this.editingUser.categoryHigherOdd = obj.categoryHigherOdd;
-    this.editingUser.maxPayout = obj.maxPayout;
-    this.editingUser.maxBettingAmount = obj.maxBettingAmount;
-    this.dataService.updateRisk(this.editingUser).subscribe(
+    this.dataService.updateBonus(this.editingUser).subscribe(
       (response) => {
         this.LoadUsers();
-        this.message.create('success', `Policy updated successfully`);
+        this.message.create('success', `Bonus updated successfully`);
         this.isDetailVisible = false;
         this.isOkLoading = false;
       },
@@ -303,31 +248,23 @@ export class BonusOnlineCustomersComponent implements OnInit {
 
   initializeDetailForm() {
     this.detailForm = this.fb.group({
-      agencyId: new FormControl(0),
       id: new FormControl(this.editingUser.id),
-      categories: new FormControl('A', [Validators.required]),
-      categoryHigherNumber: new FormControl(
-        this.editingUser.categoryHigherNumber,
-        [Validators.required]
-      ),
-      categoryHigherOdd: new FormControl(this.editingUser.categoryHigherOdd, [
-        Validators.required,
-      ]),
-      categoryHigherPayout: new FormControl(
-        this.editingUser.categoryHigherPayout,
-        [Validators.required]
-      ),
+      currency: new FormControl(this.editingUser.currency),
       isActive: new FormControl(this.editingUser.isActive),
       isOffice: new FormControl(false),
       isOnline: new FormControl(true),
-      maxBettingAmount: new FormControl(this.editingUser.maxBettingAmount, [
+      minAmount: new FormControl(this.editingUser.minAmount, [
         Validators.required,
       ]),
-      maxPayout: new FormControl(this.editingUser.maxPayout, [
+      minBetNo: new FormControl(this.editingUser.minBetNo, [
         Validators.required,
       ]),
-      name: new FormControl(this.editingUser.name, [Validators.required]),
+      // parentId: new FormControl(this.editingUser.parentId),
+      // parentName: new FormControl(this.editingUser.parentId),
+      percent: new FormControl(this.editingUser.percent, [Validators.required]),
+      // shop: new FormControl(this.editingUser.shop),
+      // shopId: new FormControl(this.editingUser.shopId),
+      symbol: new FormControl(this.editingUser.symbol),
     });
   }
-
 }

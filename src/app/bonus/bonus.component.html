@@ -74,7 +74,7 @@
             [disabled]="disableShop"
           >
             <i nz-icon nzType="plus-circle" theme="outline"></i>
-            <span>Add Policy</span>
+            <span>Add Bonus</span>
           </a>
         </div>
       </div>
@@ -92,75 +92,11 @@
               <td>{{ item.id }}</td>
               <td>{{ item.parentName }}</td>
               <td>{{ item.shop }}</td>
-              <td>
-                {{ item.name }}
-              </td>
-              <td>
-                {{ item.maxBettingAmount | number: "1.2-2" }} {{ item.symbol }}
-              </td>
-              <td>{{ item.maxPayout | number: "1.2-2" }} {{ item.symbol }}</td>
+              <td>{{ item.percent }} %</td>
+              <td>{{ item.minBetNo }}</td>
+              <td>{{ item.minAmount | number: "1.2-2" }} {{ item.symbol }}</td>
 
-              <td style="text-align: center !important">
-                <i
-                  *ngIf="item.categoryHigherOdd"
-                  nz-icon
-                  [nzType]="'check-circle'"
-                  [nzTheme]="'twotone'"
-                  [nzTwotoneColor]="'#04d992'"
-                  style="font-size: 18px"
-                ></i>
 
-                <i
-                  *ngIf="!item.categoryHigherOdd"
-                  nz-icon
-                  [nzType]="'close-circle'"
-                  [nzTheme]="'twotone'"
-                  [nzTwotoneColor]="'#de4436'"
-                  style="font-size: 18px"
-                ></i>
-              </td>
-
-              <td style="text-align: center !important">
-                <i
-                  *ngIf="item.categoryHigherPayout"
-                  nz-icon
-                  [nzType]="'check-circle'"
-                  [nzTheme]="'twotone'"
-                  [nzTwotoneColor]="'#04d992'"
-                  style="font-size: 18px"
-                ></i>
-
-                <i
-                  *ngIf="!item.categoryHigherPayout"
-                  nz-icon
-                  [nzType]="'close-circle'"
-                  [nzTheme]="'twotone'"
-                  [nzTwotoneColor]="'#de4436'"
-                  style="font-size: 18px"
-                ></i>
-              </td>
-
-              <td style="text-align: center !important">
-                <i
-                  *ngIf="item.categoryHigherNumber"
-                  nz-icon
-                  [nzType]="'check-circle'"
-                  [nzTheme]="'twotone'"
-                  [nzTwotoneColor]="'#04d992'"
-                  style="font-size: 18px"
-                ></i>
-
-                <i
-                  *ngIf="!item.categoryHigherNumber"
-                  nz-icon
-                  [nzType]="'close-circle'"
-                  [nzTheme]="'twotone'"
-                  [nzTwotoneColor]="'#de4436'"
-                  style="font-size: 18px"
-                ></i>
-              </td>
-
-              <td>{{ item.categories }}</td>
 
               <td style="text-align: center !important">
                 <i
@@ -260,7 +196,7 @@
     <nz-modal
       [nzStyle]="{ width: '60vw' }"
       [(nzVisible)]="isAddVisible"
-      nzTitle="Create New Policy"
+      nzTitle="Create New Bonus"
       (nzOnCancel)="isAddVisible = false"
       (nzOnOk)="submitAddForm()"
       [nzOkText]="'Add'"
@@ -325,14 +261,16 @@
           </div>
 
           <div>
-            <nz-form-label [nzSpan]="12">Name</nz-form-label>
+            <nz-form-label [nzSpan]="12">Percent</nz-form-label>
             <nz-form-control nzErrorTip="Invalid Input">
               <nz-input-group [nzPrefix]="prefixTemplateUser">
                 <input
-                  formControlName="name"
-                  type="text"
+                  formControlName="percent"
+                  type="number"
+                  min="0"
+                  max="100"
                   nz-input
-                  placeholder="Name"
+                  placeholder="Percent (0-100)%"
                 />
               </nz-input-group>
             </nz-form-control>
@@ -341,29 +279,16 @@
             ></ng-template>
           </div>
 
-          <div>
-            <nz-form-label [nzSpan]="12">Categories</nz-form-label>
-            <nz-select style="width: 100%" formControlName="categories">
-              <nz-option
-                *ngFor="let item of categoriesList"
-                [nzValue]="item"
-                [nzLabel]="item"
-              ></nz-option>
-            </nz-select>
-            <ng-template #prefixTemplateUser
-              ><i nz-icon nzType="folder"></i
-            ></ng-template>
-          </div>
 
-          <div>
-            <nz-form-label [nzSpan]="12">Max Betting Amount</nz-form-label>
+           <div>
+            <nz-form-label [nzSpan]="12">Min. Bet No.</nz-form-label>
             <nz-form-control nzErrorTip="Invalid Input">
               <nz-input-group [nzPrefix]="prefixTemplateUser">
                 <input
-                  formControlName="maxBettingAmount"
+                  formControlName="minBetNo"
                   type="number"
                   nz-input
-                  placeholder="Max Betting Amount"
+                  placeholder="Min. Bet No."
                 />
               </nz-input-group>
             </nz-form-control>
@@ -372,15 +297,16 @@
             ></ng-template>
           </div>
 
+
           <div>
-            <nz-form-label [nzSpan]="12">Max Payout</nz-form-label>
+            <nz-form-label [nzSpan]="12">Min. Amount</nz-form-label>
             <nz-form-control nzErrorTip="Invalid Input">
               <nz-input-group [nzPrefix]="prefixTemplateUser">
                 <input
-                  formControlName="maxPayout"
+                  formControlName="minAmount"
                   type="number"
                   nz-input
-                  placeholder="Max Payout"
+                  placeholder="Min. Amount"
                 />
               </nz-input-group>
             </nz-form-control>
@@ -389,29 +315,13 @@
             ></ng-template>
           </div>
 
-          <div style="display: flex">
+
+
+          <div style="display: flex; align-items: center;">
             <label
               nz-checkbox
-              formControlName="categoryHigherNumber"
-              nz-tooltip
-              nzTooltipTitle="Higher category must have higher bet selection"
-              >Category Higher Number</label
-            >
-            <label
-              nz-checkbox
-              formControlName="categoryHigherOdd"
-              nz-tooltip
-              nzTooltipTitle="Higher category must have higher odds"
-              >Category Higher Odd</label
-            >
-          </div>
-          <div>
-            <label
-              nz-checkbox
-              formControlName="categoryHigherPayout"
-              nz-tooltip
-              nzTooltipTitle="Higher category must give higher payout"
-              >Category Higher Payout</label
+              formControlName="isActive"
+              >Active</label
             >
           </div>
         </form>
@@ -422,7 +332,7 @@
     <nz-modal
       [nzStyle]="{ width: '60vw' }"
       [(nzVisible)]="isDetailVisible"
-      nzTitle="Policy Details"
+      nzTitle="Bonus Details"
       (nzOnCancel)="isDetailVisible = false"
       (nzOnOk)="submitDetailForm()"
       [nzOkText]="'Save'"
@@ -432,14 +342,16 @@
       <ng-container *nzModalContent>
         <form [formGroup]="detailForm" class="d-grid" autocomplete="off">
           <div>
-            <nz-form-label [nzSpan]="12">Name</nz-form-label>
+            <nz-form-label [nzSpan]="12">Percent</nz-form-label>
             <nz-form-control nzErrorTip="Invalid Input">
               <nz-input-group [nzPrefix]="prefixTemplateUser">
                 <input
-                  formControlName="name"
-                  type="text"
+                  formControlName="percent"
+                  type="number"
+                  min="0"
+                  max="100"
                   nz-input
-                  placeholder="Name"
+                  placeholder="Percent (0-100)%"
                 />
               </nz-input-group>
             </nz-form-control>
@@ -448,29 +360,16 @@
             ></ng-template>
           </div>
 
-          <div>
-            <nz-form-label [nzSpan]="12">Categories</nz-form-label>
-            <nz-select style="width: 100%" formControlName="categories">
-              <nz-option
-                *ngFor="let item of categoriesList"
-                [nzValue]="item"
-                [nzLabel]="item"
-              ></nz-option>
-            </nz-select>
-            <ng-template #prefixTemplateUser
-              ><i nz-icon nzType="folder"></i
-            ></ng-template>
-          </div>
 
           <div>
-            <nz-form-label [nzSpan]="12">Max Betting Amount</nz-form-label>
+            <nz-form-label [nzSpan]="12">Minimum Amount</nz-form-label>
             <nz-form-control nzErrorTip="Invalid Input">
               <nz-input-group [nzPrefix]="prefixTemplateUser">
                 <input
-                  formControlName="maxBettingAmount"
+                  formControlName="minAmount"
                   type="number"
                   nz-input
-                  placeholder="Max Betting Amount"
+                  placeholder="Minimum Amount"
                 />
               </nz-input-group>
             </nz-form-control>
@@ -479,15 +378,16 @@
             ></ng-template>
           </div>
 
+
           <div>
-            <nz-form-label [nzSpan]="12">Max Payout</nz-form-label>
+            <nz-form-label [nzSpan]="12">Min. Bet No.</nz-form-label>
             <nz-form-control nzErrorTip="Invalid Input">
               <nz-input-group [nzPrefix]="prefixTemplateUser">
                 <input
-                  formControlName="maxPayout"
+                  formControlName="minBetNo"
                   type="number"
                   nz-input
-                  placeholder="Max Payout"
+                  placeholder="Min. Bet No."
                 />
               </nz-input-group>
             </nz-form-control>
@@ -496,29 +396,12 @@
             ></ng-template>
           </div>
 
-          <div style="display: flex">
+
+          <div style="display: flex; align-items: flex-end;">
             <label
               nz-checkbox
-              formControlName="categoryHigherNumber"
-              nz-tooltip
-              nzTooltipTitle="Higher category must have higher bet selection"
-              >Category Higher Number</label
-            >
-            <label
-              nz-checkbox
-              formControlName="categoryHigherOdd"
-              nz-tooltip
-              nzTooltipTitle="Higher category must have higher odds"
-              >Category Higher Odd</label
-            >
-          </div>
-          <div>
-            <label
-              nz-checkbox
-              formControlName="categoryHigherPayout"
-              nz-tooltip
-              nzTooltipTitle="Higher category must give higher payout"
-              >Category Higher Payout</label
+              formControlName="isActive"
+              >Active</label
             >
           </div>
         </form>
@@ -539,5 +422,4 @@
     </ng-template>
     <app-bonus-online-customers></app-bonus-online-customers>
   </nz-tab>
-
 </nz-tabset>
