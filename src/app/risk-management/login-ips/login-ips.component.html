@@ -1,1 +1,51 @@
-<p>login-ips works!</p>
+<nz-card *ngIf="dataSource">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="d-md-flex">
+        <div class="m-b-10 m-r-20" style="flex: 1">
+          <div class="twoRow" style="align-items: flex-end !important">
+            <div class="table-filter">
+              <span>Date Range</span>
+              <nz-range-picker
+                nzFormat="dd-MM-yyyy"
+                [(ngModel)]="userTransactionsDate"
+                [nzAllowClear]="false"
+              ></nz-range-picker>
+            </div>
+
+            <button
+              style="margin-left: 1rem"
+              (click)="LoadUsers()"
+              nz-button
+              nzType="primary"
+              nzSize="medium"
+              [nzLoading]="isSearchLoading"
+            >
+              <i nz-icon nzType="search"></i>
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nz-table #table [nzData]="dataSource">
+    <thead>
+      <tr>
+        <th *ngFor="let column of orderColumn" >
+          {{ column.title }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let item of table.data; let i = index">
+        <tr>
+          <td>{{ item.ip }}</td>
+          <td>
+            {{ item.accounts }}
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </nz-table>
+</nz-card>
