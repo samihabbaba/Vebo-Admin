@@ -23,7 +23,9 @@ export class AppComponent {
     this.signalService.pushNotification.subscribe((value) => {
       if (value) {
         this.notification
-          .create('info', 'Risk Approval', 'New Bet is Awaiting Approval')
+          .create('info', 'Risk Approval', 'New Bet is Awaiting Approval', {
+            nzDuration: 120,
+          })
           .onClick.subscribe(() => {
             this.notification.remove();
             this.zone.run(() => {
