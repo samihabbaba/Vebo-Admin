@@ -1,1 +1,83 @@
-<p>ip-restriction works!</p>
+<nz-card>
+  <div class="row m-b-10">
+
+    <div class=" m-r-20" style="flex: 1">
+      <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+        <input
+          type="text"
+          nz-input
+          placeholder="Search"
+          [(ngModel)]="searchInput"
+          (keyup)="debounceSubject.next($event)"
+        />
+      </nz-input-group>
+      <ng-template #suffixIconButton>
+        <button nz-button nzType="primary" nzSearch>
+          <i nz-icon nzType="search" *ngIf="!isSearchLoading"></i>
+          <i nz-icon nzType="loading" *ngIf="isSearchLoading"></i>
+        </button>
+      </ng-template>
+    </div>
+    <div class="col-lg-4 text-right buttons-container">
+      <a nz-button nzType="primary" (click)="showAddModal()" [disabled]="false">
+        <i nz-icon nzType="plus-circle" theme="outline"></i>
+        <span>Add IP</span>
+      </a>
+    </div>
+  </div>
+  <nz-table #table [nzData]="dataSource">
+    <thead>
+      <tr>
+        <th *ngFor="let column of orderColumn">
+          {{ column.title }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let item of table.data; let i = index">
+        <tr>
+          <td>{{ item }}</td>
+          <td>
+            <button
+              nz-button
+              nzSize="small"
+              nzType="default"
+              nzDanger
+              (click)="showDeleteConfirm(item)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </nz-table>
+</nz-card>
+
+<!-- Modal Starts Here -->
+
+<!-- Add Modal -->
+<nz-modal
+  [nzStyle]="{ width: '60vw' }"
+  [(nzVisible)]="isAddVisible"
+  nzTitle="Add IP"
+  (nzOnCancel)="isAddVisible = false"
+  (nzOnOk)="submitAddForm()"
+  [nzOkText]="'Add'"
+  [nzOkLoading]="isOkLoading"
+  [nzOkDisabled]="addForm?.invalid"
+>
+  <ng-container *nzModalContent>
+    <div style="width: 100%">
+      <nz-form-label [nzSpan]="12">IP</nz-form-label>
+      <nz-form-control nzErrorTip="Invalid Input">
+        <nz-input-group [nzPrefix]="prefixTemplateUser">
+          <input [(ngModel)]="ipToAdd" type="text" nz-input placeholder="IP" />
+        </nz-input-group>
+      </nz-form-control>
+      <ng-template #prefixTemplateUser
+        ><i nz-icon nzType="folder"></i
+      ></ng-template>
+    </div>
+  </ng-container>
+</nz-modal>
