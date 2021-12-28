@@ -9,6 +9,8 @@ import { PlayerModeComponent } from './player-mode/player-mode.component';
 import { IpRestrictionComponent } from './ip-restriction/ip-restriction.component';
 import { LoginIpsComponent } from './login-ips/login-ips.component';
 import { SharedModule } from '../shared/shared.module';
+import { RiskPlanBetOfficeComponent } from './risk-plans/risk-plan-bet-office/risk-plan-bet-office.component';
+import { RiskPlanOnlineCustomerComponent } from './risk-plans/risk-plan-online-customer/risk-plan-online-customer.component';
 
 
 @NgModule({
@@ -18,7 +20,9 @@ import { SharedModule } from '../shared/shared.module';
     RiskCalculationComponent,
     PlayerModeComponent,
     IpRestrictionComponent,
-    LoginIpsComponent
+    LoginIpsComponent,
+    RiskPlanBetOfficeComponent,
+    RiskPlanOnlineCustomerComponent
   ],
   imports: [
     CommonModule,

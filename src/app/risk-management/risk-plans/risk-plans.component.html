@@ -390,15 +390,27 @@
           </div>
 
           <div style="display: flex">
-            <label nz-checkbox formControlName="categoryHigherNumber"
+            <label
+              nz-checkbox
+              formControlName="categoryHigherNumber"
+              nz-tooltip
+              nzTooltipTitle="Higher category must have higher bet selection"
               >Category Higher Number</label
             >
-            <label nz-checkbox formControlName="categoryHigherOdd"
+            <label
+              nz-checkbox
+              formControlName="categoryHigherOdd"
+              nz-tooltip
+              nzTooltipTitle="Higher category must have higher odds"
               >Category Higher Odd</label
             >
           </div>
           <div>
-            <label nz-checkbox formControlName="categoryHigherPayout"
+            <label
+              nz-checkbox
+              formControlName="categoryHigherPayout"
+              nz-tooltip
+              nzTooltipTitle="Higher category must give higher payout"
               >Category Higher Payout</label
             >
           </div>
@@ -485,15 +497,27 @@
           </div>
 
           <div style="display: flex">
-            <label nz-checkbox formControlName="categoryHigherNumber"
+            <label
+              nz-checkbox
+              formControlName="categoryHigherNumber"
+              nz-tooltip
+              nzTooltipTitle="Higher category must have higher bet selection"
               >Category Higher Number</label
             >
-            <label nz-checkbox formControlName="categoryHigherOdd"
+            <label
+              nz-checkbox
+              formControlName="categoryHigherOdd"
+              nz-tooltip
+              nzTooltipTitle="Higher category must have higher odds"
               >Category Higher Odd</label
             >
           </div>
           <div>
-            <label nz-checkbox formControlName="categoryHigherPayout"
+            <label
+              nz-checkbox
+              formControlName="categoryHigherPayout"
+              nz-tooltip
+              nzTooltipTitle="Higher category must give higher payout"
               >Category Higher Payout</label
             >
           </div>
@@ -506,14 +530,14 @@
       <i nz-icon nzType="home"></i>
       Bet Office
     </ng-template>
-    Bet Office
+    <app-risk-plan-bet-office></app-risk-plan-bet-office>
   </nz-tab>
   <nz-tab [nzTitle]="titleTemplate3">
     <ng-template #titleTemplate3>
       <i nz-icon nzType="customer-service"></i>
       Online Customers
     </ng-template>
-    Online Customers
+    <app-risk-plan-online-customer></app-risk-plan-online-customer>
   </nz-tab>
   †
 </nz-tabset>
