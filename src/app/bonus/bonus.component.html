@@ -1,1 +1,543 @@
-<p>bonus works!</p>
+<nz-tabset>
+  <nz-tab [nzTitle]="titleTemplate">
+    <ng-template #titleTemplate>
+      <i nz-icon nzType="shop"></i>
+      Shops
+    </ng-template>
+    <nz-card>
+      <div class="row m-b-30">
+        <div class="col-lg-8" style="display: flex">
+          <div class="table-filter" style="flex: 1">
+            <span>Promoter</span>
+            <div class="example-input">
+              <input
+                [disabled]="disablePromoter"
+                placeholder="Promoter"
+                nz-input
+                [(ngModel)]="promoterValue"
+                (ngModelChange)="promoterChange($event)"
+                [nzAutocomplete]="auto"
+              />
+              <nz-autocomplete #auto>
+                <nz-auto-option
+                  *ngFor="let option of filteredPromoters"
+                  [nzValue]="option.name"
+                  [nzLabel]="option.name"
+                  (selectionChange)="onPromoterSelection($event)"
+                >
+                  {{ option.name }}
+                </nz-auto-option>
+              </nz-autocomplete>
+            </div>
+          </div>
+
+          <div class="table-filter" style="margin-left: 1rem; flex: 1">
+            <span>Shop</span>
+            <div class="example-input">
+              <input
+                [disabled]="disableShop"
+                placeholder="Shop"
+                nz-input
+                [(ngModel)]="shopValue"
+                (ngModelChange)="shopChange($event)"
+                [nzAutocomplete]="auto2"
+              />
+              <nz-autocomplete #auto2>
+                <nz-auto-option
+                  *ngFor="let option of filteredShops"
+                  [nzValue]="option.name"
+                  [nzLabel]="option.name"
+                  (selectionChange)="onShopSelection($event)"
+                >
+                  {{ option.name }}
+                </nz-auto-option>
+              </nz-autocomplete>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 text-right buttons-container">
+          <a
+            nz-button
+            nzType="primary"
+            (click)="LoadUsers()"
+            style="margin-right: 1rem; flex: 1"
+            [nzLoading]="isSearchLoading"
+            [disabled]="disableShop"
+          >
+            <i nz-icon nzType="search" theme="outline"></i>
+            <span>Search</span>
+          </a>
+          <a
+            nz-button
+            nzType="primary"
+            (click)="showAddModal()"
+            [disabled]="disableShop"
+          >
+            <i nz-icon nzType="plus-circle" theme="outline"></i>
+            <span>Add Policy</span>
+          </a>
+        </div>
+      </div>
+      <nz-table #table [nzData]="dataSource">
+        <thead>
+          <tr>
+            <th *ngFor="let column of orderColumn" [nzSortFn]="column.compare">
+              {{ column.title }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of table.data; let i = index">
+            <tr>
+              <td>{{ item.id }}</td>
+              <td>{{ item.parentName }}</td>
+              <td>{{ item.shop }}</td>
+              <td>
+                {{ item.name }}
+              </td>
+              <td>
+                {{ item.maxBettingAmount | number: "1.2-2" }} {{ item.symbol }}
+              </td>
+              <td>{{ item.maxPayout | number: "1.2-2" }} {{ item.symbol }}</td>
+
+              <td style="text-align: center !important">
+                <i
+                  *ngIf="item.categoryHigherOdd"
+                  nz-icon
+                  [nzType]="'check-circle'"
+                  [nzTheme]="'twotone'"
+                  [nzTwotoneColor]="'#04d992'"
+                  style="font-size: 18px"
+                ></i>
+
+                <i
+                  *ngIf="!item.categoryHigherOdd"
+                  nz-icon
+                  [nzType]="'close-circle'"
+                  [nzTheme]="'twotone'"
+                  [nzTwotoneColor]="'#de4436'"
+                  style="font-size: 18px"
+                ></i>
+              </td>
+
+              <td style="text-align: center !important">
+                <i
+                  *ngIf="item.categoryHigherPayout"
+                  nz-icon
+                  [nzType]="'check-circle'"
+                  [nzTheme]="'twotone'"
+                  [nzTwotoneColor]="'#04d992'"
+                  style="font-size: 18px"
+                ></i>
+
+                <i
+                  *ngIf="!item.categoryHigherPayout"
+                  nz-icon
+                  [nzType]="'close-circle'"
+                  [nzTheme]="'twotone'"
+                  [nzTwotoneColor]="'#de4436'"
+                  style="font-size: 18px"
+                ></i>
+              </td>
+
+              <td style="text-align: center !important">
+                <i
+                  *ngIf="item.categoryHigherNumber"
+                  nz-icon
+                  [nzType]="'check-circle'"
+                  [nzTheme]="'twotone'"
+                  [nzTwotoneColor]="'#04d992'"
+                  style="font-size: 18px"
+                ></i>
+
+                <i
+                  *ngIf="!item.categoryHigherNumber"
+                  nz-icon
+                  [nzType]="'close-circle'"
+                  [nzTheme]="'twotone'"
+                  [nzTwotoneColor]="'#de4436'"
+                  style="font-size: 18px"
+                ></i>
+              </td>
+
+              <td>{{ item.categories }}</td>
+
+              <td style="text-align: center !important">
+                <i
+                  *ngIf="item.isActive"
+                  nz-icon
+                  [nzType]="'check-circle'"
+                  [nzTheme]="'twotone'"
+                  [nzTwotoneColor]="'#04d992'"
+                  style="font-size: 18px"
+                ></i>
+
+                <i
+                  *ngIf="!item.isActive"
+                  nz-icon
+                  [nzType]="'close-circle'"
+                  [nzTheme]="'twotone'"
+                  [nzTwotoneColor]="'#de4436'"
+                  style="font-size: 18px"
+                ></i>
+              </td>
+
+              <td class="text-md-right">
+                <button
+                  nz-button
+                  nz-dropdown
+                  nzType="default"
+                  nzShape="circle"
+                  nz-tooltip
+                  nzTooltipTitle="Options"
+                  nzTrigger="click"
+                  [nzDropdownMenu]="menu"
+                  (click)="$event.stopPropagation()"
+                >
+                  <i nz-icon nzType="more" theme="outline"></i>
+                </button>
+              </td>
+            </tr>
+
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu>
+                <li nz-menu-item (click)="showDetailModal(item)">
+                  <i
+                    nz-icon
+                    nzType="edit"
+                    nzTheme="outline"
+                    style="padding-right: 8px"
+                  ></i
+                  >Details
+                </li>
+                <li
+                  nz-menu-item
+                  *ngIf="!item.isActive"
+                  (click)="activate(item)"
+                >
+                  <i
+                    nz-icon
+                    nzType="undo"
+                    nzTheme="outline"
+                    style="padding-right: 8px"
+                  ></i>
+                  Activate
+                </li>
+                <li
+                  nz-menu-item
+                  *ngIf="item.isActive"
+                  (click)="deactivate(item)"
+                >
+                  <i
+                    nz-icon
+                    nzType="stop"
+                    nzTheme="outline"
+                    style="padding-right: 8px"
+                  ></i>
+                  Deactivate
+                </li>
+
+                <li nz-menu-divider></li>
+                <li nz-menu-item nzDanger (click)="showDeleteConfirm(item)">
+                  <i
+                    nz-icon
+                    nzType="delete"
+                    nzTheme="outline"
+                    style="padding-right: 8px"
+                  ></i>
+                  Delete
+                </li>
+              </ul>
+            </nz-dropdown-menu>
+          </ng-container>
+        </tbody>
+      </nz-table>
+    </nz-card>
+
+    <!-- Modal Starts Here -->
+
+    <!-- Add Modal -->
+    <nz-modal
+      [nzStyle]="{ width: '60vw' }"
+      [(nzVisible)]="isAddVisible"
+      nzTitle="Create New Policy"
+      (nzOnCancel)="isAddVisible = false"
+      (nzOnOk)="submitAddForm()"
+      [nzOkText]="'Add'"
+      [nzOkLoading]="isOkLoading"
+      [nzOkDisabled]="addForm?.invalid"
+    >
+      <ng-container *nzModalContent>
+        <form [formGroup]="addForm" class="d-grid" autocomplete="off">
+          <div>
+            <nz-form-label [nzSpan]="12">Promoter</nz-form-label>
+            <div class="example-input">
+              <input
+                [disabled]="addDisablePromoter"
+                placeholder="Promoter"
+                nz-input
+                [ngModelOptions]="{ standalone: true }"
+                [(ngModel)]="addPromoterValue"
+                (ngModelChange)="addPromoterChange($event)"
+                [nzAutocomplete]="auto3"
+              />
+              <nz-autocomplete #auto3>
+                <nz-auto-option
+                  *ngFor="let option of addFilteredPromoters"
+                  [nzValue]="option.name"
+                  [nzLabel]="option.name"
+                  (selectionChange)="addOnPromoterSelection($event)"
+                >
+                  {{ option.name }}
+                </nz-auto-option>
+              </nz-autocomplete>
+            </div>
+            <ng-template #prefixTemplateUser
+              ><i nz-icon nzType="folder"></i
+            ></ng-template>
+          </div>
+
+          <div>
+            <nz-form-label [nzSpan]="12">Shop</nz-form-label>
+            <div class="example-input">
+              <input
+                placeholder="Shop"
+                nz-input
+                [ngModelOptions]="{ standalone: true }"
+                [(ngModel)]="addShopValue"
+                (ngModelChange)="addShopChange($event)"
+                [nzAutocomplete]="auto4"
+              />
+              <nz-autocomplete #auto4>
+                <nz-auto-option
+                  *ngFor="let option of addFilteredShops"
+                  [nzValue]="option.name"
+                  [nzLabel]="option.name"
+                  (selectionChange)="addOnShopSelection($event)"
+                >
+                  {{ option.name }}
+                </nz-auto-option>
+              </nz-autocomplete>
+            </div>
+            <ng-template #prefixTemplateUser
+              ><i nz-icon nzType="folder"></i
+            ></ng-template>
+          </div>
+
+          <div>
+            <nz-form-label [nzSpan]="12">Name</nz-form-label>
+            <nz-form-control nzErrorTip="Invalid Input">
+              <nz-input-group [nzPrefix]="prefixTemplateUser">
+                <input
+                  formControlName="name"
+                  type="text"
+                  nz-input
+                  placeholder="Name"
+                />
+              </nz-input-group>
+            </nz-form-control>
+            <ng-template #prefixTemplateUser
+              ><i nz-icon nzType="folder"></i
+            ></ng-template>
+          </div>
+
+          <div>
+            <nz-form-label [nzSpan]="12">Categories</nz-form-label>
+            <nz-select style="width: 100%" formControlName="categories">
+              <nz-option
+                *ngFor="let item of categoriesList"
+                [nzValue]="item"
+                [nzLabel]="item"
+              ></nz-option>
+            </nz-select>
+            <ng-template #prefixTemplateUser
+              ><i nz-icon nzType="folder"></i
+            ></ng-template>
+          </div>
+
+          <div>
+            <nz-form-label [nzSpan]="12">Max Betting Amount</nz-form-label>
+            <nz-form-control nzErrorTip="Invalid Input">
+              <nz-input-group [nzPrefix]="prefixTemplateUser">
+                <input
+                  formControlName="maxBettingAmount"
+                  type="number"
+                  nz-input
+                  placeholder="Max Betting Amount"
+                />
+              </nz-input-group>
+            </nz-form-control>
+            <ng-template #prefixTemplateUser
+              ><i nz-icon nzType="folder"></i
+            ></ng-template>
+          </div>
+
+          <div>
+            <nz-form-label [nzSpan]="12">Max Payout</nz-form-label>
+            <nz-form-control nzErrorTip="Invalid Input">
+              <nz-input-group [nzPrefix]="prefixTemplateUser">
+                <input
+                  formControlName="maxPayout"
+                  type="number"
+                  nz-input
+                  placeholder="Max Payout"
+                />
+              </nz-input-group>
+            </nz-form-control>
+            <ng-template #prefixTemplateUser
+              ><i nz-icon nzType="folder"></i
+            ></ng-template>
+          </div>
+
+          <div style="display: flex">
+            <label
+              nz-checkbox
+              formControlName="categoryHigherNumber"
+              nz-tooltip
+              nzTooltipTitle="Higher category must have higher bet selection"
+              >Category Higher Number</label
+            >
+            <label
+              nz-checkbox
+              formControlName="categoryHigherOdd"
+              nz-tooltip
+              nzTooltipTitle="Higher category must have higher odds"
+              >Category Higher Odd</label
+            >
+          </div>
+          <div>
+            <label
+              nz-checkbox
+              formControlName="categoryHigherPayout"
+              nz-tooltip
+              nzTooltipTitle="Higher category must give higher payout"
+              >Category Higher Payout</label
+            >
+          </div>
+        </form>
+      </ng-container>
+    </nz-modal>
+
+    <!-- Details Modal -->
+    <nz-modal
+      [nzStyle]="{ width: '60vw' }"
+      [(nzVisible)]="isDetailVisible"
+      nzTitle="Policy Details"
+      (nzOnCancel)="isDetailVisible = false"
+      (nzOnOk)="submitDetailForm()"
+      [nzOkText]="'Save'"
+      [nzOkLoading]="isOkLoading"
+      [nzOkDisabled]="detailForm?.invalid"
+    >
+      <ng-container *nzModalContent>
+        <form [formGroup]="detailForm" class="d-grid" autocomplete="off">
+          <div>
+            <nz-form-label [nzSpan]="12">Name</nz-form-label>
+            <nz-form-control nzErrorTip="Invalid Input">
+              <nz-input-group [nzPrefix]="prefixTemplateUser">
+                <input
+                  formControlName="name"
+                  type="text"
+                  nz-input
+                  placeholder="Name"
+                />
+              </nz-input-group>
+            </nz-form-control>
+            <ng-template #prefixTemplateUser
+              ><i nz-icon nzType="folder"></i
+            ></ng-template>
+          </div>
+
+          <div>
+            <nz-form-label [nzSpan]="12">Categories</nz-form-label>
+            <nz-select style="width: 100%" formControlName="categories">
+              <nz-option
+                *ngFor="let item of categoriesList"
+                [nzValue]="item"
+                [nzLabel]="item"
+              ></nz-option>
+            </nz-select>
+            <ng-template #prefixTemplateUser
+              ><i nz-icon nzType="folder"></i
+            ></ng-template>
+          </div>
+
+          <div>
+            <nz-form-label [nzSpan]="12">Max Betting Amount</nz-form-label>
+            <nz-form-control nzErrorTip="Invalid Input">
+              <nz-input-group [nzPrefix]="prefixTemplateUser">
+                <input
+                  formControlName="maxBettingAmount"
+                  type="number"
+                  nz-input
+                  placeholder="Max Betting Amount"
+                />
+              </nz-input-group>
+            </nz-form-control>
+            <ng-template #prefixTemplateUser
+              ><i nz-icon nzType="folder"></i
+            ></ng-template>
+          </div>
+
+          <div>
+            <nz-form-label [nzSpan]="12">Max Payout</nz-form-label>
+            <nz-form-control nzErrorTip="Invalid Input">
+              <nz-input-group [nzPrefix]="prefixTemplateUser">
+                <input
+                  formControlName="maxPayout"
+                  type="number"
+                  nz-input
+                  placeholder="Max Payout"
+                />
+              </nz-input-group>
+            </nz-form-control>
+            <ng-template #prefixTemplateUser
+              ><i nz-icon nzType="folder"></i
+            ></ng-template>
+          </div>
+
+          <div style="display: flex">
+            <label
+              nz-checkbox
+              formControlName="categoryHigherNumber"
+              nz-tooltip
+              nzTooltipTitle="Higher category must have higher bet selection"
+              >Category Higher Number</label
+            >
+            <label
+              nz-checkbox
+              formControlName="categoryHigherOdd"
+              nz-tooltip
+              nzTooltipTitle="Higher category must have higher odds"
+              >Category Higher Odd</label
+            >
+          </div>
+          <div>
+            <label
+              nz-checkbox
+              formControlName="categoryHigherPayout"
+              nz-tooltip
+              nzTooltipTitle="Higher category must give higher payout"
+              >Category Higher Payout</label
+            >
+          </div>
+        </form>
+      </ng-container>
+    </nz-modal>
+  </nz-tab>
+  <nz-tab [nzTitle]="titleTemplate2">
+    <ng-template #titleTemplate2>
+      <i nz-icon nzType="home"></i>
+      Bet Office
+    </ng-template>
+    <app-bonus-bet-office></app-bonus-bet-office>
+  </nz-tab>
+  <nz-tab [nzTitle]="titleTemplate3">
+    <ng-template #titleTemplate3>
+      <i nz-icon nzType="customer-service"></i>
+      Online Customers
+    </ng-template>
+    <app-bonus-online-customers></app-bonus-online-customers>
+  </nz-tab>
+
+</nz-tabset>

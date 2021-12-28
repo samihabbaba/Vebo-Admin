@@ -14,8 +14,6 @@ import { TableService } from 'src/app/shared/services/table.service';
 
 interface DataItem {
   id: any;
-  parentName: any;
-  shop: any;
   name: any;
   maxBettingAmount: any;
   maxPayout: any;
@@ -26,11 +24,11 @@ interface DataItem {
   isActive: any;
 }
 @Component({
-  selector: 'app-bonus',
-  templateUrl: './bonus.component.html',
-  styleUrls: ['./bonus.component.css']
+  selector: 'app-bonus-online-customers',
+  templateUrl: './bonus-online-customers.component.html',
+  styleUrls: ['./bonus-online-customers.component.css']
 })
-export class BonusComponent implements OnInit {
+export class BonusOnlineCustomersComponent implements OnInit {
 
   expandSet = new Set<number>();
 
@@ -47,29 +45,6 @@ export class BonusComponent implements OnInit {
 
   detailForm: FormGroup;
   editingUser: any;
-
-  passwordForm: any;
-
-  promoterValue: any = 'All';
-  filteredPromoters: any[] = [];
-  promoters: any[] = [{ name: 'All', value: '' }];
-  disablePromoter: boolean = false;
-
-  shopValue: any = 'All';
-  filteredShops: any[] = [];
-  shops: any[] = [];
-  disableShop: boolean = false;
-
-  // Add Form Variables
-  addPromoterValue: any = 'All';
-  addFilteredPromoters: any[] = [];
-  addPromoters: any[] = [{ name: 'All', value: '' }];
-  addDisablePromoter: boolean = false;
-
-  addShopValue: any = '';
-  addFilteredShops: any[] = [];
-  addShops: any[] = [];
-  addDisableShop: boolean = false;
 
   categoriesList = [
     'A',
@@ -88,140 +63,12 @@ export class BonusComponent implements OnInit {
     'ABCD',
   ];
 
-  laodPromoters() {
-    if (this.authService.decodedToken.role === 'Shop') {
-      this.disableShop = true;
-
-      return;
-    }
-    if (this.authService.decodedToken.role === 'Promoter') {
-      this.disablePromoter = true;
-      this.promoterValue = this.authService.decodedToken.name;
-      this.dataService
-        .getShopForPromoter(this.authService.decodedToken.id)
-        .subscribe(
-          (response: any) => {
-            this.filteredShops = [{ name: 'All', value: '' }];
-            for (const ag of response.body.userList) {
-              this.filteredShops.push({
-                name: ag.name,
-                value: ag.id.toString(),
-              });
-            }
-            this.shops = [...this.filteredShops];
-            this.LoadUsers();
-          },
-          (error) => {}
-        );
-
-      return;
-    }
-
-    this.dataService.getUsers('Promoter').subscribe(
-      async (response: any) => {
-        for (const ag of response.body.userList) {
-          let promoter = { name: ag.name, value: ag.id.toString() };
-          this.promoters.push(promoter);
-        }
-
-        this.filteredPromoters = [...this.promoters];
-
-        await this.loadShops();
-        this.LoadUsers();
-      },
-      (error) => {}
-    );
-  }
-
-  promoterChange(value) {
-    this.filteredPromoters = this.promoters.filter(
-      (option) => option.name.toLowerCase().indexOf(value.toLowerCase()) !== -1
-    );
-  }
-
-  onPromoterSelection(ev) {
-    // // Event will emit if the user selected an input
-    if (ev.isUserInput) {
-      this.promoterValue = ev.source.nzValue;
-      this.loadShops();
-    }
-  }
-
-  loadShops() {
-    return new Promise((resolve, reject) => {
-      this.dataService
-        .getShopForPromoter(
-          this.authService.decodedToken.role === 'Promoter'
-            ? this.authService.decodedToken.id
-            : this.returnPromoterId()
-        )
-        .subscribe(
-          (response: any) => {
-            this.filteredShops = [{ name: 'All', value: '' }];
-            for (const ag of response.body.userList) {
-              this.filteredShops.push({
-                name: ag.name,
-                value: ag.id.toString(),
-              });
-            }
-            this.shops = [...this.filteredShops];
-            resolve(true);
-          },
-          (error) => {
-            reject(false);
-          }
-        );
-    });
-  }
-
-  shopChange(value) {
-    this.filteredShops = this.shops.filter(
-      (option) => option.name.toLowerCase().indexOf(value.toLowerCase()) !== -1
-    );
-  }
-
-  onShopSelection(ev) {
-    if (ev.isUserInput) {
-      this.shopValue = ev.source.nzValue;
-    }
-  }
-
-  returnPromoterId() {
-    if (this.authService.decodedToken.role === 'Promoter') {
-      return this.authService.decodedToken.id;
-    }
-    let promoter = this.promoters.find((x) => x.name === this.promoterValue);
-    if (!promoter) {
-      return '';
-    }
-    return promoter.value;
-  }
-
-  returnShopId() {
-    let shop = this.shops.find((x) => x.name === this.shopValue);
-    if (!shop) {
-      return '';
-    }
-    return shop.value;
-  }
-
   dataSource = [];
 
   orderColumn = [
     {
       title: 'Id',
       compare: (a: DataItem, b: DataItem) => a.id.localeCompare(b.id),
-    },
-
-    {
-      title: 'Promoter',
-      compare: (a: DataItem, b: DataItem) =>
-        a.parentName.localeCompare(b.parentName),
-    },
-
-    {
-      title: 'Shop',
-      compare: (a: DataItem, b: DataItem) => a.shop.localeCompare(b.shop),
     },
 
     {
@@ -280,23 +127,21 @@ export class BonusComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.laodPromoters();
+    this.LoadUsers();
   }
 
   LoadUsers() {
     this.isSearchLoading = true;
-    this.dataService
-      .GetRisks(this.returnPromoterId(), this.returnShopId())
-      .subscribe(
-        (response) => {
-          this.dataSource = response;
-          this.isSearchLoading = false;
-        },
-        (error) => {
-          this.message.create('error', `Something went wrong`);
-          this.isSearchLoading = false;
-        }
-      );
+    this.dataService.GetRisksNotShops('false', 'true').subscribe(
+      (response) => {
+        this.dataSource = response;
+        this.isSearchLoading = false;
+      },
+      (error) => {
+        this.message.create('error', `Something went wrong`);
+        this.isSearchLoading = false;
+      }
+    );
   }
 
   search(event?: any): void {
@@ -380,7 +225,6 @@ export class BonusComponent implements OnInit {
   // ADD FORM
 
   showAddModal(): void {
-    this.laodPromotersForAdd();
     this.initializeAddForm();
     this.isAddVisible = true;
   }
@@ -409,126 +253,19 @@ export class BonusComponent implements OnInit {
 
   initializeAddForm() {
     this.addForm = this.fb.group({
-      ShopId: new FormControl('', [Validators.required]),
+      // ShopIdToAdd: new FormControl('', [Validators.required]),
+      // shopId: new FormControl('', [Validators.required]),
       categories: new FormControl('A', [Validators.required]),
       categoryHigherNumber: new FormControl(false),
       categoryHigherOdd: new FormControl(false),
       categoryHigherPayout: new FormControl(false),
       isActive: new FormControl(true),
       isOffice: new FormControl(false),
-      isOnline: new FormControl(false),
+      isOnline: new FormControl(true),
       maxBettingAmount: new FormControl('', [Validators.required]),
       maxPayout: new FormControl('', [Validators.required]),
       name: new FormControl('', [Validators.required]),
     });
-  }
-
-  laodPromotersForAdd() {
-    if (this.authService.decodedToken.role === 'Promoter') {
-      this.addDisablePromoter = true;
-      this.addPromoterValue = this.authService.decodedToken.name;
-      this.dataService
-        .getShopForPromoter(this.authService.decodedToken.id)
-        .subscribe(
-          (response: any) => {
-            this.addFilteredShops = [];
-            for (const ag of response.body.userList) {
-              this.addFilteredShops.push({
-                name: ag.name,
-                value: ag.id.toString(),
-              });
-            }
-            this.addShops = [...this.addFilteredShops];
-          },
-          (error) => {}
-        );
-
-      return;
-    }
-
-    this.dataService.getUsers('Promoter').subscribe(
-      (response: any) => {
-        for (const ag of response.body.userList) {
-          let promoter = { name: ag.name, value: ag.id.toString() };
-          this.addPromoters.push(promoter);
-        }
-
-        this.addFilteredPromoters = [...this.addPromoters];
-
-        this.addLoadShops();
-      },
-      (error) => {}
-    );
-  }
-
-  addPromoterChange(value) {
-    this.addFilteredPromoters = this.addPromoters.filter(
-      (option) => option.name.toLowerCase().indexOf(value.toLowerCase()) !== -1
-    );
-  }
-
-  addOnPromoterSelection(ev) {
-    // // Event will emit if the user selected an input
-    if (ev.isUserInput) {
-      this.addPromoterValue = ev.source.nzValue;
-      this.addLoadShops();
-    }
-  }
-
-  addLoadShops() {
-    this.dataService
-      .getShopForPromoter(
-        this.authService.decodedToken.role === 'Promoter'
-          ? this.authService.decodedToken.id
-          : this.addReturnPromoterId()
-      )
-      .subscribe(
-        (response: any) => {
-          this.addFilteredShops = [];
-          for (const ag of response.body.userList) {
-            this.addFilteredShops.push({
-              name: ag.name,
-              value: ag.id.toString(),
-            });
-          }
-          this.addShops = [...this.addFilteredShops];
-        },
-        (error) => {}
-      );
-  }
-
-  addShopChange(value) {
-    this.addFilteredShops = this.addShops.filter(
-      (option) => option.name.toLowerCase().indexOf(value.toLowerCase()) !== -1
-    );
-  }
-
-  addOnShopSelection(ev) {
-    if (ev.isUserInput) {
-      this.addShopValue = ev.source.nzValue;
-      this.addForm.get('ShopId').patchValue(this.addReturnShopId());
-    }
-  }
-
-  addReturnPromoterId() {
-    if (this.authService.decodedToken.role === 'Promoter') {
-      return this.authService.decodedToken.id;
-    }
-    let promoter = this.addPromoters.find(
-      (x) => x.name === this.addPromoterValue
-    );
-    if (!promoter) {
-      return '';
-    }
-    return promoter.value;
-  }
-
-  addReturnShopId() {
-    let shop = this.addShops.find((x) => x.name === this.addShopValue);
-    if (!shop) {
-      return '';
-    }
-    return shop.value;
   }
 
   // DETAILS FORM
@@ -582,7 +319,7 @@ export class BonusComponent implements OnInit {
       ),
       isActive: new FormControl(this.editingUser.isActive),
       isOffice: new FormControl(false),
-      isOnline: new FormControl(false),
+      isOnline: new FormControl(true),
       maxBettingAmount: new FormControl(this.editingUser.maxBettingAmount, [
         Validators.required,
       ]),
@@ -592,4 +329,5 @@ export class BonusComponent implements OnInit {
       name: new FormControl(this.editingUser.name, [Validators.required]),
     });
   }
+
 }
