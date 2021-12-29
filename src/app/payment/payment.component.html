@@ -1,1 +1,546 @@
-<p>payment works!</p>
+<nz-card>
+  <div
+    class="row m-b-30"
+    style="display: flex; justify-content: flex-end; padding-right: 10px"
+  >
+    <div>
+      <a nz-button nzType="primary" (click)="showAddModal()">
+        <i nz-icon nzType="plus-circle" theme="outline"></i>
+        <span>Add Payment</span>
+      </a>
+    </div>
+  </div>
+  <nz-table #table [nzData]="dataSource">
+    <thead>
+      <tr>
+        <th *ngFor="let column of orderColumn" [nzSortFn]="column.compare">
+          {{ column.title }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let item of table.data; let i = index">
+        <tr>
+          <td>
+            {{ item.id }}
+          </td>
+          <td class="link-hover" (click)="showHistoryModal(item)">
+            {{ item.name }}
+          </td>
+          <td>{{ item.balance | number: "1.2-2" }}</td>
+          <td>{{ item.depositPercent }} %</td>
+          <td>{{ item.withdrawPercent }} %</td>
+          <td style="text-align: center !important">
+            <i
+              *ngIf="item.isActive"
+              nz-icon
+              [nzType]="'check-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#04d992'"
+              style="font-size: 18px"
+            ></i>
+
+            <i
+              *ngIf="!item.isActive"
+              nz-icon
+              [nzType]="'close-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#de4436'"
+              style="font-size: 18px"
+            ></i>
+          </td>
+
+          <td class="text-md-right">
+            <button
+              nz-button
+              nz-dropdown
+              nzType="default"
+              nzShape="circle"
+              nz-tooltip
+              nzTooltipTitle="Options"
+              nzTrigger="click"
+              [nzDropdownMenu]="menu"
+              (click)="$event.stopPropagation()"
+            >
+              <i nz-icon nzType="more" theme="outline"></i>
+            </button>
+          </td>
+        </tr>
+
+        <!-- TABLE EXPANSION -->
+
+        <!-- <tr [nzExpand]="expandSet.has(item.id)">
+          <span>FFFF</span>
+        </tr> -->
+
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu>
+            <li nz-menu-item (click)="showDetailModal(item)">
+              <i
+                nz-icon
+                nzType="edit"
+                nzTheme="outline"
+                style="padding-right: 8px"
+              ></i
+              >Details
+            </li>
+
+            <li nz-menu-item (click)="showDepositModal(item)">
+              <i
+                nz-icon
+                nzType="credit-card"
+                nzTheme="outline"
+                style="padding-right: 8px"
+              ></i
+              >Deposit
+            </li>
+
+            <li nz-menu-item (click)="showWithdrawModal(item)">
+              <i
+                nz-icon
+                nzType="minus-square"
+                nzTheme="outline"
+                style="padding-right: 8px"
+              ></i
+              >Withdraw
+            </li>
+
+            <li nz-menu-item (click)="showHistoryModal(item)">
+              <i
+                nz-icon
+                nzType="history"
+                nzTheme="outline"
+                style="padding-right: 8px"
+              ></i
+              >History
+            </li>
+
+            <li
+              nz-menu-item
+              *ngIf="!item.isActive"
+              (click)="suspendConfirm(item)"
+            >
+              <i
+                nz-icon
+                nzType="undo"
+                nzTheme="outline"
+                style="padding-right: 8px"
+              ></i>
+              Activate
+            </li>
+            <li
+              nz-menu-item
+              *ngIf="item.isActive"
+              (click)="unsuspendConfirm(item)"
+            >
+              <i
+                nz-icon
+                nzType="stop"
+                nzTheme="outline"
+                style="padding-right: 8px"
+              ></i>
+              Deactivate
+            </li>
+
+            <li nz-menu-divider></li>
+            <li nz-menu-item nzDanger (click)="showDeleteConfirm(item)">
+              <i
+                nz-icon
+                nzType="delete"
+                nzTheme="outline"
+                style="padding-right: 8px"
+              ></i>
+              Delete
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+      </ng-container>
+    </tbody>
+  </nz-table>
+</nz-card>
+
+<!-- Modal Starts Here -->
+
+<!-- Add Modal -->
+<nz-modal
+  [nzStyle]="{ width: '60vw' }"
+  [(nzVisible)]="isAddVisible"
+  nzTitle="Create New Payment"
+  (nzOnCancel)="isAddVisible = false"
+  (nzOnOk)="submitAddForm()"
+  [nzOkText]="'Add'"
+  [nzOkLoading]="isOkLoading"
+  [nzOkDisabled]="addForm?.invalid"
+>
+  <ng-container *nzModalContent>
+    <form [formGroup]="addForm" class="d-grid" autocomplete="off">
+      <div>
+        <nz-form-label [nzSpan]="12">Name</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group [nzPrefix]="prefixTemplateUser">
+            <input
+              formControlName="name"
+              type="text"
+              nz-input
+              placeholder="Name"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+      </div>
+
+      <div>
+        <nz-form-label [nzSpan]="12">Deposit Percent</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group [nzPrefix]="prefixTemplateUser">
+            <input
+              formControlName="depositPercent"
+              type="number"
+              min="0"
+              max="100"
+              nz-input
+              placeholder="Deposit Percent (0-100)%"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+      </div>
+
+      <div>
+        <nz-form-label [nzSpan]="12">Withdraw Percent</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group [nzPrefix]="prefixTemplateUser">
+            <input
+              formControlName="withdrawPercent"
+              type="number"
+              min="0"
+              max="100"
+              nz-input
+              placeholder="Withdraw Percent (0-100)%"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<!-- Details Modal -->
+<nz-modal
+  [nzStyle]="{ width: '60vw' }"
+  [(nzVisible)]="isDetailVisible"
+  nzTitle="Payment Details"
+  (nzOnCancel)="isDetailVisible = false"
+  (nzOnOk)="submitDetailForm()"
+  [nzOkText]="'Save'"
+  [nzOkLoading]="isOkLoading"
+  [nzOkDisabled]="detailForm?.invalid"
+>
+  <ng-container *nzModalContent>
+    <form [formGroup]="detailForm" class="d-grid" autocomplete="off">
+      <div>
+        <nz-form-label [nzSpan]="12">Deposit Percent</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group [nzPrefix]="prefixTemplateUser">
+            <input
+              formControlName="depositPercent"
+              type="number"
+              min="0"
+              max="100"
+              nz-input
+              placeholder="Deposit Percent (0-100)%"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+      </div>
+
+      <div>
+        <nz-form-label [nzSpan]="12">Withdraw Percent</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group [nzPrefix]="prefixTemplateUser">
+            <input
+              formControlName="withdrawPercent"
+              type="number"
+              min="0"
+              max="100"
+              nz-input
+              placeholder="Withdraw Percent (0-100)%"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<!-- Deposit Modal -->
+<nz-modal
+  [nzStyle]="{ width: '60vw' }"
+  [(nzVisible)]="isDepositVisible"
+  [nzTitle]="'Deposit To ' + editingUser?.name"
+  (nzOnCancel)="isDepositVisible = false"
+  (nzOnOk)="submitDepositForm()"
+  [nzOkText]="'Deposit'"
+  [nzOkLoading]="isOkLoading"
+  [nzOkDisabled]="depositForm?.invalid"
+>
+  <ng-container *nzModalContent>
+    <form [formGroup]="depositForm" class="d-grid" autocomplete="off">
+      <div>
+        <nz-form-label [nzSpan]="12">Amount</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group [nzPrefix]="prefixTemplateUser">
+            <input
+              formControlName="amount"
+              type="number"
+              nz-input
+              placeholder="Amount"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+      </div>
+
+      <div>
+        <nz-form-label [nzSpan]="12">Reference</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group [nzPrefix]="prefixTemplateUser">
+            <input
+              formControlName="reference"
+              type="text"
+              nz-input
+              placeholder="Reference"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<!-- Withdraw Modal -->
+<nz-modal
+  [nzStyle]="{ width: '60vw' }"
+  [(nzVisible)]="isWithdrawVisible"
+  [nzTitle]="'Withdraw From ' + editingUser?.name"
+  (nzOnCancel)="isWithdrawVisible = false"
+  (nzOnOk)="submitWithdrawForm()"
+  [nzOkText]="'Withdraw'"
+  [nzOkLoading]="isOkLoading"
+  [nzOkDisabled]="withdrawForm?.invalid"
+>
+  <ng-container *nzModalContent>
+    <form [formGroup]="withdrawForm" class="d-grid" autocomplete="off">
+      <div>
+        <nz-form-label [nzSpan]="12">Amount</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group [nzPrefix]="prefixTemplateUser">
+            <input
+              formControlName="amount"
+              type="number"
+              nz-input
+              placeholder="Amount"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+      </div>
+
+      <div>
+        <nz-form-label [nzSpan]="12">Reference</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group [nzPrefix]="prefixTemplateUser">
+            <input
+              formControlName="reference"
+              type="text"
+              nz-input
+              placeholder="Reference"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<!-- History Modal -->
+<nz-modal
+  [nzStyle]="{ width: '90vw' }"
+  [(nzVisible)]="isHistoryVisible"
+  [nzTitle]="'Transactions of ' + editingUser?.name"
+  (nzOnCancel)="isHistoryVisible = false"
+>
+  <ng-container *nzModalContent>
+    <div class="filters-container">
+      <nz-range-picker
+        nzFormat="dd-MM-yyyy"
+        [nzAllowClear]="false"
+        [(ngModel)]="userTransactionsDate"
+      ></nz-range-picker>
+
+      <nz-select
+        [(ngModel)]="userTransactionsType"
+        style="width: 120px; margin-left: 1rem"
+      >
+        <nz-option nzValue="All" nzLabel="All"></nz-option>
+        <nz-option nzValue="Deposit" nzLabel="Deposit"></nz-option>
+        <nz-option nzValue="Withdraw" nzLabel="Withdraw"></nz-option>
+      </nz-select>
+
+      <button
+        style="width: 200px; margin-left: 1.5rem"
+        (click)="getUserTransactions()"
+        nz-button
+        nzType="primary"
+        [nzLoading]="userTransactionsLoading"
+      >
+        <i nz-icon nzType="search"></i>
+        Search
+      </button>
+    </div>
+
+    <nz-table #table2 [nzData]="userTransactionsData">
+      <thead>
+        <tr>
+          <th
+            *ngFor="let column of orderColumnTransactions"
+            [nzSortFn]="column.compare"
+          >
+            {{ column.title }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of table2.data; let i = index">
+          <tr (click)="onExpandChange(item.id, $event)" style="cursor: pointer">
+            <td>{{ item.amount | number: "1.2-2" }}{{ " " + item.symbole }}</td>
+            <td>
+              {{ item.paymentType }}
+            </td>
+            <td *ngIf="item.isDeposite" style="color: #04d992">Deposit</td>
+            <td *ngIf="!item.isDeposite" style="color: #de4436">Withdraw</td>
+            <td>{{ item.date | date: "medium" }}</td>
+            <td>{{ item.refrence }}</td>
+          </tr>
+
+          <!-- TABLE EXPANSION -->
+
+          <tr [nzExpand]="expandSet.has(item.id)">
+            <nz-list nzGrid>
+              <div nz-row [nzGutter]="4">
+                <div nz-col [nzSpan]="4" style="margin-right: 16px">
+                  <nz-list-item>
+                    <nz-card
+                      [nzTitle]="'Cash Balance (' + item.symbole + ')'"
+                      style="text-align: center"
+                    >
+                      <span style="color: #de4436">
+                        {{ item.prevCashBalance | number: "1.2-2" }}
+                      </span>
+                      <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+                      <span style="color: #04d992">
+                        {{ item.newCashBalance | number: "1.2-2" }}
+                      </span>
+                    </nz-card>
+                  </nz-list-item>
+                </div>
+
+                <div nz-col [nzSpan]="4" style="margin-right: 16px">
+                  <nz-list-item>
+                    <nz-card
+                      [nzTitle]="'Bonus Balance (' + item.symbole + ')'"
+                      style="text-align: center"
+                    >
+                      <span style="color: #de4436">
+                        {{ item.prevBonusBalance | number: "1.2-2" }}
+                      </span>
+                      <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+                      <span style="color: #04d992">
+                        {{ item.newBonusBalance | number: "1.2-2" }}
+                      </span>
+                    </nz-card>
+                  </nz-list-item>
+                </div>
+
+                <div nz-col [nzSpan]="4" style="margin-right: 16px">
+                  <nz-list-item>
+                    <nz-card
+                      [nzTitle]="'Credit Limit (' + item.symbole + ')'"
+                      style="text-align: center"
+                    >
+                      <span style="color: #de4436">
+                        {{ item.prevCreditLimit | number: "1.2-2" }}
+                      </span>
+                      <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+                      <span style="color: #04d992">
+                        {{ item.newCreditLimit | number: "1.2-2" }}
+                      </span>
+                    </nz-card>
+                  </nz-list-item>
+                </div>
+
+                <div nz-col [nzSpan]="4" style="margin-right: 16px">
+                  <nz-list-item>
+                    <nz-card
+                      [nzTitle]="'Used Credit (' + item.symbole + ')'"
+                      style="text-align: center"
+                    >
+                      <span style="color: #de4436">
+                        {{ item.prevUsedCredit | number: "1.2-2" }}
+                      </span>
+                      <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+                      <span style="color: #04d992">
+                        {{ item.newUsedCredit | number: "1.2-2" }}
+                      </span>
+                    </nz-card>
+                  </nz-list-item>
+                </div>
+
+                <div nz-col [nzSpan]="4" style="margin-right: 16px">
+                  <nz-list-item>
+                    <nz-card
+                      [nzTitle]="'Real Balance (' + item.symbole + ')'"
+                      style="text-align: center"
+                    >
+                      <span style="color: #de4436">
+                        {{ item.prevRealBalance | number: "1.2-2" }}
+                      </span>
+                      <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+                      <span style="color: #04d992">
+                        {{ item.newRealBalance | number: "1.2-2" }}
+                      </span>
+                    </nz-card>
+                  </nz-list-item>
+                </div>
+              </div>
+            </nz-list>
+          </tr>
+        </ng-container>
+      </tbody>
+    </nz-table>
+  </ng-container>
+  <ng-container *nzModalFooter> </ng-container>
+</nz-modal>

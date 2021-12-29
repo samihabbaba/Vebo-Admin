@@ -1449,7 +1449,7 @@ export class DataService {
     );
   }
 
-  getPayments() {
+  getPayments():any {
     return this.http.get(
       // `${environment.apiUrl}bonus/?Status=All`,
       `${environment.apiUrl}payment`,
