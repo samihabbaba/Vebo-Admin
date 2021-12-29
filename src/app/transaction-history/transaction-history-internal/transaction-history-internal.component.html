@@ -1,5 +1,5 @@
 <nz-card>
-  <div class="filters-container">
+  <div class="filters-container" style="display: flex; flex-wrap: wrap">
     <nz-range-picker
       nzFormat="dd-MM-yyyy"
       [(ngModel)]="userTransactionsDate"
@@ -16,7 +16,7 @@
     </nz-select>
 
     <button
-      style="width: 200px; margin-left: 1.5rem"
+      style="width: 200px; margin-left: auto"
       (click)="getUserTransactions()"
       nz-button
       nzType="primary"
@@ -27,7 +27,11 @@
     </button>
   </div>
 
-  <nz-table #table2 [nzData]="userTransactionsData" style="padding-top: 1rem">
+  <nz-table
+    #table2
+    [nzData]="userTransactionsData"
+    style="padding-top: 1rem"
+  >
     <thead>
       <tr>
         <th
@@ -40,8 +44,16 @@
     </thead>
     <tbody>
       <ng-container *ngFor="let item of table2.data; let i = index">
-        <tr (click)="onExpandChange(item.id, $event)" style="cursor: pointer">
-          <td>{{ item.amount | number: "1.2-2" }}{{ " " + item.symbole }}</td>
+        <tr
+          (click)="onExpandChange(item.id, $event)"
+          style="cursor: pointer"
+        >
+          <td>
+            {{ item.user }}
+          </td>
+          <td>
+            {{ item.amount | number: "1.2-2" }}{{ " " + item.symbole }}
+          </td>
           <td>
             {{ item.paymentType }}
           </td>

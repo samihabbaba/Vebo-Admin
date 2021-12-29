@@ -1,1 +1,126 @@
-<p>logs works!</p>
+<nz-card>
+  <div class="table-filter-container">
+    <div class="twoRow">
+      <div class="table-filter">
+        <span>Username</span>
+        <input nz-input placeholder="Username" [(ngModel)]="username" />
+      </div>
+
+      <div class="table-filter">
+        <span>Type</span>
+
+        <nz-select [(ngModel)]="type">
+          <nz-option nzValue="" nzLabel="All"></nz-option>
+          <nz-option
+            [nzValue]="item"
+            [nzLabel]="item"
+            *ngFor="let item of TypesList"
+          ></nz-option>
+        </nz-select>
+      </div>
+
+
+    </div>
+
+    <div class="twoRow">
+      <div class="table-filter">
+        <span>Level</span>
+
+        <nz-select [(ngModel)]="level">
+          <nz-option nzValue="" nzLabel="All"></nz-option>
+          <nz-option
+            [nzValue]="item"
+            [nzLabel]="item"
+            *ngFor="let item of LogsType"
+          ></nz-option>
+        </nz-select>
+      </div>
+      <div class="table-filter">
+        <span>Date Range</span>
+        <nz-range-picker
+          nzFormat="dd-MM-yyyy"
+          [(ngModel)]="userTransactionsDate"
+          [nzAllowClear]="false"
+        ></nz-range-picker>
+      </div>
+    </div>
+
+    <div class="twoRow">
+      <div class="table-filter">
+        <span>Ip Address</span>
+        <input nz-input placeholder="Ip Address" [(ngModel)]="ipAddress" />
+      </div>
+      <button
+        (click)="getBets()"
+        nz-button
+        nzType="primary"
+        nzSize="medium"
+        [nzLoading]="userTransactionsLoading"
+      >
+        <i nz-icon nzType="search"></i>
+        Search
+      </button>
+    </div>
+  </div>
+
+  <nz-table
+    #table2
+    [nzData]="userTransactionsData"
+    style="padding-top: 0.4rem"
+    nzSize="medium"
+    nzTableLayout="auto"
+  >
+    <thead>
+      <tr>
+        <th
+          *ngFor="let column of orderColumnTransactions"
+          style="padding: 0.4rem"
+          [ngStyle]="{ 'text-align': column.title == 'Id' ? 'center' : 'left' }"
+        >
+          {{ column.title }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let item of table2.data; let i = index">
+        <tr class="lowPadding">
+          <td>
+            {{ item.id }}
+          </td>
+
+          <td
+            [ngClass]="{
+              greenText: item.level === 'Info',
+              redText: item.level === 'Error',
+              yellowText: item.level === 'Warn'
+            }"
+          >
+            {{ item.level }}
+          </td>
+
+          <td>
+            {{ item.logged | date: "dd/MM/yyyy HH:mm:ss" }}
+          </td>
+
+          <td>
+            {{ item.message }}
+          </td>
+
+          <td>
+            {{ item.type }}
+          </td>
+          <td>
+            {{ item.user }}
+          </td>
+          <td>
+            {{ item.ip }}
+          </td>
+
+          <td>
+            {{ item.userAgent }}
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </nz-table>
+</nz-card>

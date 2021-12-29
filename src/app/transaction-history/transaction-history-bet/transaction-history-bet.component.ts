@@ -1,13 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { DataService } from '../shared/services/data.service';
+import { DataService } from 'src/app/shared/services/data.service';
 
 @Component({
-  selector: 'app-transaction-history',
-  templateUrl: './transaction-history.component.html',
-  styleUrls: ['./transaction-history.component.css'],
+  selector: 'app-transaction-history-bet',
+  templateUrl: './transaction-history-bet.component.html',
+  styleUrls: ['./transaction-history-bet.component.css']
 })
-export class TransactionHistoryComponent implements OnInit {
+export class TransactionHistoryBetComponent implements OnInit {
+
   expandSet = new Set<number>();
   @Input() currentUser: any;
   userTransactionsDate: any = [new Date(), new Date()];
@@ -69,7 +70,7 @@ export class TransactionHistoryComponent implements OnInit {
         10000,
         this.userTransactionsType,
         false,
-        false
+        true
       )
       .subscribe(
         (resp) => {
@@ -83,4 +84,5 @@ export class TransactionHistoryComponent implements OnInit {
         }
       );
   }
+
 }
