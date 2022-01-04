@@ -1,1 +1,134 @@
-<p>payment works!</p>
+<nz-card>
+  <div class="table-filter-container">
+    <div class="twoRow">
+      <div class="table-filter">
+        <span>Date Range</span>
+        <nz-range-picker
+          nzFormat="dd-MM-yyyy"
+          [(ngModel)]="userTransactionsDate"
+          [nzAllowClear]="false"
+        ></nz-range-picker>
+      </div>
+    </div>
+
+    <div class="twoRow">
+      <div style="display: flex">
+        <button
+          nz-tooltip
+          nzTooltipTitle="Download"
+          style="margin: 0.3rem"
+          nz-button
+          nzType="primary"
+          nzSize="medium"
+          (click)="this.exportToExcelSheet()"
+        >
+          <i nz-icon nzType="download"></i>
+          Export To Excel
+        </button>
+      </div>
+
+      <button
+        style="margin-right: 1rem"
+        (click)="getBets()"
+        nz-button
+        nzType="primary"
+        nzSize="medium"
+        [nzLoading]="userTransactionsLoading"
+      >
+        <i nz-icon nzType="search"></i>
+        Search
+      </button>
+    </div>
+  </div>
+
+  <nz-table
+    #table2
+    [nzData]="userTransactionsData"
+    style="padding-top: 0.4rem"
+    nzSize="medium"
+    nzTableLayout="auto"
+  >
+    <thead>
+      <tr>
+        <th
+          *ngFor="let column of orderColumnTransactions"
+          style="padding: 0.4rem"
+        >
+          {{ column.title }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let item of table2.data; let i = index">
+        <tr
+          (click)="onExpandChange(item, $event)"
+          style="cursor: pointer"
+          class="lowPadding"
+        >
+          <td>
+            {{ item.id }}
+          </td>
+          <td>
+            {{ item.name }}
+          </td>
+          <td>{{ item.deposit | number: "1.2-2" }} ₺</td>
+          <td>{{ item.depositCost | number: "1.2-2" }} ₺</td>
+          <td>{{ item.withdraw | number: "1.2-2" }} ₺</td>
+          <td>{{ item.withdrawCost | number: "1.2-2" }} ₺</td>
+          <td>{{ item.totalCost | number: "1.2-2" }} ₺</td>
+        </tr>
+
+        <!-- TABLE EXPANSION -->
+
+        <tr [nzExpand]="expandSet.has(item.id)">
+          <nz-table
+            class="yo"
+            #table3
+            [nzData]="item.records"
+            [nzFrontPagination]="false"
+            [nzShowPagination]="false"
+            [nzBordered]="true"
+          >
+            <thead>
+              <tr>
+                <th
+                  *ngFor="let column of orderColumnTransactions2"
+                  style="padding: 0.4rem"
+                >
+                  {{ column.title }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let item of table3.data; let i = index">
+                <tr class="lowPadding">
+                  <td>
+                    {{ item.id }}
+                  </td>
+                  <td>
+                    {{ item.userName }}
+                  </td>
+                  <td>
+                    {{ item.name }}
+                  </td>
+                  <td>{{ item.date }}</td>
+                  <td>{{ item.time }}</td>
+                  <td>{{ item.currency }}</td>
+                  <td
+                    [ngClass]="{
+                      greenText: item.isDeposit,
+                      redText: !item.isDeposit
+                    }"
+                  >
+                    {{ item.amount | number: "1.2-2" }} {{ item.symbol }}
+                  </td>
+                  <td>{{ item.paymentMethod }}</td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </nz-table>
+        </tr>
+      </ng-container>
+    </tbody>
+  </nz-table>
+</nz-card>
