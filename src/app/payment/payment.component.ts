@@ -101,25 +101,39 @@ export class PaymentComponent implements OnInit {
 
   orderColumnTransactions = [
     {
-      title: 'Amount',
-      compare: (a: any, b: any) => a.amount.localeCompare(b.amount),
+      title: 'Staff',
+      compare: (a: any, b: any) => a.staff.localeCompare(b.staff),
     },
     {
-      title: 'Payment Type',
-      compare: (a: any, b: any) => a.paymentType.localeCompare(b.paymentType),
+      title: 'Amount',
+      compare: (a: any, b: any) => a.amount - b.amount,
     },
     {
       title: 'Type',
-      compare: (a: any, b: any) => a.isDeposite - b.isDeposite,
+      compare: (a: any, b: any) => a.isDeposit - b.isDeposit,
+    },
+    {
+      title: 'Previous',
+      compare: (a: any, b: any) => a.prevBalance - b.prevBalance,
+    },
+
+    {
+      title: 'Current',
+      compare: (a: any, b: any) => a.currentBalance - b.currentBalance,
+    },
+
+    {
+      title: 'Reference',
+      compare: (a: any, b: any) => a.reference.localeCompare(b.reference),
     },
     {
       title: 'Date',
       compare: (a: any, b: any) => a.date.localeCompare(b.date),
     },
-    {
-      title: 'Reference',
-      compare: (a: any, b: any) => a.refrence.localeCompare(b.refrence),
-    },
+    // {
+    //   title: 'Time',
+    //   compare: (a: any, b: any) => a.time.localeCompare(b.time),
+    // },
   ];
 
   constructor(
@@ -303,7 +317,9 @@ export class PaymentComponent implements OnInit {
       isDeposit: new FormControl(true, [Validators.required]),
       paymentId: new FormControl(this.editingUser.id, [Validators.required]),
       reference: new FormControl('', [Validators.required]),
-      staffId: new FormControl(this.dataService.currentUser.id, [Validators.required]),
+      staffId: new FormControl(this.dataService.currentUser.id, [
+        Validators.required,
+      ]),
     });
   }
 
@@ -339,7 +355,9 @@ export class PaymentComponent implements OnInit {
       isDeposit: new FormControl(false, [Validators.required]),
       paymentId: new FormControl(this.editingUser.id, [Validators.required]),
       reference: new FormControl('', [Validators.required]),
-      staffId: new FormControl(this.dataService.currentUser.id, [Validators.required]),
+      staffId: new FormControl(this.dataService.currentUser.id, [
+        Validators.required,
+      ]),
     });
   }
 
@@ -363,28 +381,28 @@ export class PaymentComponent implements OnInit {
   // HISTORY FORM
   showHistoryModal(item: any): void {
     this.editingUser = item;
+    this.isHistoryVisible = true;
     this.getUserTransactions();
   }
 
   getUserTransactions() {
     this.userTransactionsLoading = true;
     this.dataService
-      .getTransactionForUser(
-        this.dataService.convertDateTimeToIso(this.userTransactionsDate[0]),
-        this.dataService.convertDateTimeToIso(this.userTransactionsDate[1]),
+      .getPaymentsTransactionHistory(
+        this.userTransactionsDate[0].toISOString().slice(0, -14),
+        this.userTransactionsDate[1].toISOString().slice(0, -14),
         this.editingUser.id,
-        1,
-        10000,
         this.userTransactionsType
       )
       .subscribe(
         (resp) => {
-          this.userTransactionsData = resp.body.transactions;
+          this.userTransactionsData = resp.body;
+          console.log(this.userTransactionsData);
           this.isHistoryVisible = true;
           this.userTransactionsLoading = false;
         },
         (error) => {
-          this.message.create('error', `Insufficient credit`);
+          this.message.create('error', `Something went wrong`);
           this.userTransactionsLoading = false;
         }
       );

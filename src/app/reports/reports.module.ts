@@ -5,6 +5,7 @@ import { ReportsRoutingModule } from './reports-routing.module';
 import { ReportsComponent } from './reports.component';
 import { WinLoseComponent } from './win-lose/win-lose.component';
 import { PaymentComponent } from './payment/payment.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { PaymentComponent } from './payment/payment.component';
   ],
   imports: [
     CommonModule,
-    ReportsRoutingModule
+    ReportsRoutingModule,
+    SharedModule
   ]
 })
 export class ReportsModule { }

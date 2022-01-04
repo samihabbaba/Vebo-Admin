@@ -1,1 +1,333 @@
-<p>win-lose works!</p>
+<nz-card>
+  <div class="table-filter-container">
+    <div class="twoRow">
+      <div class="table-filter">
+        <span>Date Range</span>
+        <nz-range-picker
+          nzFormat="dd-MM-yyyy"
+          [(ngModel)]="userTransactionsDate"
+          [nzAllowClear]="false"
+        ></nz-range-picker>
+      </div>
+    </div>
+
+    <div class="twoRow">
+      <div class="table-filter">
+        <span>Stake</span>
+        <nz-input-number
+          [(ngModel)]="formToSubmit.stake"
+          [nzMin]="0"
+          [nzStep]="1"
+        ></nz-input-number>
+      </div>
+      <div class="table-filter">
+        <span>Payout</span>
+        <nz-input-number
+          [(ngModel)]="formToSubmit.payout"
+          [nzMin]="0"
+          [nzStep]="1"
+        ></nz-input-number>
+      </div>
+    </div>
+
+    <div class="twoRow">
+      <div class="table-filter">
+        <span>Bonus</span>
+        <nz-input-number
+          [(ngModel)]="formToSubmit.bonus"
+          [nzMin]="0"
+          [nzStep]="1"
+        ></nz-input-number>
+      </div>
+
+      <div class="table-filter">
+        <span>Running Bets</span>
+        <nz-input-number
+          [(ngModel)]="formToSubmit.runningBets"
+          [nzMin]="0"
+          [nzStep]="1"
+        ></nz-input-number>
+      </div>
+    </div>
+
+    <div class="twoRow">
+      <div class="table-filter">
+        <span>Voided Bets</span>
+        <nz-input-number
+          [(ngModel)]="formToSubmit.voided"
+          [nzMin]="0"
+          [nzStep]="1"
+        ></nz-input-number>
+      </div>
+
+      <div class="table-filter">
+        <span>Commission</span>
+        <nz-input-number
+          [(ngModel)]="formToSubmit.commission"
+          [nzMin]="0"
+          [nzStep]="1"
+        ></nz-input-number>
+      </div>
+    </div>
+    <div></div>
+
+    <div class="twoRow">
+      <button
+        nz-tooltip
+        nzTooltipTitle="Download Report"
+        style="margin: 0.3rem"
+        nz-button
+        nzType="primary"
+        nzSize="medium"
+        (click)="exportToExcelSheet()"
+      >
+        <i nz-icon nzType="download"></i>
+        Export To Excel
+      </button>
+
+      <button
+        style="margin-right: 1rem"
+        (click)="getBets()"
+        nz-button
+        nzType="primary"
+        nzSize="medium"
+        [nzLoading]="userTransactionsLoading"
+      >
+        <i nz-icon nzType="search"></i>
+        Search
+      </button>
+    </div>
+  </div>
+  <div class="row" style="padding-top: 1rem">
+    <div class="col-lg-4">
+      <nz-card>
+        <div class="d-flex justify-content-between align-items-center">
+          <h5>SportBook</h5>
+        </div>
+        <div class="m-t-30 m-b-30">
+          <nz-list [nzItemLayout]="'horizontal'">
+            <nz-list-item>
+              <nz-list-item-meta nzDescription="Stake">-> </nz-list-item-meta>
+              <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
+                {{ report.sportBookStake | number: "1.2-2" }} ₺
+              </nz-tag>
+            </nz-list-item>
+
+            <nz-list-item>
+              <nz-list-item-meta nzDescription="Running Bets"
+                >->
+              </nz-list-item-meta>
+              <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
+                {{ report.sportBookRunningBet | number: "1.2-2" }} ₺
+              </nz-tag>
+            </nz-list-item>
+
+            <nz-list-item>
+              <nz-list-item-meta nzDescription="Payout">-> </nz-list-item-meta>
+              <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
+                {{ report.sportBookPayout | number: "1.2-2" }} ₺
+              </nz-tag>
+            </nz-list-item>
+
+            <nz-list-item>
+              <nz-list-item-meta nzDescription="Voided">-> </nz-list-item-meta>
+              <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
+                {{ report.sportBookVoided | number: "1.2-2" }} ₺
+              </nz-tag>
+            </nz-list-item>
+
+            <nz-list-item>
+              <nz-list-item-meta nzDescription="Bonus">-> </nz-list-item-meta>
+              <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
+                {{ report.sportBookBonus | number: "1.2-2" }} ₺
+              </nz-tag>
+            </nz-list-item>
+
+            <nz-list-item>
+              <nz-list-item-meta nzDescription="Commission"
+                >->
+              </nz-list-item-meta>
+              <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
+                {{ report.sportBookComission | number: "1.2-2" }} ₺
+              </nz-tag>
+            </nz-list-item>
+          </nz-list>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+          <h5>Profit</h5>
+          <h5 style="margin-left: auto">
+            {{ report.sportBookProfit | number: "1.2-2" }} ₺
+          </h5>
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-lg-4">
+      <nz-card>
+        <div class="d-flex justify-content-between align-items-center">
+          <h5>Layoff</h5>
+        </div>
+        <div class="m-t-30 m-b-30">
+          <nz-list [nzItemLayout]="'horizontal'">
+            <nz-list-item>
+              <nz-list-item-meta nzDescription="Stake">-> </nz-list-item-meta>
+              <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
+                {{ report.layoffStake | number: "1.2-2" }} ₺
+              </nz-tag>
+            </nz-list-item>
+
+            <nz-list-item>
+              <nz-list-item-meta nzDescription="Running Bets"
+                >->
+              </nz-list-item-meta>
+              <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
+                {{ report.layoffRunningBet | number: "1.2-2" }} ₺
+              </nz-tag>
+            </nz-list-item>
+
+            <nz-list-item>
+              <nz-list-item-meta nzDescription="Payout">-> </nz-list-item-meta>
+              <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
+                {{ report.layoffPayout | number: "1.2-2" }} ₺
+              </nz-tag>
+            </nz-list-item>
+
+            <nz-list-item>
+              <nz-list-item-meta nzDescription="Voided">-> </nz-list-item-meta>
+              <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
+                {{ report.layoffVoided | number: "1.2-2" }} ₺
+              </nz-tag>
+            </nz-list-item>
+
+            <nz-list-item>
+              <nz-list-item-meta nzDescription="Bonus">-> </nz-list-item-meta>
+              <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
+                {{ report.layoffBonus | number: "1.2-2" }} ₺
+              </nz-tag>
+            </nz-list-item>
+
+            <nz-list-item>
+              <nz-list-item-meta nzDescription="Commission"
+                >->
+              </nz-list-item-meta>
+              <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
+                {{ report.layoffComission | number: "1.2-2" }} ₺
+              </nz-tag>
+            </nz-list-item>
+          </nz-list>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+          <h5>Profit</h5>
+          <h5 style="margin-left: auto">
+            {{ report.layoffProfit | number: "1.2-2" }} ₺
+          </h5>
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-lg-4">
+      <nz-card>
+        <div class="d-flex justify-content-between align-items-center">
+          <h5>Banking</h5>
+        </div>
+        <div class="m-t-30 m-b-30">
+          <nz-list [nzItemLayout]="'horizontal'">
+            <nz-list-item>
+              <nz-list-item-meta nzDescription="Deposited"
+                >->
+              </nz-list-item-meta>
+              <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
+                {{ report.deposited | number: "1.2-2" }} ₺
+              </nz-tag>
+            </nz-list-item>
+
+            <nz-list-item>
+              <nz-list-item-meta nzDescription="Deposit Cost"
+                >->
+              </nz-list-item-meta>
+              <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
+                {{ report.depositCost | number: "1.2-2" }} ₺
+              </nz-tag>
+            </nz-list-item>
+
+            <nz-list-item>
+              <nz-list-item-meta nzDescription="Withdrawal"
+                >->
+              </nz-list-item-meta>
+              <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
+                {{ report.withdraw | number: "1.2-2" }} ₺
+              </nz-tag>
+            </nz-list-item>
+
+            <nz-list-item>
+              <nz-list-item-meta nzDescription="Withdrawal Cost"
+                >->
+              </nz-list-item-meta>
+              <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
+                {{ report.withdrawCost | number: "1.2-2" }} ₺
+              </nz-tag>
+            </nz-list-item>
+
+            <nz-list-item>
+              <nz-list-item-meta nzDescription="Previous Cash Balance"
+                >->
+              </nz-list-item-meta>
+              <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
+                {{ report.startCashBalance | number: "1.2-2" }} ₺
+              </nz-tag>
+            </nz-list-item>
+
+            <nz-list-item>
+              <nz-list-item-meta nzDescription="Current Balance"
+                >->
+              </nz-list-item-meta>
+              <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
+                {{ report.currentBalance | number: "1.2-2" }} ₺
+              </nz-tag>
+            </nz-list-item>
+          </nz-list>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+          <h5>Total</h5>
+          <h5 style="margin-left: auto">
+            {{ report.total | number: "1.2-2" }} ₺
+          </h5>
+        </div>
+      </nz-card>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <nz-card>
+        <div class="d-flex justify-content-between align-items-center">
+          <div style="flex: 1; display: flex; justify-content: space-around">
+            <h4>Credit Deposit</h4>
+            <nz-tag class="m-r-0 m-b-0" [nzColor]="'blue'">
+              {{ report.creditDeposit | number: "1.2-2" }} ₺
+            </nz-tag>
+          </div>
+          <div style="flex: 1; display: flex; justify-content: space-around">
+            <h4>Credit Withdraw</h4>
+            <nz-tag class="m-r-0 m-b-0" [nzColor]="'blue'">
+              {{ report.creditWithdraw | number: "1.2-2" }} ₺
+            </nz-tag>
+          </div>
+        </div>
+      </nz-card>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <nz-card>
+        <div class="d-flex justify-content-between align-items-center" style="width: 50%; margin: 0 auto !important;">
+          <div style="flex: 1; display: flex; justify-content: space-around">
+            <h3>Profit</h3>
+            <nz-tag class="m-r-0 m-b-0" [nzColor]="report.winLoss < 0 ? 'red' : 'green'">
+              {{ report.winLoss | number: "1.2-2" }} ₺
+            </nz-tag>
+          </div>
+        </div>
+      </nz-card>
+    </div>
+  </div>
+</nz-card>
