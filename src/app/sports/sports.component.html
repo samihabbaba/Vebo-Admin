@@ -1,17 +1,17 @@
-<nz-tabset>
+<nz-tabset *ngIf="sportsList">
   <nz-tab [nzTitle]="titleTemplate">
     <ng-template #titleTemplate>
       <i nz-icon nzType="trophy"></i>
       Sports
     </ng-template>
-    <app-available-sports></app-available-sports>
+    <app-available-sports [sports]="sports" (getSports)="getSports()"></app-available-sports>
   </nz-tab>
   <nz-tab [nzTitle]="titleTemplate2">
     <ng-template #titleTemplate2>
       <i nz-icon nzType="partition"></i>
       Regions
     </ng-template>
-    <app-regions></app-regions>
+    <app-regions [sportsList]="sportsList" ></app-regions>
   </nz-tab>
   <nz-tab [nzTitle]="titleTemplate3">
     <ng-template #titleTemplate3>

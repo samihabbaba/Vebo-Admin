@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -8,7 +8,6 @@ import {
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DataService } from 'src/app/shared/services/data.service';
-import { TableService } from 'src/app/shared/services/table.service';
 
 @Component({
   selector: 'app-available-sports',
@@ -25,14 +24,8 @@ export class AvailableSportsComponent implements OnInit {
   detailForm: FormGroup;
   editingUser: any;
 
-  dropdownOptions: any[] = [
-    { label: 'In Stock', value: 'inStock' },
-    { label: 'Out of Stock', value: 'outOfStock' },
-  ];
-
-  selectedStatus: string = '';
-
-  dataSource = [];
+  @Input() sports = [];
+  @Output() getSports: EventEmitter<any> = new EventEmitter();
 
   orderColumn = [
     {
@@ -63,23 +56,10 @@ export class AvailableSportsComponent implements OnInit {
     private fb: FormBuilder
   ) {}
 
-  ngOnInit() {
-    this.LoadUsers();
-  }
+  ngOnInit() {}
 
   LoadUsers() {
-    this.isSearchLoading = true;
-    this.dataService.GetSports().subscribe(
-      (response) => {
-        this.dataSource = response.body;
-        console.log(this.dataSource);
-        this.isSearchLoading = false;
-      },
-      (error) => {
-        this.message.create('error', `Something went wrong`);
-        this.isSearchLoading = false;
-      }
-    );
+    this.getSports.emit();
   }
 
   statusChange(value: string): void {}
@@ -90,18 +70,16 @@ export class AvailableSportsComponent implements OnInit {
       nzTitle: `Do you Want to activate the sport ${item.name}?`,
       nzOkText: 'Yes',
       nzOnOk: () => {
-        // this.editingUser.isMasterAccount = false;
-        // this.editingUser.isDeleted = false;
-        // this.editingUser.isSuspended = true;
-        // this.dataService.submitChangesForUser(this.editingUser).subscribe(
-        //   (response) => {
-        //     this.LoadUsers();
-        //     this.message.create('success', `User suspended successfully`);
-        //   },
-        //   (error) => {
-        //     this.message.create('error', `Something went wrong`);
-        //   }
-        // );
+        this.editingUser.isActive = true;
+        this.dataService.updateSport(this.editingUser).subscribe(
+          (response) => {
+            this.LoadUsers();
+            this.message.create('success', `Sport activated successfully`);
+          },
+          (error) => {
+            this.message.create('error', `Something went wrong`);
+          }
+        );
       },
     });
   }
@@ -112,18 +90,16 @@ export class AvailableSportsComponent implements OnInit {
       nzTitle: `Do you Want to deactivate the sport ${item.name}?`,
       nzOkText: 'Yes',
       nzOnOk: () => {
-        // this.editingUser.isMasterAccount = false;
-        // this.editingUser.isDeleted = false;
-        // this.editingUser.isSuspended = false;
-        // this.dataService.submitChangesForUser(this.editingUser).subscribe(
-        //   (response) => {
-        //     this.LoadUsers();
-        //     this.message.create('success', `User unsuspended successfully`);
-        //   },
-        //   (error) => {
-        //     this.message.create('error', `Something went wrong`);
-        //   }
-        // );
+        this.editingUser.isActive = false;
+        this.dataService.updateSport(this.editingUser).subscribe(
+          (response) => {
+            this.LoadUsers();
+            this.message.create('success', `Sport deactivated successfully`);
+          },
+          (error) => {
+            this.message.create('error', `Something went wrong`);
+          }
+        );
       },
     });
   }
@@ -134,7 +110,7 @@ export class AvailableSportsComponent implements OnInit {
     this.editingUser = item;
     this.initializeDetailForm();
     this.isDetailVisible = true;
-    console.log(this.editingUser)
+    console.log(this.editingUser);
   }
 
   submitDetailForm() {
@@ -158,7 +134,9 @@ export class AvailableSportsComponent implements OnInit {
 
   initializeDetailForm() {
     this.detailForm = this.fb.group({
-      category: new FormControl(this.editingUser.category, [Validators.required]),
+      category: new FormControl(this.editingUser.category, [
+        Validators.required,
+      ]),
       isActive: new FormControl(this.editingUser.isActive),
     });
   }

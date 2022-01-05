@@ -1,33 +1,6 @@
 <nz-card>
-  <div class="row m-b-30">
-    <div class="col-lg-8">
-      <div class="d-md-flex">
-        <div class="m-b-10 m-r-20 d-flex align-items-center">
-          <nz-select
-            style="min-width: 220px"
-            class="w-100"
-            nzPlaceHolder="Status"
-            [(ngModel)]="selectedStatus"
-            (ngModelChange)="statusChange($event)"
-          >
-            <nz-option nzLabel="All" nzValue=""></nz-option>
-            <nz-option
-              [nzLabel]="item.label"
-              [nzValue]="item.value"
-              *ngFor="let item of dropdownOptions"
-            ></nz-option>
-          </nz-select>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-4 text-right">
-      <a nz-button nzType="primary" style="width: 100%">
-        <i nz-icon nzType="search" theme="outline"></i>
-        <span>Search</span>
-      </a>
-    </div>
-  </div>
-  <nz-table #table [nzData]="dataSource">
+
+  <nz-table #table [nzData]="sports">
     <thead>
       <tr>
         <th *ngFor="let column of orderColumn" [nzSortFn]="column.compare">
@@ -107,7 +80,7 @@
                 nzTheme="outline"
                 style="padding-right: 8px"
               ></i>
-              Deactivated
+              Deactivate
             </li>
           </ul>
         </nz-dropdown-menu>
@@ -139,7 +112,7 @@
         </nz-select>
       </div>
 
-      <div style="display: flex">
+      <div style="display: flex; margin-top: 2rem;">
         <label nz-checkbox formControlName="isActive">Active</label>
       </div>
     </form>
