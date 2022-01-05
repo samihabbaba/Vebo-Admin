@@ -25,6 +25,7 @@ export class RegionsComponent implements OnInit {
   editingUser: any;
 
   @Input() sportsList = [];
+  @Output() regionList = new EventEmitter();
   dataSource = [];
 
   selectedSport: any = '';
@@ -67,6 +68,11 @@ export class RegionsComponent implements OnInit {
     this.dataService.GetRegions(this.selectedSport).subscribe(
       (response) => {
         this.dataSource = response.body;
+        let regions = [];
+        for ( let r of this.dataSource) {
+          regions.push({name: r.regionName, id: r.regionId});
+        }
+        this.regionList.emit(regions);
       },
       (error) => {
         this.message.create('error', `Something went wrong`);
@@ -86,7 +92,7 @@ export class RegionsComponent implements OnInit {
         this.dataService.updateRegion(this.editingUser).subscribe(
           (response) => {
             this.LoadUsers();
-            this.message.create('success', `Sport activated successfully`);
+            this.message.create('success', `Region activated successfully`);
           },
           (error) => {
             this.message.create('error', `Something went wrong`);
@@ -106,7 +112,7 @@ export class RegionsComponent implements OnInit {
         this.dataService.updateRegion(this.editingUser).subscribe(
           (response) => {
             this.LoadUsers();
-            this.message.create('success', `Sport deactivated successfully`);
+            this.message.create('success', `Region deactivated successfully`);
           },
           (error) => {
             this.message.create('error', `Something went wrong`);

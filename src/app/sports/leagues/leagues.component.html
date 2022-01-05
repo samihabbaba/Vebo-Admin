@@ -1,1 +1,242 @@
-<p>leagues works!</p>
+<nz-card>
+  <div class="row m-b-30">
+    <div class="col-lg-8">
+      <div class="d-md-flex">
+        <div class="m-b-10 m-r-20 d-flex align-items-center">
+          <nz-select
+            style="min-width: 220px"
+            class="w-100"
+            nzPlaceHolder="Sport"
+            [(ngModel)]="selectedSport"
+            (ngModelChange)="statusChange($event)"
+          >
+            <!-- <nz-option nzLabel="All" nzValue=""></nz-option> -->
+            <nz-option
+              [nzLabel]="item.name"
+              [nzValue]="item.id"
+              *ngFor="let item of sportsList"
+            ></nz-option>
+          </nz-select>
+        </div>
+
+        <div class="m-b-10 m-r-20 d-flex align-items-center">
+          <nz-select
+            style="min-width: 220px"
+            class="w-100"
+            nzPlaceHolder="Region"
+            [(ngModel)]="selectedRegion"
+          >
+            <nz-option
+              [nzLabel]="item.name"
+              [nzValue]="item.id"
+              *ngFor="let item of regionList"
+            ></nz-option>
+          </nz-select>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-lg-4 text-right">
+      <a nz-button nzType="primary" style="width: 100%" (click)="LoadUsers()">
+        <i nz-icon nzType="search" theme="outline"></i>
+        <span>Search</span>
+      </a>
+    </div>
+  </div>
+  <nz-table #table [nzData]="dataSource">
+    <thead>
+      <tr>
+        <th *ngFor="let column of orderColumn" [nzSortFn]="column.compare">
+          {{ column.title }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let item of table.data; let i = index">
+        <tr>
+          <td>{{ item.leagueId }}</td>
+          <td>
+            {{ item.leagueName }}
+          </td>
+          <td>{{ item.margin }}</td>
+          <td>{{ item.category }}</td>
+          <td>{{ item.orderNumber }}</td>
+
+
+          <td style="text-align: center !important">
+            <i
+              *ngIf="item.isPopular"
+              nz-icon
+              [nzType]="'check-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#04d992'"
+              style="font-size: 18px"
+            ></i>
+
+            <i
+              *ngIf="!item.isPopular"
+              nz-icon
+              [nzType]="'close-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#de4436'"
+              style="font-size: 18px"
+            ></i>
+          </td>
+
+          <td style="text-align: center !important">
+            <i
+              *ngIf="item.isActive"
+              nz-icon
+              [nzType]="'check-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#04d992'"
+              style="font-size: 18px"
+            ></i>
+
+            <i
+              *ngIf="!item.isActive"
+              nz-icon
+              [nzType]="'close-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#de4436'"
+              style="font-size: 18px"
+            ></i>
+          </td>
+
+          <td class="text-md-right">
+            <button
+              nz-button
+              nz-dropdown
+              nzType="default"
+              nzShape="circle"
+              nz-tooltip
+              nzTooltipTitle="Options"
+              nzTrigger="click"
+              [nzDropdownMenu]="menu"
+              (click)="$event.stopPropagation()"
+            >
+              <i nz-icon nzType="more" theme="outline"></i>
+            </button>
+          </td>
+        </tr>
+
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu>
+            <li nz-menu-item (click)="showDetailModal(item)">
+              <i
+                nz-icon
+                nzType="edit"
+                nzTheme="outline"
+                style="padding-right: 8px"
+              ></i
+              >Update
+            </li>
+
+
+            <li nz-menu-item *ngIf="!item.isPopular" (click)="setPopular(item)">
+              <i
+                nz-icon
+                nzType="fire"
+                nzTheme="outline"
+                style="padding-right: 8px"
+              ></i>
+              Set Popular
+            </li>
+            <li nz-menu-item *ngIf="item.isPopular" (click)="setUnpopular(item)">
+              <i
+                nz-icon
+                nzType="history"
+                nzTheme="outline"
+                style="padding-right: 8px"
+              ></i>
+              Set Unpopular
+            </li>
+
+
+            <li nz-menu-item *ngIf="!item.isActive" (click)="activate(item)">
+              <i
+                nz-icon
+                nzType="undo"
+                nzTheme="outline"
+                style="padding-right: 8px"
+              ></i>
+              Activate
+            </li>
+            <li nz-menu-item *ngIf="item.isActive" (click)="deactivate(item)">
+              <i
+                nz-icon
+                nzType="stop"
+                nzTheme="outline"
+                style="padding-right: 8px"
+              ></i>
+              Deactivate
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+      </ng-container>
+    </tbody>
+  </nz-table>
+</nz-card>
+
+<!-- Details Modal -->
+<nz-modal
+  [nzStyle]="{ width: '50vw' }"
+  [(nzVisible)]="isDetailVisible"
+  [nzTitle]="'Update of ' + editingUser?.name"
+  (nzOnCancel)="isDetailVisible = false"
+  (nzOnOk)="submitDetailForm()"
+  [nzOkText]="'Save'"
+  [nzOkLoading]="isOkLoading"
+  [nzOkDisabled]="detailForm?.invalid"
+>
+  <ng-container *nzModalContent>
+    <form [formGroup]="detailForm" class="d-grid" autocomplete="off">
+      <div>
+        <nz-form-label [nzSpan]="12">Order Number</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group [nzPrefix]="prefixTemplateUser">
+            <input
+              formControlName="orderNumber"
+              type="number"
+              nz-input
+              placeholder="Order Number"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+      </div>
+      <!-- <div>
+        <nz-form-label [nzSpan]="12">Margin</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group [nzPrefix]="prefixTemplateUser">
+            <input
+              formControlName="margin"
+              type="number"
+              nz-input
+              placeholder="Margin"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #prefixTemplateUser
+          ><i nz-icon nzType="folder"></i
+        ></ng-template>
+      </div> -->
+
+      <div>
+        <nz-form-label [nzSpan]="12">Category</nz-form-label>
+        <nz-select style="width: 100%" formControlName="category">
+          <nz-option nzValue="A" nzLabel="A"></nz-option>
+          <nz-option nzValue="B" nzLabel="B"></nz-option>
+          <nz-option nzValue="C" nzLabel="C"></nz-option>
+          <nz-option nzValue="D" nzLabel="D"></nz-option>
+        </nz-select>
+      </div>
+
+      <div style="display: flex; margin-top: 2rem;">
+        <label nz-checkbox formControlName="isActive">Active</label>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>

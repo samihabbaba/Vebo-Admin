@@ -1,1 +1,111 @@
-<p>live-events works!</p>
+<nz-card>
+  <nz-table #table [nzData]="sports">
+    <thead>
+      <tr>
+        <th *ngFor="let column of orderColumn" [nzSortFn]="column.compare">
+          {{ column.title }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let item of table.data; let i = index">
+        <tr>
+          <td>{{ item.homeTeam }}</td>
+          <td>
+            {{ item.awayTeam }}
+          </td>
+          <td>{{ item.date | date: "short" }}</td>
+
+          <td style="text-align: center !important">
+            <i
+              *ngIf="item.isActive"
+              nz-icon
+              [nzType]="'check-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#04d992'"
+              style="font-size: 18px"
+            ></i>
+
+            <i
+              *ngIf="!item.isActive"
+              nz-icon
+              [nzType]="'close-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#de4436'"
+              style="font-size: 18px"
+            ></i>
+          </td>
+
+          <td class="text-md-right">
+            <button
+              nz-button
+              nz-dropdown
+              nzType="default"
+              nzShape="circle"
+              nz-tooltip
+              nzTooltipTitle="Options"
+              nzTrigger="click"
+              [nzDropdownMenu]="menu"
+              (click)="$event.stopPropagation()"
+            >
+              <i nz-icon nzType="more" theme="outline"></i>
+            </button>
+          </td>
+        </tr>
+
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu>
+            <li nz-menu-item (click)="showDetailModal(item)">
+              <i
+                nz-icon
+                nzType="edit"
+                nzTheme="outline"
+                style="padding-right: 8px"
+              ></i
+              >Odd Change
+            </li>
+            <li nz-menu-item (click)="activate(item)">
+              <i
+                nz-icon
+                nzType="stop"
+                nzTheme="outline"
+                style="padding-right: 8px"
+              ></i>
+              Disable
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+      </ng-container>
+    </tbody>
+  </nz-table>
+</nz-card>
+
+<!-- Details Modal -->
+<nz-modal
+  [nzStyle]="{ width: '50vw' }"
+  [(nzVisible)]="isDetailVisible"
+  [nzTitle]="'Update of ' + editingUser?.name"
+  (nzOnCancel)="isDetailVisible = false"
+  (nzOnOk)="submitDetailForm()"
+  [nzOkText]="'Save'"
+  [nzOkLoading]="isOkLoading"
+  [nzOkDisabled]="detailForm?.invalid"
+>
+  <ng-container *nzModalContent>
+    <form [formGroup]="detailForm" class="d-grid" autocomplete="off">
+      <div>
+        <nz-form-label [nzSpan]="12">Category</nz-form-label>
+        <nz-select style="width: 100%" formControlName="category">
+          <nz-option nzValue="A" nzLabel="A"></nz-option>
+          <nz-option nzValue="B" nzLabel="B"></nz-option>
+          <nz-option nzValue="C" nzLabel="C"></nz-option>
+          <nz-option nzValue="D" nzLabel="D"></nz-option>
+        </nz-select>
+      </div>
+
+      <div style="display: flex; margin-top: 2rem">
+        <label nz-checkbox formControlName="isActive">Active</label>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>

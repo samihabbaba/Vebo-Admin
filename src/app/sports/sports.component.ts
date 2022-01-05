@@ -11,6 +11,8 @@ export class SportsComponent implements OnInit {
   sports: any[] = [];
   sportsList: any[];
 
+  regionList: any[];
+
 
   constructor(
     private message: NzMessageService,
@@ -36,5 +38,9 @@ export class SportsComponent implements OnInit {
     );
   }
 
+  updateRegionList(event) {
+    // console.log(event);
+    this.regionList = event;
+  }
 
 }
