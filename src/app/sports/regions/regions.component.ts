@@ -12,7 +12,7 @@ import { DataService } from 'src/app/shared/services/data.service';
 @Component({
   selector: 'app-regions',
   templateUrl: './regions.component.html',
-  styleUrls: ['./regions.component.css'],
+  styleUrls: ['./regions.component.scss'],
 })
 export class RegionsComponent implements OnInit {
   isOkLoading: boolean = false;

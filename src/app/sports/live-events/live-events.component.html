@@ -8,7 +8,7 @@
       </tr>
     </thead>
     <tbody>
-      <ng-container *ngFor="let item of table.data; let i = index">
+      <ng-container *ngFor="let item of table.data">
         <tr>
           <td>{{ item.homeTeam }}</td>
           <td>
@@ -18,7 +18,7 @@
 
           <td style="text-align: center !important">
             <i
-              *ngIf="item.isActive"
+              *ngIf="checkIfMatchOddChanged(item)"
               nz-icon
               [nzType]="'check-circle'"
               [nzTheme]="'twotone'"
@@ -27,7 +27,7 @@
             ></i>
 
             <i
-              *ngIf="!item.isActive"
+              *ngIf="!checkIfMatchOddChanged(item)"
               nz-icon
               [nzType]="'close-circle'"
               [nzTheme]="'twotone'"
@@ -64,7 +64,7 @@
               ></i
               >Odd Change
             </li>
-            <li nz-menu-item (click)="activate(item)">
+            <li nz-menu-item (click)="disableMatch(item)">
               <i
                 nz-icon
                 nzType="stop"
@@ -82,9 +82,9 @@
 
 <!-- Details Modal -->
 <nz-modal
-  [nzStyle]="{ width: '50vw' }"
+  [nzStyle]="{ width: '70vw' }"
   [(nzVisible)]="isDetailVisible"
-  [nzTitle]="'Update of ' + editingUser?.name"
+  [nzTitle]="'Change odds '"
   (nzOnCancel)="isDetailVisible = false"
   (nzOnOk)="submitDetailForm()"
   [nzOkText]="'Save'"
@@ -92,20 +92,25 @@
   [nzOkDisabled]="detailForm?.invalid"
 >
   <ng-container *nzModalContent>
-    <form [formGroup]="detailForm" class="d-grid" autocomplete="off">
-      <div>
-        <nz-form-label [nzSpan]="12">Category</nz-form-label>
-        <nz-select style="width: 100%" formControlName="category">
-          <nz-option nzValue="A" nzLabel="A"></nz-option>
-          <nz-option nzValue="B" nzLabel="B"></nz-option>
-          <nz-option nzValue="C" nzLabel="C"></nz-option>
-          <nz-option nzValue="D" nzLabel="D"></nz-option>
-        </nz-select>
+    <div class="odd-container">
+      <div
+        class="item"
+        *ngFor="
+          let result of this.editingUser?.markets[
+            getMainMarketIndex(this.editingUser?.markets)
+          ].results
+        "
+      >
+        <h4>{{ result.name.value }}</h4>
+        <nz-divider style="margin: 5px 0"></nz-divider>
+        <div style="padding: 5px 0">
+          <nz-input-number
+            [(ngModel)]="result.odds"
+            [nzMin]="0"
+            [nzStep]="1"
+          ></nz-input-number>
+        </div>
       </div>
-
-      <div style="display: flex; margin-top: 2rem">
-        <label nz-checkbox formControlName="isActive">Active</label>
-      </div>
-    </form>
+    </div>
   </ng-container>
 </nz-modal>

@@ -24,6 +24,8 @@ export class DataService {
   reloadBetsObs = new BehaviorSubject<any>(0);
   reloadBets = this.reloadBetsObs.asObservable();
 
+  reloadEvents= new BehaviorSubject<any>(true);
+
   currentUser: any = {};
 
   timeOffsets = [

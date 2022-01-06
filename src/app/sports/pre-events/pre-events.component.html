@@ -1,1 +1,179 @@
-<p>pre-events works!</p>
+<nz-card>
+  <div class="row m-b-30">
+    <div class="col-lg-8">
+      <div class="d-md-flex">
+        <div class="m-b-10 m-r-20 d-flex align-items-center inp-field">
+          <span>Sports</span>
+          <nz-select
+            style="min-width: 220px"
+            class="w-100"
+            nzPlaceHolder="Sport"
+            [(ngModel)]="selectedSport"
+          >
+            <!-- <nz-option nzLabel="All" nzValue=""></nz-option> -->
+            <nz-option
+              [nzLabel]="item.name"
+              [nzValue]="item.id"
+              *ngFor="let item of sportsList"
+            ></nz-option>
+          </nz-select>
+        </div>
+
+        <div class="m-b-10 m-r-20 d-flex align-items-center inp-field">
+          <span>Regions</span>
+
+          <nz-select
+            style="min-width: 220px"
+            class="w-100"
+            nzPlaceHolder="Region"
+            [(ngModel)]="selectedRegion"
+            (ngModelChange)="regionDropdownChange($event)"
+          >
+            <nz-option
+              [nzLabel]="item.name"
+              [nzValue]="item.id"
+              *ngFor="let item of regionList"
+            ></nz-option>
+          </nz-select>
+        </div>
+
+        <div class="m-b-10 m-r-20 d-flex align-items-center inp-field">
+          <span>Leagues</span>
+
+          <nz-select
+            style="min-width: 220px"
+            class="w-100"
+            nzPlaceHolder="League"
+            [(ngModel)]="selectedLeague"
+          >
+            <nz-option
+              [nzLabel]="item.name"
+              [nzValue]="item.id"
+              *ngFor="let item of leagueList"
+            ></nz-option>
+          </nz-select>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 text-right">
+      <a nz-button nzType="primary" style="width: 100%" (click)="LoadUsers()">
+        <i nz-icon nzType="search" theme="outline"></i>
+        <span>Search</span>
+      </a>
+    </div>
+  </div>
+  <nz-table #table [nzData]="dataSource">
+    <thead>
+      <tr>
+        <th *ngFor="let column of orderColumn" [nzSortFn]="column.compare">
+          {{ column.title }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let item of table.data">
+        <tr>
+          <td>{{ item.homeTeam }}</td>
+          <td>
+            {{ item.awayTeam }}
+          </td>
+          <td>{{ item.date | date: "short" }}</td>
+
+          <td style="text-align: center !important">
+            <i
+              *ngIf="checkIfMatchOddChanged(item)"
+              nz-icon
+              [nzType]="'check-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#04d992'"
+              style="font-size: 18px"
+            ></i>
+
+            <i
+              *ngIf="!checkIfMatchOddChanged(item)"
+              nz-icon
+              [nzType]="'close-circle'"
+              [nzTheme]="'twotone'"
+              [nzTwotoneColor]="'#de4436'"
+              style="font-size: 18px"
+            ></i>
+          </td>
+
+          <td class="text-md-right">
+            <button
+              nz-button
+              nz-dropdown
+              nzType="default"
+              nzShape="circle"
+              nz-tooltip
+              nzTooltipTitle="Options"
+              nzTrigger="click"
+              [nzDropdownMenu]="menu"
+              (click)="$event.stopPropagation()"
+            >
+              <i nz-icon nzType="more" theme="outline"></i>
+            </button>
+          </td>
+        </tr>
+
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu>
+            <li nz-menu-item (click)="showDetailModal(item)">
+              <i
+                nz-icon
+                nzType="edit"
+                nzTheme="outline"
+                style="padding-right: 8px"
+              ></i
+              >Odd Change
+            </li>
+            <li nz-menu-item (click)="disableMatch(item)">
+              <i
+                nz-icon
+                nzType="stop"
+                nzTheme="outline"
+                style="padding-right: 8px"
+              ></i>
+              Disable
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+      </ng-container>
+    </tbody>
+  </nz-table>
+</nz-card>
+
+<!-- Details Modal -->
+<nz-modal
+  [nzStyle]="{ width: '70vw' }"
+  [(nzVisible)]="isDetailVisible"
+  [nzTitle]="'Change odds '"
+  (nzOnCancel)="isDetailVisible = false"
+  (nzOnOk)="submitDetailForm()"
+  [nzOkText]="'Save'"
+  [nzOkLoading]="isOkLoading"
+  [nzOkDisabled]="detailForm?.invalid"
+>
+  <ng-container *nzModalContent>
+    <div class="odd-container">
+      <div
+        class="item"
+        *ngFor="
+          let result of this.editingUser?.markets[
+            getMainMarketIndex(this.editingUser?.markets)
+          ].results
+        "
+      >
+        <h4>{{ result.name.value }}</h4>
+        <nz-divider style="margin: 5px 0"></nz-divider>
+        <div style="padding: 5px 0">
+          <nz-input-number
+            [(ngModel)]="result.odds"
+            [nzMin]="0"
+            [nzStep]="1"
+          ></nz-input-number>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</nz-modal>

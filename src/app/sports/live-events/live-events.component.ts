@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  NgZone,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -7,15 +16,15 @@ import {
 } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/shared/services/data.service';
 
 @Component({
   selector: 'app-live-events',
   templateUrl: './live-events.component.html',
-  styleUrls: ['./live-events.component.css']
+  styleUrls: ['./live-events.component.scss'],
 })
 export class LiveEventsComponent implements OnInit {
-
   isOkLoading: boolean = false;
   // Modal Variables
   isDetailVisible: boolean = false;
@@ -27,11 +36,13 @@ export class LiveEventsComponent implements OnInit {
 
   sports = [];
 
+  subs$: Subscription;
+  changedOddsList: any[] = [];
+
   orderColumn = [
     {
       title: 'Home Team',
       compare: (a: any, b: any) => a.homeTeam.localeCompare(b.homeTeam),
-
     },
     {
       title: 'Away Team',
@@ -39,7 +50,7 @@ export class LiveEventsComponent implements OnInit {
     },
     {
       title: 'Date',
-       compare: (a: any, b: any) => a.date - b.date,
+      compare: (a: any, b: any) => a.date - b.date,
     },
     {
       title: 'Odd Change',
@@ -54,18 +65,33 @@ export class LiveEventsComponent implements OnInit {
     private message: NzMessageService,
     private modalService: NzModalService,
     private dataService: DataService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private cdr: ChangeDetectorRef,
+    private zone: NgZone
   ) {}
 
   ngOnInit() {
-    this.LoadUsers()
+    // this.LoadUsers();
+    this.subs$ = this.dataService.reloadEvents.subscribe((resp) => {
+      if (resp) {
+        setTimeout(() => {
+          this.LoadUsers();
+          this.getAllChangedOdds();
+        }, 1000);
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.subs$.unsubscribe();
   }
 
   LoadUsers() {
     this.dataService.getLiveMatches().subscribe(
       (response) => {
+        // this.sports = [];
+        // this.sports = this.zone.run(() => response.body);
         this.sports = response.body;
-        console.log(this.sports)
       },
       (error) => {
         this.message.create('error', `Something went wrong`);
@@ -74,17 +100,18 @@ export class LiveEventsComponent implements OnInit {
   }
 
 
-  activate(item: any): void {
+
+  disableMatch(item: any): void {
     this.editingUser = item;
     this.modalService.confirm({
-      nzTitle: `Do you Want to activate the sport ${item.name}?`,
+      nzTitle: `Do you Want to disable the match ${item.homeTeam} - ${item.awayTeam}?`,
       nzOkText: 'Yes',
       nzOnOk: () => {
-        this.editingUser.isActive = true;
-        this.dataService.updateSport(this.editingUser).subscribe(
+        this.dataService.disableMatch(this.editingUser, true).subscribe(
           (response) => {
-            this.LoadUsers();
-            this.message.create('success', `Sport activated successfully`);
+            // this.LoadUsers();
+            this.dataService.reloadEvents.next(true);
+            this.message.create('success', `Match disabled successfully`);
           },
           (error) => {
             this.message.create('error', `Something went wrong`);
@@ -94,44 +121,64 @@ export class LiveEventsComponent implements OnInit {
     });
   }
 
-  deactivate(item: any): void {
-    this.editingUser = item;
-    this.modalService.confirm({
-      nzTitle: `Do you Want to deactivate the sport ${item.name}?`,
-      nzOkText: 'Yes',
-      nzOnOk: () => {
-        this.editingUser.isActive = false;
-        this.dataService.updateSport(this.editingUser).subscribe(
-          (response) => {
-            this.LoadUsers();
-            this.message.create('success', `Sport deactivated successfully`);
-          },
-          (error) => {
-            this.message.create('error', `Something went wrong`);
-          }
-        );
+
+  checkIfMatchOddChanged(event){
+    if(this.changedOddsList == null || this.changedOddsList.length ==0){
+      return false;
+    }
+    return this.changedOddsList.some(x=>
+      x.homeTeam === event.homeTeam
+      && x.awayTeam === event.awayTeam
+      && x.date === event.date);
+  }
+
+  getAllChangedOdds() {
+    this.dataService.getOddsChangedList().subscribe(
+      (resp) => {
+        this.changedOddsList = resp.body.filter((x) => x.manualOddEnabled);
       },
-    });
+      (error) => {}
+    );
   }
 
   // DETAILS FORM
 
   showDetailModal(item: any): void {
     this.editingUser = item;
-    this.initializeDetailForm();
     this.isDetailVisible = true;
+    console.log(
+      this.editingUser.markets[
+        this.getMainMarketIndex(this.editingUser.markets)
+      ].results
+    );
     console.log(this.editingUser);
   }
 
   submitDetailForm() {
     this.isOkLoading = true;
-    const obj = this.detailForm.getRawValue();
-    this.editingUser.category = obj.category;
-    this.editingUser.isActive = obj.isActive;
-    this.dataService.updateSport(this.editingUser).subscribe(
+    let odds: any = [];
+    this.editingUser.markets[
+      this.getMainMarketIndex(this.editingUser.markets)
+    ].results.forEach((element) => {
+      odds.push({
+        sourceName: element.sourceName?.value ? element.sourceName?.value : '',
+        name: element.name.value,
+        value: element.odds,
+      });
+    });
+
+    let modalToSend = {
+      homeTeam: this.editingUser.homeTeam,
+      awayTeam: this.editingUser.awayTeam,
+      date: this.editingUser.date,
+      isEnabled: true,
+      odds: odds,
+    };
+    console.log(modalToSend);
+    this.dataService.changeOddsForMatch(modalToSend).subscribe(
       (response) => {
-        this.LoadUsers();
-        this.message.create('success', `Sport updated successfully`);
+        this.dataService.reloadEvents.next(true);
+        this.message.create('success', `Odds updated successfully`);
         this.isDetailVisible = false;
         this.isOkLoading = false;
       },
@@ -142,12 +189,8 @@ export class LiveEventsComponent implements OnInit {
     );
   }
 
-  initializeDetailForm() {
-    this.detailForm = this.fb.group({
-      category: new FormControl(this.editingUser.category, [
-        Validators.required,
-      ]),
-      isActive: new FormControl(this.editingUser.isActive),
-    });
+  getMainMarketIndex(markets) {
+    let index = markets.findIndex((x) => x.isMain == true);
+    return index;
   }
 }

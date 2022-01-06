@@ -2,7 +2,8 @@
   <div class="row m-b-30">
     <div class="col-lg-8">
       <div class="d-md-flex">
-        <div class="m-b-10 m-r-20 d-flex align-items-center">
+        <div class="m-b-10 m-r-20 d-flex align-items-center inp-field">
+          <span>Sports</span>
           <nz-select
             style="min-width: 220px"
             class="w-100"
@@ -19,7 +20,9 @@
           </nz-select>
         </div>
 
-        <div class="m-b-10 m-r-20 d-flex align-items-center">
+        <div class="m-b-10 m-r-20 d-flex align-items-center inp-field">
+          <span>Regions</span>
+
           <nz-select
             style="min-width: 220px"
             class="w-100"
@@ -34,7 +37,6 @@
           </nz-select>
         </div>
       </div>
-
     </div>
     <div class="col-lg-4 text-right">
       <a nz-button nzType="primary" style="width: 100%" (click)="LoadUsers()">
@@ -61,7 +63,6 @@
           <td>{{ item.margin }}</td>
           <td>{{ item.category }}</td>
           <td>{{ item.orderNumber }}</td>
-
 
           <td style="text-align: center !important">
             <i
@@ -132,7 +133,6 @@
               >Update
             </li>
 
-
             <li nz-menu-item *ngIf="!item.isPopular" (click)="setPopular(item)">
               <i
                 nz-icon
@@ -142,7 +142,11 @@
               ></i>
               Set Popular
             </li>
-            <li nz-menu-item *ngIf="item.isPopular" (click)="setUnpopular(item)">
+            <li
+              nz-menu-item
+              *ngIf="item.isPopular"
+              (click)="setUnpopular(item)"
+            >
               <i
                 nz-icon
                 nzType="history"
@@ -151,7 +155,6 @@
               ></i>
               Set Unpopular
             </li>
-
 
             <li nz-menu-item *ngIf="!item.isActive" (click)="activate(item)">
               <i
@@ -234,7 +237,7 @@
         </nz-select>
       </div>
 
-      <div style="display: flex; margin-top: 2rem;">
+      <div style="display: flex; margin-top: 2rem">
         <label nz-checkbox formControlName="isActive">Active</label>
       </div>
     </form>

@@ -4,21 +4,31 @@
       <i nz-icon nzType="trophy"></i>
       Sports
     </ng-template>
-    <app-available-sports [sports]="sports" (getSports)="getSports()"></app-available-sports>
+    <app-available-sports
+      [sports]="sports"
+      (getSports)="getSports()"
+    ></app-available-sports>
   </nz-tab>
   <nz-tab [nzTitle]="titleTemplate2">
     <ng-template #titleTemplate2>
       <i nz-icon nzType="partition"></i>
       Regions
     </ng-template>
-    <app-regions [sportsList]="sportsList" (regionList)="updateRegionList($event)"></app-regions>
+    <app-regions
+      [sportsList]="sportsList"
+      (regionList)="updateRegionList($event)"
+    ></app-regions>
   </nz-tab>
   <nz-tab [nzTitle]="titleTemplate3">
     <ng-template #titleTemplate3>
       <i nz-icon nzType="flag"></i>
       Leagues
     </ng-template>
-    <app-leagues *ngIf="regionList" [sportsList]="sportsList" [regionList]="regionList"></app-leagues>
+    <app-leagues
+      *ngIf="regionList"
+      [sportsList]="sportsList"
+      [regionList]="regionList"
+    ></app-leagues>
   </nz-tab>
   <nz-tab [nzTitle]="titleTemplate4">
     <ng-template #titleTemplate4>
@@ -32,7 +42,11 @@
       <i nz-icon nzType="desktop"></i>
       Pre Events
     </ng-template>
-    <app-pre-events></app-pre-events>
+    <app-pre-events
+      *ngIf="regionList"
+      [sportsList]="sportsList"
+      [regionList]="regionList"
+    ></app-pre-events>
   </nz-tab>
   <nz-tab [nzTitle]="titleTemplate6">
     <ng-template #titleTemplate6>

@@ -1,0 +1,9 @@
+.inp-field {
+  position: relative;
+  span {
+    position: absolute;
+    top: -20px;
+    left: 85px;
+    z-index: 2;
+  }
+}

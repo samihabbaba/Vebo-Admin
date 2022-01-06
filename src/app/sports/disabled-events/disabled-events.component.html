@@ -1,1 +1,36 @@
-<p>disabled-events works!</p>
+<nz-card>
+  <nz-table #table [nzData]="sports">
+    <thead>
+      <tr>
+        <th *ngFor="let column of orderColumn" [nzSortFn]="column.compare">
+          {{ column.title }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let item of table.data; let i = index">
+        <tr>
+          <td>{{ item.homeTeam }}</td>
+          <td>
+            {{ item.awayTeam }}
+          </td>
+          <td>{{ item.date | date: "short" }}</td>
+
+          <td >
+            <button
+              nz-button
+              nz-dropdown
+              nzType="default"
+              nz-tooltip
+              nzTooltipTitle="Enable"
+              (click)="enableMatch(item)"
+            >
+              <i nz-icon nzType="undo" theme="outline"></i>
+              Enable
+            </button>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </nz-table>
+</nz-card>
