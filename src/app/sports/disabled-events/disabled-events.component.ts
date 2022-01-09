@@ -78,7 +78,7 @@ export class DisabledEventsComponent implements OnInit {
     this.dataService.getDisbaledMatches().subscribe(
       (response) => {
         this.sports = response.body;
-        console.log(this.sports);
+        // console.log(this.sports);
       },
       (error) => {
         this.message.create('error', `Something went wrong`);

@@ -106,7 +106,7 @@ export class PreEventsComponent implements OnInit {
       .subscribe(
         (response) => {
           this.dataSource = response.body;
-          console.log(this.dataSource)
+          // console.log(this.dataSource)
         },
         (error) => {
           this.message.create('error', `Something went wrong`);
@@ -177,12 +177,12 @@ export class PreEventsComponent implements OnInit {
   showDetailModal(item: any): void {
     this.editingUser = item;
     this.isDetailVisible = true;
-    console.log(
-      this.editingUser.markets[
-        this.getMainMarketIndex(this.editingUser.markets)
-      ].results
-    );
-    console.log(this.editingUser);
+    // console.log(
+    //   this.editingUser.markets[
+    //     this.getMainMarketIndex(this.editingUser.markets)
+    //   ].results
+    // );
+    // console.log(this.editingUser);
   }
 
   submitDetailForm() {
@@ -205,7 +205,7 @@ export class PreEventsComponent implements OnInit {
       isEnabled: true,
       odds: odds,
     };
-    console.log(modalToSend);
+    // console.log(modalToSend);
     this.dataService.changeOddsForMatch(modalToSend).subscribe(
       (response) => {
         this.dataService.reloadEvents.next(true);
