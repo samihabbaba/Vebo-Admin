@@ -1,1 +1,140 @@
-<p>player-mode works!</p>
+<nz-card>
+  <div class="table-filter-container">
+    <div class="twoRow">
+      <div class="table-filter">
+        <span>Date Range</span>
+        <nz-range-picker
+          nzFormat="dd-MM-yyyy"
+          [(ngModel)]="userTransactionsDate"
+          [nzAllowClear]="false"
+        ></nz-range-picker>
+      </div>
+
+      <div class="table-filter">
+        <span>Sports</span>
+
+        <nz-select
+          [(ngModel)]="selectedSport"
+          (ngModelChange)="sportsChange($event)"
+        >
+          <nz-option nzValue="" nzLabel="All"></nz-option>
+          <nz-option
+            [nzValue]="item.id"
+            [nzLabel]="item.name"
+            *ngFor="let item of sportList"
+          ></nz-option>
+        </nz-select>
+      </div>
+    </div>
+
+    <div class="twoRow">
+      <div class="table-filter">
+        <span>Region</span>
+
+        <nz-select
+          [(ngModel)]="selectedregion"
+          (ngModelChange)="regionChange($event)"
+        >
+          <nz-option nzValue="" nzLabel="All"></nz-option>
+          <nz-option
+            [nzValue]="item.id"
+            [nzLabel]="item.name"
+            *ngFor="let item of regionList"
+          ></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="table-filter">
+        <span>League</span>
+
+        <nz-select [(ngModel)]="selectedLeague">
+          <nz-option nzValue="" nzLabel="All"></nz-option>
+          <nz-option
+            [nzValue]="item.id"
+            [nzLabel]="item.name"
+            *ngFor="let item of leagueList"
+          ></nz-option>
+        </nz-select>
+      </div>
+    </div>
+
+    <button
+      style="margin-right: 1rem; align-self: center"
+      (click)="getBets()"
+      nz-button
+      nzType="primary"
+      nzSize="medium"
+      [nzLoading]="userTransactionsLoading"
+    >
+      <i nz-icon nzType="search"></i>
+      Search
+    </button>
+  </div>
+
+  <nz-table
+    #table2
+    [nzData]="userTransactionsData"
+    style="padding-top: 0.4rem"
+    nzSize="medium"
+    nzTableLayout="auto"
+  >
+    <thead>
+      <tr>
+        <th
+          *ngFor="let column of orderColumnTransactions"
+          style="padding: 0.4rem"
+          [ngStyle]="{ 'text-align': column.title == 'Id' ? 'center' : 'left' }"
+        >
+          {{ column.title }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let item of table2.data; let i = index">
+        <tr class="lowPadding">
+          <td>
+            {{ item.eventName }}
+          </td>
+          <!-- [ngClass]="{
+            greenText: item.level === 'Info',
+            redText: item.level === 'Error',
+            yellowText: item.level === 'Warn'
+          }" -->
+          <td>
+            {{ item.sport }}
+          </td>
+
+          <td>
+            {{ item.region }}
+          </td>
+
+          <td>
+            {{ item.league }}
+          </td>
+
+          <td>
+            {{ item.selection }}
+          </td>
+          <td>
+            {{ item.date }}
+          </td>
+          <td>
+            {{ item.stake }}
+          </td>
+
+          <td>
+            {{ item.singleRisk }}
+          </td>
+
+          <td>
+            {{ item.multipleRisk }}
+          </td>
+
+          <td>
+            {{ item.totalSlip }}
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </nz-table>
+</nz-card>

@@ -914,14 +914,14 @@ export const NAVITEMS: SideNavInterface[] = [
         submenu: [],
       },
 
-      // {
-      //   path: '/risk-management/risk-calculation',
-      //   title: 'Risk Calculation',
-      //   iconType: '',
-      //   icon: '',
-      //   iconTheme: '',
-      //   submenu: [],
-      // },
+      {
+        path: '/risk-management/risk-calculation',
+        title: 'Risk Calculation',
+        iconType: '',
+        icon: '',
+        iconTheme: '',
+        submenu: [],
+      },
 
       {
         path: '/risk-management/player-mode',

@@ -1,1 +1,87 @@
-<p>risk-calculation works!</p>
+<nz-card>
+  <div class="content-container">
+    <div class="flex-row">
+      <h4>Event Name</h4>
+      <h4>First Half</h4>
+      <h4>Second Half</h4>
+    </div>
+
+    <div class="events-col" [formGroup]="form">
+      <ng-container formArrayName="events">
+        <div *ngFor="let eventForm of events.controls; let i = index">
+          <div class="event-row" [formGroup]="eventForm">
+            <div class="autoComplete">
+              <input
+                placeholder="Event Name"
+                nz-input
+                [(ngModel)]="inputValue"
+                (input)="onInput($event)"
+                [nzAutocomplete]="auto"
+                [ngModelOptions]="{ standalone: true }"
+              />
+              <nz-autocomplete
+                [nzDataSource]="options"
+                nzBackfill
+                #auto
+              ></nz-autocomplete>
+            </div>
+
+            <div class="half-score">
+              <nz-input-number
+                nzPlaceHolder="Home"
+                formControlName="homeScore1H"
+                [nzMin]="0"
+                [nzStep]="1"
+              ></nz-input-number>
+              <nz-input-number
+                nzPlaceHolder="Away"
+                formControlName="awayScore1H"
+                [nzMin]="0"
+                [nzStep]="1"
+              ></nz-input-number>
+            </div>
+
+            <div class="half-score">
+              <nz-input-number
+                nzPlaceHolder="Home"
+                formControlName="homeScore2H"
+                [nzMin]="0"
+                [nzStep]="1"
+              ></nz-input-number>
+              <nz-input-number
+                nzPlaceHolder="Away"
+                formControlName="awayScore2H"
+                [nzMin]="0"
+                [nzStep]="1"
+              ></nz-input-number>
+            </div>
+
+            <button
+              class="del-btn"
+              nz-button
+              nzType="danger"
+              nzDanger
+              nzShape="circle"
+              (click)="deleteEvent(i)"
+            >
+              <i nz-icon nzType="delete"></i>
+            </button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="flex-row">
+      <button nz-button nzType="primary" nzBlock (click)="test()">
+        <i nz-icon nzType="calculator"></i>Calculate
+      </button>
+      <button nz-button nzType="default" nzBlock (click)="addEvent()">
+        <i nz-icon nzType="plus"></i>Add Another Event
+      </button>
+    </div>
+
+    <nz-divider></nz-divider>
+
+    <h4 class="result">Risk Calculated : 0 ₺</h4>
+  </div>
+</nz-card>

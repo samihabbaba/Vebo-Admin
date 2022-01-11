@@ -4,8 +4,6 @@ import { AuthenticationService } from 'src/app/shared/services/authentication.se
 import { DataService } from 'src/app/shared/services/data.service';
 import { ExcelService } from 'src/app/shared/services/excel.service';
 import * as _ from 'lodash';
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-logs',
