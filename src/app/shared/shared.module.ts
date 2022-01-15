@@ -48,6 +48,7 @@ import { NgxPrintModule } from 'ngx-print';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
+import { TranslateModule } from '@ngx-translate/core';
 
 const antdModule = [
   NzButtonModule,
@@ -99,6 +100,7 @@ const antdModule = [
         UserBetsActivityComponent,
         SubAccountPromoterComponent,
         SubAccountShopComponent,
+        TranslateModule,
         PrintSelectionComponent,
     ],
     imports: [
@@ -109,6 +111,7 @@ const antdModule = [
         ReactiveFormsModule,
         FormsModule,
         NgxPrintModule,
+        TranslateModule,
         ...antdModule
     ],
     declarations: [

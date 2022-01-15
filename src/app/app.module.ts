@@ -27,6 +27,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { AuthComponent } from './auth/auth.component';
 import { AuthenticationService } from './shared/services/authentication.service';
 import { UserInfoComponent } from './users/user-info/user-info.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 registerLocaleData(en);
 
@@ -36,7 +37,7 @@ registerLocaleData(en);
     CommonLayoutComponent,
     FullLayoutComponent,
     AuthComponent,
-    UserInfoComponent
+    UserInfoComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,7 +49,8 @@ registerLocaleData(en);
     NgChartjsModule,
     FormsModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule.forRoot(),
   ],
   providers: [
     {
@@ -61,7 +63,7 @@ registerLocaleData(en);
     },
     ThemeConstantService,
     NzNotificationService,
-    AuthenticationService
+    AuthenticationService,
   ],
   bootstrap: [AppComponent],
 })

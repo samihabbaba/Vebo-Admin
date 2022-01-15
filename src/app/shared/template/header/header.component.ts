@@ -1,4 +1,7 @@
 import { Component, HostListener, ViewEncapsulation } from '@angular/core';
+import { NavigationStart, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { TranslationService } from 'src/app/i18n/translation.service';
 import { SideNavInterface } from '../../interfaces/side-nav.type';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ThemeConstantService } from '../../services/theme-constant.service';
@@ -28,7 +31,8 @@ export class HeaderComponent {
   lang: string = 'en';
 
   changeLang(lang) {
-    this.lang = lang
+    this.lang = lang;
+    this.translationService.setLanguage(lang);
   }
 
   scrHeight;
@@ -44,7 +48,9 @@ export class HeaderComponent {
 
   constructor(
     private themeService: ThemeConstantService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private translationService: TranslationService,
+    private router: Router
   ) {
     if (
       localStorage.getItem('theme') &&
@@ -56,6 +62,12 @@ export class HeaderComponent {
   }
 
   ngOnInit(): void {
+    this.setSelectedLanguage();
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationStart))
+      .subscribe((event) => {
+        this.setSelectedLanguage();
+      });
     this.themeService.isMenuFoldedChanges.subscribe(
       (isFolded) => (this.isFolded = isFolded)
     );
@@ -88,32 +100,9 @@ export class HeaderComponent {
     this.quickViewVisible = !this.quickViewVisible;
   }
 
-  notificationList = [
-    {
-      title: 'You received a new message',
-      time: '8 min',
-      icon: 'mail',
-      color: 'ant-avatar-' + 'blue',
-    },
-    {
-      title: 'New user registered',
-      time: '7 hours',
-      icon: 'user-add',
-      color: 'ant-avatar-' + 'cyan',
-    },
-    {
-      title: 'System Alert',
-      time: '8 hours',
-      icon: 'warning',
-      color: 'ant-avatar-' + 'red',
-    },
-    {
-      title: 'You have a new update',
-      time: '2 days',
-      icon: 'sync',
-      color: 'ant-avatar-' + 'gold',
-    },
-  ];
+  setSelectedLanguage(): any {
+    this.changeLang(this.translationService.getSelectedLanguage());
+  }
 
   changeHeaderColor() {
     localStorage.setItem('theme', this.selectedHeaderColor);

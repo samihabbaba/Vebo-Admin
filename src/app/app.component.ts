@@ -1,7 +1,10 @@
 import { Component, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
+import { locale as enLang } from './i18n/vocabs/en';
+import { locale as trLang } from './i18n/vocabs/tr';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { finalize } from 'rxjs/operators';
+import { TranslationService } from './i18n/translation.service';
 import { AuthenticationService } from './shared/services/authentication.service';
 import { SignalRService } from './shared/services/signal-r.service';
 
@@ -15,8 +18,12 @@ export class AppComponent {
     private signalService: SignalRService,
     private authService: AuthenticationService,
     private router: Router,
-    private zone: NgZone
-  ) {}
+    private zone: NgZone,
+    private translationService: TranslationService
+  ) {
+    // register translations
+    this.translationService.loadTranslations(enLang, trLang);
+  }
 
   ngOnInit() {
     this.authService.setCurrentUser();

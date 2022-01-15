@@ -97,9 +97,22 @@
           [nzDropdownMenu]="popNotification"
           [nzPlacement]="'bottomRight'"
         >
-          <nz-badge>
+          <img
+            *ngIf="lang === 'tr'"
+            style="width: 30px; height: 30px; border-radius: 4px"
+            src="../../../../assets/flags/turkey.svg"
+            alt="Turkish"
+          />
+
+          <img
+            *ngIf="lang === 'en'"
+            style="width: 30px; height: 30px; border-radius: 4px"
+            src="../../../../assets/flags/united-states.svg"
+            alt="English"
+          />
+          <!-- <nz-badge>
             <i nz-icon nzType="global" theme="outline"></i>
-          </nz-badge>
+          </nz-badge> -->
         </a>
         <nz-dropdown-menu #popNotification="nzDropdownMenu">
           <div nz-menu class="langDropdown">
@@ -108,7 +121,11 @@
               [ngClass]="{ selected: lang === 'tr' }"
               (click)="changeLang('tr')"
             >
-              <img src="../../../../assets/flags/turkey.svg" alt="Turkish" />
+              <img
+                class="flag"
+                src="../../../../assets/flags/turkey.svg"
+                alt="Turkish"
+              />
               <span class="text"> Turkish </span>
             </li>
 
@@ -118,6 +135,7 @@
               (click)="changeLang('en')"
             >
               <img
+                class="flag"
                 src="../../../../assets/flags/united-states.svg"
                 alt="English"
               />
