@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ROUTES } from './side-nav-routes.config';
+import { NAVITEMS } from './side-nav-routes.config';
 import { ThemeConstantService } from '../../services/theme-constant.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class SideNavComponent{
     constructor( private themeService: ThemeConstantService) {}
 
     ngOnInit(): void {
-        this.menuItems = ROUTES.filter(menuItem => menuItem);
+        this.menuItems = NAVITEMS.filter(menuItem => menuItem);
         this.themeService.isMenuFoldedChanges.subscribe(isFolded => this.isFolded = isFolded);
         this.themeService.isExpandChanges.subscribe(isExpand => this.isExpand = isExpand);
         this.themeService.isSideNavDarkChanges.subscribe(isDark => this.isSideNavDark = isDark);

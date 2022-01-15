@@ -9,8 +9,10 @@
 //   }
 // }
 
-app-sidenav {
-  display: none;
+@media screen and (min-width: 993px) {
+  app-sidenav {
+    display: none;
+  }
 }
 
 .d-grid {

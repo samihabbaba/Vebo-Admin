@@ -102,7 +102,28 @@
           </nz-badge>
         </a>
         <nz-dropdown-menu #popNotification="nzDropdownMenu">
-          <div nz-menu class="pop-notification">Language</div>
+          <div nz-menu class="langDropdown">
+            <li
+              nz-menu-item
+              [ngClass]="{ selected: lang === 'tr' }"
+              (click)="changeLang('tr')"
+            >
+              <img src="../../../../assets/flags/turkey.svg" alt="Turkish" />
+              <span class="text"> Turkish </span>
+            </li>
+
+            <li
+              nz-menu-item
+              [ngClass]="{ selected: lang === 'en' }"
+              (click)="changeLang('en')"
+            >
+              <img
+                src="../../../../assets/flags/united-states.svg"
+                alt="English"
+              />
+              <span class="text"> English </span>
+            </li>
+          </div>
         </nz-dropdown-menu>
       </li>
       <li>
@@ -146,6 +167,7 @@
                         </li> -->
             <li nz-menu-item>
               <a
+                style="color: #72849a"
                 class="p-v-5 d-flex align-items-center justify-content-between"
               >
                 <div>
@@ -167,6 +189,7 @@
             </li>
             <li nz-menu-item (click)="logOut()">
               <a
+                style="color: #72849a"
                 class="p-v-5 d-flex align-items-center justify-content-between"
               >
                 <div>

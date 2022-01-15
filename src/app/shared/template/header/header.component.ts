@@ -25,6 +25,12 @@ export class HeaderComponent {
     subMenu: [],
   };
 
+  lang: string = 'en';
+
+  changeLang(lang) {
+    this.lang = lang
+  }
+
   scrHeight;
   scrWidth;
 
