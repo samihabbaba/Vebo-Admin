@@ -1,0 +1,320 @@
+<nz-card
+  [nzTitle]="translate.instant('Settings')"
+  [nzExtra]="extraTemplate"
+  *ngIf="form"
+>
+  <div class="content" [formGroup]="form">
+    <h4>
+      {{ "General Information" | translate }}
+      <i nz-icon nzType="global" nzTheme="outline"></i>
+    </h4>
+    <div class="twoCol">
+      <div>
+        <nz-form-label [nzSpan]="12">{{
+          "Time Offset" | translate
+        }}</nz-form-label>
+        <nz-select style="width: 100%" formControlName="timeOffset">
+          <nz-option
+            *ngFor="let item of dataService.timeOffsets"
+            [nzValue]="item.value"
+            [nzLabel]="item.name"
+            >{{ item.name }}</nz-option
+          >
+        </nz-select>
+      </div>
+
+      <div>
+        <nz-form-label [nzSpan]="12">{{
+          "Maximum Selection" | translate
+        }}</nz-form-label>
+        <nz-select style="width: 100%" formControlName="maxSelection">
+          <nz-option
+            *ngFor="let item of maxSelection"
+            [nzValue]="item"
+            [nzLabel]="item"
+          ></nz-option>
+        </nz-select>
+      </div>
+    </div>
+
+    <h4 style="margin-top: 1.5rem">
+      {{ "Risk Management" | translate }}
+      <i nz-icon nzType="bar-chart" nzTheme="outline"></i>
+    </h4>
+
+    <div class="twoCol">
+      <div>
+        <nz-form-label [nzSpan]="12">{{ "Total Stake" }}</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group>
+            <input
+              formControlName="totalStack"
+              type="number"
+              nz-input
+              placeholder="Total Stake"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </div>
+
+      <div>
+        <nz-form-label [nzSpan]="12">{{ "Bets Number" }}</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group>
+            <input
+              formControlName="betsNo"
+              type="number"
+              nz-input
+              placeholder="Bets Number"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </div>
+    </div>
+
+    <div class="fourCol">
+      <div>
+        <nz-form-label [nzSpan]="12">{{
+          "Minimum Stake" | translate
+        }}</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group>
+            <input
+              formControlName="minStake"
+              type="number"
+              nz-input
+              placeholder="Minimum Stake"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </div>
+
+      <div>
+        <nz-form-label [nzSpan]="12">{{
+          "Maximum Stake" | translate
+        }}</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group>
+            <input
+              formControlName="maxStake"
+              type="number"
+              nz-input
+              placeholder="Maximum Stake"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </div>
+
+      <div>
+        <nz-form-label [nzSpan]="12">{{
+          "Major Minimum Stake" | translate
+        }}</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group>
+            <input
+              formControlName="majorMinStake"
+              type="number"
+              nz-input
+              placeholder="Major Minimum Stake"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </div>
+
+      <div>
+        <nz-form-label [nzSpan]="12">{{
+          "Major Maximum Stake" | translate
+        }}</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group>
+            <input
+              formControlName="majorMaxStake"
+              type="number"
+              nz-input
+              placeholder="Major Maximum Stake"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </div>
+
+      <div>
+        <nz-form-label [nzSpan]="12">{{
+          "Minimum Payout" | translate
+        }}</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group>
+            <input
+              formControlName="minPayout"
+              type="number"
+              nz-input
+              placeholder="Minimum Payout"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </div>
+
+      <div>
+        <nz-form-label [nzSpan]="12">{{
+          "Maximum Payout" | translate
+        }}</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group>
+            <input
+              formControlName="maxPayout"
+              type="number"
+              nz-input
+              placeholder="Maximum Payout"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </div>
+
+      <div>
+        <nz-form-label [nzSpan]="12">{{
+          "Major Minimum Payout" | translate
+        }}</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group>
+            <input
+              formControlName="majorMinPayout"
+              type="number"
+              nz-input
+              placeholder="Major Minimum Payout"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </div>
+
+      <div>
+        <nz-form-label [nzSpan]="12">{{
+          "Major Maximum Payout" | translate
+        }}</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group>
+            <input
+              formControlName="majorMaxPayout"
+              type="number"
+              nz-input
+              placeholder="Major Maximum Payout"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </div>
+    </div>
+
+    <h4 style="margin-top: 1.5rem">
+      {{ "Commission Information" | translate }}
+      <i nz-icon nzType="swap" nzTheme="outline"></i>
+    </h4>
+
+    <div class="threeCol">
+      <div>
+        <nz-form-label [nzSpan]="12">{{
+          "Single Minimum Odd" | translate
+        }}</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group>
+            <input
+              formControlName="singleMinOdd"
+              type="number"
+              nz-input
+              placeholder="Single Minimum Odd"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </div>
+
+      <div>
+        <nz-form-label [nzSpan]="12">{{
+          "Double Minimum Odd" | translate
+        }}</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group>
+            <input
+              formControlName="doubleMinOdd"
+              type="number"
+              nz-input
+              placeholder="Double Minimum Odd"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </div>
+
+      <div>
+        <nz-form-label [nzSpan]="12">{{
+          "Triple Minimum Odd" | translate
+        }}</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group>
+            <input
+              formControlName="tripleMinOdd"
+              type="number"
+              nz-input
+              placeholder="Triple Minimum Odd"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </div>
+
+      <div>
+        <nz-form-label [nzSpan]="12">{{
+          "Single Commission Rate" | translate
+        }}</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group>
+            <input
+              formControlName="singleComissionRate"
+              type="number"
+              min="0"
+              max="100"
+              nz-input
+              placeholder="Single Commission Rate"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </div>
+
+      <div>
+        <nz-form-label [nzSpan]="12">{{
+          "Double Commission Rate" | translate
+        }}</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group>
+            <input
+              formControlName="doubleComissionRate"
+              type="number"
+              min="0"
+              max="100"
+              nz-input
+              placeholder="Double Commission Rate"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </div>
+
+      <div>
+        <nz-form-label [nzSpan]="12">{{
+          "Triple Commission Rate" | translate
+        }}</nz-form-label>
+        <nz-form-control nzErrorTip="Invalid Input">
+          <nz-input-group>
+            <input
+              formControlName="tripleComissionRate"
+              type="number"
+              min="0"
+              max="100"
+              nz-input
+              placeholder="Triple Commission Rate"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </div>
+    </div>
+  </div>
+</nz-card>
+
+<ng-template #extraTemplate>
+  <button nz-button nzType="primary" nzSize="small" (click)="updateSetting()">
+    {{ "Save" | translate }}
+  </button>
+</ng-template>

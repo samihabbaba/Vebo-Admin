@@ -169,7 +169,7 @@ export class PromoterComponent implements OnInit {
       (response) => {
         if (response.status == 200) {
           this.dataSource = response.body.userList;
-          console.log(this.dataSource);
+          // console.log(this.dataSource);
         }
         this.isSearchLoading = false;
       },
@@ -613,7 +613,7 @@ export class PromoterComponent implements OnInit {
     this.dataService
       .getBalanceForUser(this.editingUser.id)
       .subscribe((resp) => {
-        console.log(resp);
+        // console.log(resp);
         this.balanceModel = resp;
         this.isBalanceVisible = true;
       });

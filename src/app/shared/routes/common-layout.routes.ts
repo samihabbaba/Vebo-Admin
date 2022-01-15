@@ -160,4 +160,12 @@ export const CommonLayout_ROUTES: Routes = [
     loadChildren: () =>
       import('../../reports/reports.module').then((m) => m.ReportsModule),
   },
+
+  {
+    path: 'settings',
+    loadChildren: () =>
+      import('../../account-settings/account-settings.module').then(
+        (m) => m.AccountSettingsModule
+      ),
+  },
 ];

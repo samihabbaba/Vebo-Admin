@@ -110,7 +110,7 @@ export class MasterComponent implements OnInit {
       (response) => {
         if (response.status == 200) {
           this.dataSource = response.body.userList;
-          console.log(this.dataSource);
+          // console.log(this.dataSource);
         }
         this.isSearchLoading = false;
       },

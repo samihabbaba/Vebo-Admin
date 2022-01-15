@@ -41,7 +41,7 @@
               [routerLink]="item.path"
             >
               <i nz-icon [nzType]="item.icon"></i>
-              {{ item.title }}
+              {{ item.title | translate }}
             </li>
 
             <li
@@ -57,7 +57,7 @@
                     *ngFor="let subItem of item.submenu"
                     [routerLink]="subItem.path"
                   >
-                    {{ subItem.title }}
+                    {{ subItem.title | translate }}
                   </li>
                 </ul>
               </ul>
@@ -183,7 +183,7 @@
                                 </div>
                             </div>
                         </li> -->
-            <li nz-menu-item>
+            <li nz-menu-item routerLink="/settings">
               <a
                 style="color: #72849a"
                 class="p-v-5 d-flex align-items-center justify-content-between"
@@ -195,7 +195,9 @@
                     nzType="lock"
                     theme="outline"
                   ></i>
-                  <span class="m-l-10">Account Setting</span>
+                  <span class="m-l-10">{{
+                    "Account Setting" | translate
+                  }}</span>
                 </div>
                 <i
                   class="font-size-10"
@@ -217,7 +219,7 @@
                     nzType="logout"
                     theme="outline"
                   ></i>
-                  <span class="m-l-10">Logout</span>
+                  <span class="m-l-10">{{ "Logout" | translate }}</span>
                 </div>
                 <i
                   class="font-size-10"
