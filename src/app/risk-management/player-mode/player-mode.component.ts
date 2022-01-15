@@ -4,6 +4,7 @@ import { AuthenticationService } from 'src/app/shared/services/authentication.se
 import { DataService } from 'src/app/shared/services/data.service';
 import { ExcelService } from 'src/app/shared/services/excel.service';
 import * as _ from 'lodash';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-player-mode',
@@ -32,50 +33,50 @@ export class PlayerModeComponent implements OnInit {
 
   orderColumnTransactions = [
     {
-      title: 'Event Name',
+      title: this.translate.instant('Event Name'),
       compare: (a: any, b: any) => a.eventName.localeCompare(b.eventName),
     },
     {
-      title: 'Sport',
+      title: this.translate.instant('Sport'),
       compare: (a: any, b: any) => a.sport.localeCompare(b.sport),
     },
     {
-      title: 'Region',
+      title: this.translate.instant('Region'),
       compare: (a: any, b: any) => a.region.localeCompare(b.region),
     },
 
     {
-      title: 'League',
+      title: this.translate.instant('League'),
       compare: (a: any, b: any) => a.league.localeCompare(b.league),
     },
 
     {
-      title: 'Selection',
+      title: this.translate.instant('Selection'),
       compare: (a: any, b: any) => a.selection.localeCompare(b.selection),
     },
 
     {
-      title: 'Date',
+      title: this.translate.instant('Date'),
       compare: (a: any, b: any) => a.date - b.date,
     },
 
     {
-      title: 'Stake',
+      title: this.translate.instant('Stake'),
       compare: (a: any, b: any) => a.stake - b.stake,
     },
 
     {
-      title: 'Single Risk',
+      title: this.translate.instant('Single Risk'),
       compare: (a: any, b: any) => a.singleRisk.localeCompare(b.singleRisk),
     },
 
     {
-      title: 'Multiple Risk',
+      title: this.translate.instant('Multiple Risk'),
       compare: (a: any, b: any) => a.multipleRisk.localeCompare(b.multipleRisk),
     },
 
     {
-      title: 'Total Slip',
+      title: this.translate.instant('Total Slip'),
       compare: (a: any, b: any) => a.totalSlip.localeCompare(b.totalSlip),
     },
   ];
@@ -84,7 +85,8 @@ export class PlayerModeComponent implements OnInit {
     public dataService: DataService,
     private message: NzMessageService,
     private excel: ExcelService,
-    public authService: AuthenticationService
+    public authService: AuthenticationService,
+    public translate: TranslateService
   ) {}
 
   ngOnInit(): void {

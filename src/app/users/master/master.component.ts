@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DataService } from 'src/app/shared/services/data.service';
@@ -63,28 +64,28 @@ export class MasterComponent implements OnInit {
 
   orderColumn = [
     {
-      title: 'Username',
+      title: this.translate.instant('Username'),
       compare: (a: DataItem, b: DataItem) =>
         a.username.localeCompare(b.username),
     },
     {
-      title: 'Name',
+      title: this.translate.instant('Name'),
       compare: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name),
     },
     {
-      title: 'Email',
+      title: this.translate.instant('Email'),
       compare: (a: DataItem, b: DataItem) => a.email.localeCompare(b.email),
     },
     {
-      title: 'Mobile',
+      title: this.translate.instant('Mobile'),
       compare: (a: DataItem, b: DataItem) => a.mobile.localeCompare(b.mobile),
     },
     {
-      title: 'Active',
+      title: this.translate.instant('Active'),
       compare: (a: DataItem, b: DataItem) => a.isActive - b.isActive,
     },
     {
-      title: 'Suspended',
+      title: this.translate.instant('Suspended'),
       compare: (a: DataItem, b: DataItem) => a.isSuspended - b.isSuspended,
     },
     {
@@ -97,7 +98,8 @@ export class MasterComponent implements OnInit {
     private message: NzMessageService,
     private modalService: NzModalService,
     private dataService: DataService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {

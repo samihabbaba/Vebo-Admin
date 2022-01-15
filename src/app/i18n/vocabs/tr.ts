@@ -15,7 +15,7 @@ export const locale = {
     Credit_Limit: 'Kredi Limiti',
     Used_Credit: 'Kullanılan Kredi',
     Remaining_Credit: 'Kalan Kredi',
-    Withdraw: 'çekim',
+    Withdraw: 'Çekim',
     Deposit: 'yatırım',
     Commission: 'Komisyon',
     commission: 'Komisyon',
@@ -74,7 +74,7 @@ export const locale = {
     Suspend: 'Askıya Al',
     Unsuspend: 'Askıdan Kaldır',
     Delete: 'Sil',
-    Promoters: 'anabayi',
+    Promoters: 'Anabayi',
     Parent: 'Sahibi',
     Cash_Balance: 'Nakit bakiye',
     Credit_Balance: 'Kredi bakiye',
@@ -106,6 +106,7 @@ export const locale = {
     Select_payment_type: 'Ödeme türü seç',
     Deposite_To: 'yatırım:',
     Pay: 'Öde',
+
     // Commission:'',
     Commission_Amount: 'Komisyon Miktarı',
     Real: 'Çekilebilir Para',
@@ -165,7 +166,11 @@ export const locale = {
     Mixed: 'Karışık',
     Pre_Match: 'Maç öncesi',
     Live: 'Canlı',
+    'Total Cost': 'Toplam',
     Sports: 'Sporlar',
+    'Live Events': 'Canlı Maçlar',
+    'Pre Events': 'Yaklaşan Maçlar',
+    'Disabled Events': 'İptal Edilen Maçlar',
     All: 'Hepsi',
     Single_Risk: 'Bir Risk',
     Multiple_Risk: 'Birden Fazla Risk',
@@ -186,6 +191,8 @@ export const locale = {
     View_Bets: 'Bahisleri Görüntüle',
     'Bet ID': 'Bahis numarası',
     Stake_Range: 'Bahis Aralığı::',
+    'Bet Office': 'İddaa Bayisi',
+    Transaction: 'İşlemler',
     'Lower range': 'Düşük',
     'higher range': 'Yüksek',
     Payout_Range: 'Ödeme Aralığı:',
@@ -304,6 +311,7 @@ export const locale = {
     User: 'Kullanıcı',
     Void: 'İptal edilmiş',
     Approved: 'Onaylandı',
+    Customer: 'Müşteri',
 
     required_number: 'Bu alana lütfen bir sayı giriniz.',
     Pick_Columns_to_show: 'Gösterilecek sütunu seç',
@@ -386,7 +394,7 @@ export const locale = {
     'BET SLIP': 'Bahis Kuponu',
     Mapping: 'Eşleştirme',
     'Clear All': 'Hepsini Temizle',
-    'Save': 'Kaydet',
+    Save: 'Kaydet',
     'Accept Odd Change': 'Oran Değişikliğini Kabul Et',
     'PLACE BETS': 'Bahis Yap',
     'Bonus Amount': 'Bonus Tutarı',
@@ -566,6 +574,7 @@ export const locale = {
     'Gold Coast Premier League': 'Gold Coast Premier Ligi',
     Golf: 'Golf',
     Greece: 'Yunanistan',
+
     'Greece Cup': 'Yunanistan Kupası',
     'Half Time Double Chance': 'İlk Yarı Çifte Şans',
     'Half Time Handicap': 'İlk Yarı Handikapı',
@@ -774,6 +783,7 @@ export const locale = {
     Taiwan: 'Tayvan',
     Tajikistan: 'Tacikistan',
     Tanzania: 'Tanzanya',
+    'Total Bets': 'Toplam Bahisler',
     'Tasmania Northern Championship': 'Kuzey Tazmanya Şampiyonası ',
     'Tasmania Southern Championship': 'Güney Tazmanya Şampiyonası ',
     'Tasmania Super League - Women': 'Ulusal Premier Lig Tazmanya - Kadınlar',
@@ -788,6 +798,7 @@ export const locale = {
     'Team 2 to Score': 'Deplasman Gol Atar',
     'Team to Score more Goals - 2nd Half':
       'Daha Fazla Gol Atacak Takım - 2. Yarı',
+    Office: 'Ofis',
     Tennis: 'Tenis',
     'Tercera - Promotion Playoffs': 'Tercera - Promotion Play-Off',
     'TFF 1. League - Playoffs': 'TFF 1.Lig - Play-Off',
@@ -1299,7 +1310,7 @@ export const locale = {
 
     Even: 'Çift',
     Odd: 'Tek',
-
+    'Theme Color': 'Renk',
     'Most Goals between 15:01 and 30:00 min.':
       '15:01 ve 30. Dakikalar Arasında En Çok Gol Atılır',
     'Most Goals between 30:01 and Half Time':

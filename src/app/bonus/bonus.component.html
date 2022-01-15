@@ -2,7 +2,7 @@
   <nz-tab [nzTitle]="titleTemplate">
     <ng-template #titleTemplate>
       <i nz-icon nzType="shop"></i>
-      Shops
+      {{'Shops'| translate}}
     </ng-template>
     <nz-card>
       <div class="row m-b-30">
@@ -411,14 +411,14 @@
   <nz-tab [nzTitle]="titleTemplate2">
     <ng-template #titleTemplate2>
       <i nz-icon nzType="home"></i>
-      Bet Office
+      {{'Bet Office' | translate}}
     </ng-template>
     <app-bonus-bet-office></app-bonus-bet-office>
   </nz-tab>
   <nz-tab [nzTitle]="titleTemplate3">
     <ng-template #titleTemplate3>
       <i nz-icon nzType="customer-service"></i>
-      Online Customers
+      {{'Online Customers' | translate}}
     </ng-template>
     <app-bonus-online-customers></app-bonus-online-customers>
   </nz-tab>

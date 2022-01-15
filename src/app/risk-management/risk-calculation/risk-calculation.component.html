@@ -1,9 +1,9 @@
 <nz-card>
   <div class="content-container">
     <div class="flex-row">
-      <h4>Event Name</h4>
-      <h4>First Half</h4>
-      <h4>Second Half</h4>
+      <h4>{{ "Event Name" | translate }}</h4>
+      <h4>{{ "First Half" | translate }}</h4>
+      <h4>{{ "Second Half" | translate }}</h4>
     </div>
 
     <div class="events-col" [formGroup]="form">
@@ -76,17 +76,18 @@
 
     <div class="flex-row">
       <button nz-button nzType="primary" nzBlock (click)="submit()">
-        <i nz-icon nzType="calculator"></i>Calculate
+        <i nz-icon nzType="calculator"></i>{{ "Calculate" | translate }}
       </button>
       <button nz-button nzType="default" nzBlock (click)="addEvent()">
-        <i nz-icon nzType="plus"></i>Add Another Event
+        <i nz-icon nzType="plus"></i>{{ "Add Another Event" | translate }}
       </button>
     </div>
 
     <nz-divider></nz-divider>
 
     <h4 class="result">
-      Risk Calculated : {{ calculatedRisk | number: "1.2-2" }} ₺
+      {{ "Risk Calculated" | translate }} :
+      {{ calculatedRisk | number: "1.2-2" }} ₺
     </h4>
   </div>
 </nz-card>

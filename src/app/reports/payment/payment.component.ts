@@ -4,6 +4,7 @@ import { AuthenticationService } from 'src/app/shared/services/authentication.se
 import { DataService } from 'src/app/shared/services/data.service';
 import { ExcelService } from 'src/app/shared/services/excel.service';
 import * as _ from 'lodash';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-payment',
@@ -27,75 +28,75 @@ export class PaymentComponent implements OnInit {
 
   orderColumnTransactions = [
     {
-      title: 'Id',
+      title: this.translate.instant('Id'),
       compare: (a: any, b: any) => a.id - b.id,
     },
     {
-      title: 'Name',
+      title: this.translate.instant('Name'),
       compare: (a: any, b: any) => a.name.localeCompare(b.name),
     },
     {
-      title: 'Deposit',
+      title: this.translate.instant('Deposit'),
       compare: (a: any, b: any) => a.deposit - b.deposit,
     },
 
     {
-      title: 'Deposit Cost',
+      title: this.translate.instant('Deposit Cost'),
       compare: (a: any, b: any) => a.depositCost - b.depositCost,
     },
 
     {
-      title: 'Withdraw',
+      title: this.translate.instant('Withdraw'),
       compare: (a: any, b: any) => a.withdraw - b.withdraw,
     },
 
     {
-      title: 'Withdraw Cost',
+      title: this.translate.instant('Withdraw Cost'),
       compare: (a: any, b: any) => a.withdrawCost - b.withdrawCost,
     },
 
     {
-      title: 'Total Cost',
+      title: this.translate.instant('Total Cost'),
       compare: (a: any, b: any) => a.totalCost - b.totalCost,
     },
   ];
 
   orderColumnTransactions2 = [
     {
-      title: 'Id',
+      title: this.translate.instant('Id'),
       compare: (a: any, b: any) => a.id - b.id,
     },
     {
-      title: 'Username',
+      title: this.translate.instant('Username'),
       compare: (a: any, b: any) => a.userName.localeCompare(b.userName),
     },
     {
-      title: 'Name',
+      title: this.translate.instant('Name'),
       compare: (a: any, b: any) => a.name.localeCompare(b.name),
     },
 
     {
-      title: 'Date',
+      title: this.translate.instant('Date'),
       compare: (a: any, b: any) => a.date.localeCompare(b.date),
     },
 
     {
-      title: 'Time',
+      title: this.translate.instant('Time'),
       compare: (a: any, b: any) => a.date.localeCompare(b.date),
     },
 
     {
-      title: 'Currency',
+      title: this.translate.instant('Currency'),
       compare: (a: any, b: any) => a.currency.localeCompare(b.currency),
     },
 
     {
-      title: 'Amount',
+      title: this.translate.instant('Amount'),
       compare: (a: any, b: any) => a.amount - b.amount,
     },
 
     {
-      title: 'Payment Method',
+      title: this.translate.instant('Payment Method'),
       compare: (a: any, b: any) =>
         a.paymentMethod.localeCompare(b.paymentMethod),
     },
@@ -105,7 +106,8 @@ export class PaymentComponent implements OnInit {
     public dataService: DataService,
     private message: NzMessageService,
     private excel: ExcelService,
-    public authService: AuthenticationService
+    public authService: AuthenticationService,
+    public translate: TranslateService
   ) {}
 
   ngOnInit(): void {

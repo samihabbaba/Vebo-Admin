@@ -12,6 +12,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Subscription } from 'rxjs';
@@ -37,15 +38,15 @@ export class DisabledEventsComponent implements OnInit {
 
   orderColumn = [
     {
-      title: 'Home Team',
+      title: this.translate.instant('Home Team'),
       compare: (a: any, b: any) => a.homeTeam.localeCompare(b.homeTeam),
     },
     {
-      title: 'Away Team',
+      title: this.translate.instant('Away Team'),
       compare: (a: any, b: any) => a.awayTeam.localeCompare(b.awayTeam),
     },
     {
-      title: 'Date',
+      title: this.translate.instant('Date'),
       compare: (a: any, b: any) => a.date - b.date,
     },
     {
@@ -58,7 +59,8 @@ export class DisabledEventsComponent implements OnInit {
     private modalService: NzModalService,
     private dataService: DataService,
     private fb: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {

@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DataService } from 'src/app/shared/services/data.service';
@@ -32,19 +33,19 @@ export class RegionsComponent implements OnInit {
 
   orderColumn = [
     {
-      title: 'Id',
+      title: this.translate.instant('Id'),
       compare: (a: any, b: any) => a.regionId - b.regionId,
     },
     {
-      title: 'Name',
+      title: this.translate.instant('Name'),
       compare: (a: any, b: any) => a.regionName.localeCompare(b.regionName),
     },
     {
-      title: 'Order Number',
+      title: this.translate.instant('Order Number'),
       compare: (a: any, b: any) => a.orderNumber - b.orderNumber,
     },
     {
-      title: 'Active',
+      title: this.translate.instant('Active'),
       compare: (a: any, b: any) => a.isActive - b.isActive,
     },
     {
@@ -56,7 +57,8 @@ export class RegionsComponent implements OnInit {
     private message: NzMessageService,
     private modalService: NzModalService,
     private dataService: DataService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {

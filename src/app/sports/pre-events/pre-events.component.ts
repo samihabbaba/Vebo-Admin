@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Subscription } from 'rxjs';
@@ -40,19 +41,19 @@ export class PreEventsComponent implements OnInit {
 
   orderColumn = [
     {
-      title: 'Home Team',
+      title: this.translate.instant('Home Team'),
       compare: (a: any, b: any) => a.homeTeam.localeCompare(b.homeTeam),
     },
     {
-      title: 'Away Team',
+      title: this.translate.instant('Away Team'),
       compare: (a: any, b: any) => a.awayTeam.localeCompare(b.awayTeam),
     },
     {
-      title: 'Date',
+      title: this.translate.instant('Date'),
       compare: (a: any, b: any) => a.date - b.date,
     },
     {
-      title: 'Odd Change',
+      title: this.translate.instant('Odd Change'),
       // compare: (a: any, b: any) => a.isActive - b.isActive,
     },
     {
@@ -64,7 +65,8 @@ export class PreEventsComponent implements OnInit {
     private message: NzMessageService,
     private modalService: NzModalService,
     private dataService: DataService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {

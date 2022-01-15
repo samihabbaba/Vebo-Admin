@@ -6,6 +6,7 @@ import { ExcelService } from 'src/app/shared/services/excel.service';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-win-lose',
@@ -60,7 +61,8 @@ export class WinLoseComponent implements OnInit {
     public dataService: DataService,
     private message: NzMessageService,
     private excel: ExcelService,
-    public authService: AuthenticationService
+    public authService: AuthenticationService,
+    public translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -96,6 +98,4 @@ export class WinLoseComponent implements OnInit {
       endTime: `23.59`,
     });
   }
-
-
 }

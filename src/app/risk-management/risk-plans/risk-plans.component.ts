@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
@@ -208,60 +209,60 @@ export class RiskPlansComponent implements OnInit {
 
   orderColumn = [
     {
-      title: 'Id',
+      title: this.translate.instant('Id'),
       compare: (a: DataItem, b: DataItem) => a.id.localeCompare(b.id),
     },
 
     {
-      title: 'Promoter',
+      title: this.translate.instant('Promoter'),
       compare: (a: DataItem, b: DataItem) =>
         a.parentName.localeCompare(b.parentName),
     },
 
     {
-      title: 'Shop',
+      title: this.translate.instant('Shop'),
       compare: (a: DataItem, b: DataItem) => a.shop.localeCompare(b.shop),
     },
 
     {
-      title: 'Name',
+      title: this.translate.instant('Name'),
       compare: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name),
     },
     {
-      title: 'Max Bet. Amount',
+      title: this.translate.instant('Max Bet. Amount'),
       compare: (a: DataItem, b: DataItem) =>
         a.maxBettingAmount.localeCompare(b.maxBettingAmount),
     },
     {
-      title: 'Max Payout',
+      title: this.translate.instant('Max Payout'),
       compare: (a: DataItem, b: DataItem) =>
         a.maxPayout.localeCompare(b.maxPayout),
     },
 
     {
-      title: 'Cate. High. Odd',
+      title: this.translate.instant('Cate. High. Odd'),
       compare: (a: DataItem, b: DataItem) =>
         a.categoryHigherOdd - b.categoryHigherOdd,
     },
     {
-      title: 'Cate. High. Pay',
+      title: this.translate.instant('Cate. High. Pay'),
       compare: (a: DataItem, b: DataItem) =>
         a.categoryHigherPayout - b.categoryHigherPayout,
     },
     {
-      title: 'Cate. High. Num.',
+      title: this.translate.instant('Cate. High. Num.'),
       compare: (a: DataItem, b: DataItem) =>
         a.categoryHigherNumber - b.categoryHigherNumber,
     },
 
     {
-      title: 'Categories',
+      title: this.translate.instant('Categories'),
       compare: (a: DataItem, b: DataItem) =>
         a.categories.localeCompare(b.categories),
     },
 
     {
-      title: 'Active',
+      title: this.translate.instant('Active'),
       compare: (a: DataItem, b: DataItem) => a.isActive - b.isActive,
     },
     {
@@ -275,7 +276,8 @@ export class RiskPlansComponent implements OnInit {
     private message: NzMessageService,
     private modalService: NzModalService,
     private dataService: DataService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {

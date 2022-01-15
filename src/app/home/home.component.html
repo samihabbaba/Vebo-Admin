@@ -3,7 +3,7 @@
     <nz-card>
       <div class="d-flex justify-content-between align-items-center">
         <div>
-          <p class="m-b-0">Cash</p>
+          <p class="m-b-0">{{ "Cash" | translate }}</p>
           <h2 class="m-b-0">
             <span>$14,966</span>
           </h2>
@@ -20,7 +20,7 @@
     <nz-card>
       <div class="d-flex justify-content-between align-items-center">
         <div>
-          <p class="m-b-0">Credit Limit</p>
+          <p class="m-b-0">{{ "Credit Limit" | translate }}</p>
           <h2 class="m-b-0">
             <span>26.80%</span>
           </h2>
@@ -37,7 +37,7 @@
     <nz-card>
       <div class="d-flex justify-content-between align-items-center">
         <div>
-          <p class="m-b-0">Used Credit</p>
+          <p class="m-b-0">{{ "Used Credit" | translate }}</p>
           <h2 class="m-b-0">
             <span>3057</span>
           </h2>
@@ -54,7 +54,7 @@
     <nz-card>
       <div class="d-flex justify-content-between align-items-center">
         <div>
-          <p class="m-b-0">Remaining Credit</p>
+          <p class="m-b-0">{{ "Remaining Credit" | translate }}</p>
           <h2 class="m-b-0">
             <span>$6,138</span>
           </h2>
@@ -74,7 +74,7 @@
     <nz-card>
       <div class="d-flex justify-content-between align-items-center">
         <div>
-          <p class="m-b-0">Withdraw</p>
+          <p class="m-b-0">{{ "Withdraw" | translate }}</p>
           <h2 class="m-b-0">
             <span>$14,966</span>
           </h2>
@@ -91,7 +91,7 @@
     <nz-card>
       <div class="d-flex justify-content-between align-items-center">
         <div>
-          <p class="m-b-0">Deposit</p>
+          <p class="m-b-0">{{ "Deposit" | translate }}</p>
           <h2 class="m-b-0">
             <span>26.80%</span>
           </h2>
@@ -108,7 +108,7 @@
     <nz-card>
       <div class="d-flex justify-content-between align-items-center">
         <div>
-          <p class="m-b-0">Commission</p>
+          <p class="m-b-0">{{ "Commission" | translate }}</p>
           <h2 class="m-b-0">
             <span>3057</span>
           </h2>
@@ -125,7 +125,7 @@
     <nz-card>
       <div class="d-flex justify-content-between align-items-center">
         <div>
-          <p class="m-b-0">Pending Commission</p>
+          <p class="m-b-0">{{ "Pending Commission" | translate }}</p>
           <h2 class="m-b-0">
             <span>$6,138</span>
           </h2>
@@ -144,7 +144,7 @@
   <div class="col-lg-3">
     <nz-card>
       <div class="d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">Navigation</h5>
+        <h5 class="mb-0">{{ "Navigation" | translate }}</h5>
       </div>
       <div class="m-t-20">
         <div class="d-flex m-b-20">
@@ -158,11 +158,11 @@
           </div>
           <div class="m-l-20">
             <h5 class="m-b-0">
-              <a class="text-dark" routerLink="/risk-management/player-mode"
-                >Player Mode</a
-              >
+              <a class="text-dark" routerLink="/risk-management/player-mode">{{
+                "Player Mode" | translate
+              }}</a>
             </h5>
-            <p class="m-b-0">See player mode.</p>
+            <p class="m-b-0">{{ "See player mode." | translate }}</p>
           </div>
         </div>
         <div class="d-flex m-b-20">
@@ -176,9 +176,11 @@
           </div>
           <div class="m-l-20">
             <h5 class="m-b-0">
-              <a class="text-dark" routerLink="/bets/view-bets">View Bets</a>
+              <a class="text-dark" routerLink="/bets/view-bets">{{
+                "View Bets" | translate
+              }}</a>
             </h5>
-            <p class="m-b-0">View all played bets.</p>
+            <p class="m-b-0">{{ "View all played bets." | translate }}</p>
           </div>
         </div>
         <div class="d-flex m-b-20">
@@ -192,11 +194,11 @@
           </div>
           <div class="m-l-20">
             <h5 class="m-b-0">
-              <a class="text-dark" routerLink="/bets/risk-approval"
-                >Risk Approve</a
-              >
+              <a class="text-dark" routerLink="/bets/risk-approval">{{
+                "Risk Approve" | translate
+              }}</a>
             </h5>
-            <p class="m-b-0">Check your risk.</p>
+            <p class="m-b-0">{{ "Check your risk." | translate }}</p>
           </div>
         </div>
         <div class="d-flex">
@@ -210,9 +212,11 @@
           </div>
           <div class="m-l-20">
             <h5 class="m-b-0">
-              <a class="text-dark" routerLink="/users/customer">Customers</a>
+              <a class="text-dark" routerLink="/users/customer">{{
+                "Customers" | translate
+              }}</a>
             </h5>
-            <p class="m-b-0">All playing customers.</p>
+            <p class="m-b-0">{{ "All playing customers." | translate }}</p>
           </div>
         </div>
       </div>
@@ -222,7 +226,7 @@
   <div class="col-lg-3">
     <nz-card>
       <div class="d-flex justify-content-between align-items-center">
-        <h5>Total Stake</h5>
+        <h5>{{ "Total Stake" | translate }}</h5>
       </div>
       <div class="text-center m-v-45">
         <nz-progress
@@ -243,7 +247,7 @@
   <div class="col-lg-6">
     <nz-card>
       <div class="d-flex justify-content-between align-items-center">
-        <h5>Total Bets</h5>
+        <h5>{{ "Total Bets" | translate }}</h5>
         <!-- <div>
           <a
             class="text-dark font-size-20"
@@ -280,13 +284,13 @@
         <div class="d-inline-block m-r-30">
           <p class="m-b-0">
             <nz-badge nzStatus="default" [nzColor]="blue"></nz-badge>
-            <span>Online</span>
+            <span>{{'Online' | translate}}</span>
           </p>
         </div>
         <div class="d-inline-block">
           <p class="m-b-0">
             <nz-badge nzStatus="default" [nzColor]="blueLight"></nz-badge>
-            <span>Office</span>
+            <span>{{'Office' | translate}}</span>
           </p>
         </div>
       </div>

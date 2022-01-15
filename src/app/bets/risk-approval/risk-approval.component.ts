@@ -6,6 +6,7 @@ import { ExcelService } from 'src/app/shared/services/excel.service';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-risk-approval',
@@ -67,67 +68,67 @@ export class RiskApprovalComponent implements OnInit {
 
   orderColumnTransactions = [
     {
-      title: 'Id',
+      title: this.translate.instant('Id'),
       compare: (a: any, b: any) => a.id.localeCompare(b.id),
     },
     {
-      title: 'Username',
+      title: this.translate.instant('Username'),
       compare: (a: any, b: any) => a.username.localeCompare(b.username),
     },
     {
-      title: 'Parent',
+      title: this.translate.instant('Parent'),
       compare: (a: any, b: any) => a.parentName.localeCompare(b.parentName),
     },
 
     {
-      title: 'Sel. Mode',
+      title: this.translate.instant('Sel. Mode'),
       compare: (a: any, b: any) =>
         a.selectionType.localeCompare(b.selectionType),
     },
 
     {
-      title: 'Bet Type',
+      title: this.translate.instant('Bet Type'),
       compare: (a: any, b: any) => a.betType.localeCompare(b.betType),
     },
 
     {
-      title: '# Sel.',
+      title: this.translate.instant('# Sel.'),
       compare: (a: any, b: any) =>
         a.totalSelections.localeCompare(b.totalSelections),
     },
 
     {
-      title: 'Stake',
+      title: this.translate.instant('Stake'),
       compare: (a: any, b: any) => a.stake.localeCompare(b.stake),
     },
 
     {
-      title: 'E. Pay',
+      title: this.translate.instant('E. Pay'),
       compare: (a: any, b: any) => a.payout.localeCompare(b.payout),
     },
 
     {
-      title: 'E. Bonus',
+      title: this.translate.instant('E. Bonus'),
       compare: (a: any, b: any) => a.bonus.localeCompare(b.bonus),
     },
 
     {
-      title: 'Max Pay',
+      title: this.translate.instant('Max Pay'),
       compare: (a: any, b: any) => a.maxPayout.localeCompare(b.maxPayout),
     },
 
     {
-      title: 'Status',
+      title: this.translate.instant('Status'),
       compare: (a: any, b: any) => a.status.localeCompare(b.status),
     },
 
     {
-      title: 'Date',
+      title: this.translate.instant('Date'),
       compare: (a: any, b: any) => a.date.localeCompare(b.date),
     },
 
     {
-      title: 'Time',
+      title: this.translate.instant('Time'),
       compare: (a: any, b: any) => a.time.localeCompare(b.time),
     },
   ];
@@ -160,7 +161,8 @@ export class RiskApprovalComponent implements OnInit {
     public dataService: DataService,
     private message: NzMessageService,
     private excel: ExcelService,
-    public authService: AuthenticationService
+    public authService: AuthenticationService,
+    public translate: TranslateService
   ) {
     this.debounceSubject
       .pipe(debounceTime(500), distinctUntilChanged())

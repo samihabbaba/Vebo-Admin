@@ -2,7 +2,7 @@
   <div class="table-filter-container">
     <div class="twoRow">
       <div class="table-filter">
-        <span>Date Range</span>
+        <span>{{ "Date Range" | translate }}</span>
         <nz-range-picker
           nzFormat="dd-MM-yyyy"
           [(ngModel)]="userTransactionsDate"
@@ -13,7 +13,7 @@
 
     <div class="twoRow">
       <div class="table-filter">
-        <span>Stake</span>
+        <span>{{ "Stake" | translate }}</span>
         <nz-input-number
           [(ngModel)]="formToSubmit.stake"
           [nzMin]="0"
@@ -32,7 +32,7 @@
 
     <div class="twoRow">
       <div class="table-filter">
-        <span>Bonus</span>
+        <span>{{ "Bonus" | translate }}</span>
         <nz-input-number
           [(ngModel)]="formToSubmit.bonus"
           [nzMin]="0"
@@ -41,7 +41,7 @@
       </div>
 
       <div class="table-filter">
-        <span>Running Bets</span>
+        <span>{{ "Running Bets" | translate }}</span>
         <nz-input-number
           [(ngModel)]="formToSubmit.runningBets"
           [nzMin]="0"
@@ -52,7 +52,7 @@
 
     <div class="twoRow">
       <div class="table-filter">
-        <span>Voided Bets</span>
+        <span>{{ "Voided Bets" | translate }}</span>
         <nz-input-number
           [(ngModel)]="formToSubmit.voided"
           [nzMin]="0"
@@ -61,7 +61,7 @@
       </div>
 
       <div class="table-filter">
-        <span>Commission</span>
+        <span>{{ "Commission" | translate }}</span>
         <nz-input-number
           [(ngModel)]="formToSubmit.commission"
           [nzMin]="0"
@@ -82,7 +82,7 @@
         (click)="exportToExcelSheet()"
       >
         <i nz-icon nzType="download"></i>
-        Export To Excel
+        {{ "Export To Excel" | translate }}
       </button>
 
       <button
@@ -94,7 +94,7 @@
         [nzLoading]="userTransactionsLoading"
       >
         <i nz-icon nzType="search"></i>
-        Search
+        {{ "Search" | translate }}
       </button>
     </div>
   </div>
@@ -102,19 +102,22 @@
     <div class="col-lg-4">
       <nz-card>
         <div class="d-flex justify-content-between align-items-center">
-          <h5>SportBook</h5>
+          <h5>{{ "SportBook" | translate }}</h5>
         </div>
         <div class="m-t-30 m-b-30">
           <nz-list [nzItemLayout]="'horizontal'">
             <nz-list-item>
-              <nz-list-item-meta nzDescription="Stake">-> </nz-list-item-meta>
+              <nz-list-item-meta [nzDescription]="translate.instant('Stake')"
+                >->
+              </nz-list-item-meta>
               <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
                 {{ report.sportBookStake | number: "1.2-2" }} ₺
               </nz-tag>
             </nz-list-item>
 
             <nz-list-item>
-              <nz-list-item-meta nzDescription="Running Bets"
+              <nz-list-item-meta
+                [nzDescription]="translate.instant('Running Bets')"
                 >->
               </nz-list-item-meta>
               <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
@@ -123,28 +126,35 @@
             </nz-list-item>
 
             <nz-list-item>
-              <nz-list-item-meta nzDescription="Payout">-> </nz-list-item-meta>
+              <nz-list-item-meta [nzDescription]="translate.instant('Payout')"
+                >->
+              </nz-list-item-meta>
               <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
                 {{ report.sportBookPayout | number: "1.2-2" }} ₺
               </nz-tag>
             </nz-list-item>
 
             <nz-list-item>
-              <nz-list-item-meta nzDescription="Voided">-> </nz-list-item-meta>
+              <nz-list-item-meta [nzDescription]="translate.instant('Voided')"
+                >->
+              </nz-list-item-meta>
               <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
                 {{ report.sportBookVoided | number: "1.2-2" }} ₺
               </nz-tag>
             </nz-list-item>
 
             <nz-list-item>
-              <nz-list-item-meta nzDescription="Bonus">-> </nz-list-item-meta>
+              <nz-list-item-meta [nzDescription]="translate.instant('Bonus')"
+                >->
+              </nz-list-item-meta>
               <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
                 {{ report.sportBookBonus | number: "1.2-2" }} ₺
               </nz-tag>
             </nz-list-item>
 
             <nz-list-item>
-              <nz-list-item-meta nzDescription="Commission"
+              <nz-list-item-meta
+                [nzDescription]="translate.instant('Commission')"
                 >->
               </nz-list-item-meta>
               <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
@@ -154,7 +164,7 @@
           </nz-list>
         </div>
         <div class="d-flex justify-content-between align-items-center">
-          <h5>Profit</h5>
+          <h5>{{ "Profit" | translate }}</h5>
           <h5 style="margin-left: auto">
             {{ report.sportBookProfit | number: "1.2-2" }} ₺
           </h5>
@@ -165,19 +175,22 @@
     <div class="col-lg-4">
       <nz-card>
         <div class="d-flex justify-content-between align-items-center">
-          <h5>Layoff</h5>
+          <h5>{{ "Layoff" | translate }}</h5>
         </div>
         <div class="m-t-30 m-b-30">
           <nz-list [nzItemLayout]="'horizontal'">
             <nz-list-item>
-              <nz-list-item-meta nzDescription="Stake">-> </nz-list-item-meta>
+              <nz-list-item-meta [nzDescription]="translate.instant('Stake')"
+                >->
+              </nz-list-item-meta>
               <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
                 {{ report.layoffStake | number: "1.2-2" }} ₺
               </nz-tag>
             </nz-list-item>
 
             <nz-list-item>
-              <nz-list-item-meta nzDescription="Running Bets"
+              <nz-list-item-meta
+                [nzDescription]="translate.instant('Running Bets')"
                 >->
               </nz-list-item-meta>
               <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
@@ -186,28 +199,35 @@
             </nz-list-item>
 
             <nz-list-item>
-              <nz-list-item-meta nzDescription="Payout">-> </nz-list-item-meta>
+              <nz-list-item-meta [nzDescription]="translate.instant('Payout')"
+                >->
+              </nz-list-item-meta>
               <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
                 {{ report.layoffPayout | number: "1.2-2" }} ₺
               </nz-tag>
             </nz-list-item>
 
             <nz-list-item>
-              <nz-list-item-meta nzDescription="Voided">-> </nz-list-item-meta>
+              <nz-list-item-meta [nzDescription]="translate.instant('Voided')"
+                >->
+              </nz-list-item-meta>
               <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
                 {{ report.layoffVoided | number: "1.2-2" }} ₺
               </nz-tag>
             </nz-list-item>
 
             <nz-list-item>
-              <nz-list-item-meta nzDescription="Bonus">-> </nz-list-item-meta>
+              <nz-list-item-meta [nzDescription]="translate.instant('Bonus')"
+                >->
+              </nz-list-item-meta>
               <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
                 {{ report.layoffBonus | number: "1.2-2" }} ₺
               </nz-tag>
             </nz-list-item>
 
             <nz-list-item>
-              <nz-list-item-meta nzDescription="Commission"
+              <nz-list-item-meta
+                [nzDescription]="translate.instant('Commission')"
                 >->
               </nz-list-item-meta>
               <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
@@ -217,7 +237,7 @@
           </nz-list>
         </div>
         <div class="d-flex justify-content-between align-items-center">
-          <h5>Profit</h5>
+          <h5>{{ "Profit" | translate }}</h5>
           <h5 style="margin-left: auto">
             {{ report.layoffProfit | number: "1.2-2" }} ₺
           </h5>
@@ -228,12 +248,13 @@
     <div class="col-lg-4">
       <nz-card>
         <div class="d-flex justify-content-between align-items-center">
-          <h5>Banking</h5>
+          <h5>{{ "Banking" | translate }}</h5>
         </div>
         <div class="m-t-30 m-b-30">
           <nz-list [nzItemLayout]="'horizontal'">
             <nz-list-item>
-              <nz-list-item-meta nzDescription="Deposited"
+              <nz-list-item-meta
+                [nzDescription]="translate.instant('Deposited')"
                 >->
               </nz-list-item-meta>
               <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
@@ -242,7 +263,8 @@
             </nz-list-item>
 
             <nz-list-item>
-              <nz-list-item-meta nzDescription="Deposit Cost"
+              <nz-list-item-meta
+                [nzDescription]="translate.instant('Deposit Cost')"
                 >->
               </nz-list-item-meta>
               <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
@@ -251,7 +273,8 @@
             </nz-list-item>
 
             <nz-list-item>
-              <nz-list-item-meta nzDescription="Withdrawal"
+              <nz-list-item-meta
+                [nzDescription]="translate.instant('Withdrawal')"
                 >->
               </nz-list-item-meta>
               <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
@@ -260,7 +283,8 @@
             </nz-list-item>
 
             <nz-list-item>
-              <nz-list-item-meta nzDescription="Withdrawal Cost"
+              <nz-list-item-meta
+                [nzDescription]="translate.instant('Withdrawal Cost')"
                 >->
               </nz-list-item-meta>
               <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
@@ -269,7 +293,8 @@
             </nz-list-item>
 
             <nz-list-item>
-              <nz-list-item-meta nzDescription="Previous Cash Balance"
+              <nz-list-item-meta
+                [nzDescription]="translate.instant('Previous Cash Balance')"
                 >->
               </nz-list-item-meta>
               <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
@@ -278,7 +303,8 @@
             </nz-list-item>
 
             <nz-list-item>
-              <nz-list-item-meta nzDescription="Current Balance"
+              <nz-list-item-meta
+                [nzDescription]="translate.instant('Current Balance')"
                 >->
               </nz-list-item-meta>
               <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
@@ -288,7 +314,7 @@
           </nz-list>
         </div>
         <div class="d-flex justify-content-between align-items-center">
-          <h5>Total</h5>
+          <h5>{{ "Total" | translate }}</h5>
           <h5 style="margin-left: auto">
             {{ report.total | number: "1.2-2" }} ₺
           </h5>
@@ -301,13 +327,13 @@
       <nz-card>
         <div class="d-flex justify-content-between align-items-center">
           <div style="flex: 1; display: flex; justify-content: space-around">
-            <h4>Credit Deposit</h4>
+            <h4>{{ "Credit Deposit" | translate }}</h4>
             <nz-tag class="m-r-0 m-b-0" [nzColor]="'blue'">
               {{ report.creditDeposit | number: "1.2-2" }} ₺
             </nz-tag>
           </div>
           <div style="flex: 1; display: flex; justify-content: space-around">
-            <h4>Credit Withdraw</h4>
+            <h4>{{ "Credit Withdraw" | translate }}</h4>
             <nz-tag class="m-r-0 m-b-0" [nzColor]="'blue'">
               {{ report.creditWithdraw | number: "1.2-2" }} ₺
             </nz-tag>
@@ -319,10 +345,16 @@
   <div class="row">
     <div class="col-md-12">
       <nz-card>
-        <div class="d-flex justify-content-between align-items-center" style="width: 50%; margin: 0 auto !important;">
+        <div
+          class="d-flex justify-content-between align-items-center"
+          style="width: 50%; margin: 0 auto !important"
+        >
           <div style="flex: 1; display: flex; justify-content: space-around">
-            <h3>Profit</h3>
-            <nz-tag class="m-r-0 m-b-0" [nzColor]="report.winLoss < 0 ? 'red' : 'green'">
+            <h3>{{ "Profit" | translate }}</h3>
+            <nz-tag
+              class="m-r-0 m-b-0"
+              [nzColor]="report.winLoss < 0 ? 'red' : 'green'"
+            >
               {{ report.winLoss | number: "1.2-2" }} ₺
             </nz-tag>
           </div>

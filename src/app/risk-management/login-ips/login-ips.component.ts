@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DataService } from 'src/app/shared/services/data.service';
@@ -26,10 +27,10 @@ export class LoginIpsComponent implements OnInit {
   dataSource = [];
   orderColumn = [
     {
-      title: 'IP',
+      title: this.translate.instant('IP'),
     },
     {
-      title: 'Accounts',
+      title: this.translate.instant('Accounts'),
     },
   ];
 
@@ -38,7 +39,8 @@ export class LoginIpsComponent implements OnInit {
     private message: NzMessageService,
     private modalService: NzModalService,
     private dataService: DataService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {

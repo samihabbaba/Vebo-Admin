@@ -6,6 +6,7 @@ import { ExcelService } from 'src/app/shared/services/excel.service';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-bet-office',
@@ -46,53 +47,53 @@ export class BetOfficeComponent implements OnInit {
 
   orderColumnTransactions = [
     {
-      title: 'Id',
+      title: this.translate.instant('Id'),
       compare: (a: any, b: any) => a.id.localeCompare(b.id),
     },
     {
-      title: 'Username',
+      title: this.translate.instant('Username'),
       compare: (a: any, b: any) => a.username.localeCompare(b.username),
     },
     {
-      title: 'Parent',
+      title: this.translate.instant('Parent'),
       compare: (a: any, b: any) => a.parentName.localeCompare(b.parentName),
     },
 
     {
-      title: '# Bets',
+      title: this.translate.instant('# Bets'),
       compare: (a: any, b: any) => a.betsNo.localeCompare(b.betsNo),
     },
 
     {
-      title: 'Bet Type',
+      title: this.translate.instant('Bet Type'),
       compare: (a: any, b: any) => a.betType.localeCompare(b.betType),
     },
 
     {
-      title: 'Sel. Mode',
+      title: this.translate.instant('Sel. Mode'),
       compare: (a: any, b: any) =>
         a.selectionType.localeCompare(b.selectionType),
     },
 
     {
-      title: '# Sel.',
+      title: this.translate.instant('# Sel.'),
       compare: (a: any, b: any) =>
         a.totalSelections.localeCompare(b.totalSelections),
     },
 
     {
-      title: 'Win. Sel.',
+      title: this.translate.instant('Win. Sel.'),
       compare: (a: any, b: any) =>
         a.winningSelections.localeCompare(b.winningSelections),
     },
 
     {
-      title: 'Odds',
+      title: this.translate.instant('Odds'),
       compare: (a: any, b: any) => a.odds.localeCompare(b.odds),
     },
 
     {
-      title: 'Stake',
+      title: this.translate.instant('Stake'),
       compare: (a: any, b: any) => a.stake.localeCompare(b.stake),
     },
 
@@ -102,47 +103,47 @@ export class BetOfficeComponent implements OnInit {
     // },
 
     {
-      title: 'E. Pay',
+      title: this.translate.instant('E. Pay'),
       compare: (a: any, b: any) => a.payout.localeCompare(b.payout),
     },
 
     {
-      title: 'E. Bonus',
+      title: this.translate.instant('E. Bonus'),
       compare: (a: any, b: any) => a.bonus.localeCompare(b.bonus),
     },
 
     {
-      title: 'Max Pay',
+      title: this.translate.instant('Max Pay'),
       compare: (a: any, b: any) => a.maxPayout.localeCompare(b.maxPayout),
     },
 
     {
-      title: 'Real Win',
+      title: this.translate.instant('Real Win'),
       compare: (a: any, b: any) => a.realWin.localeCompare(b.realWin),
     },
 
     {
-      title: 'Net',
+      title: this.translate.instant('Net'),
       compare: (a: any, b: any) => a.net.localeCompare(b.net),
     },
 
     {
-      title: 'Status',
+      title: this.translate.instant('Status'),
       compare: (a: any, b: any) => a.status.localeCompare(b.status),
     },
 
     {
-      title: 'Act. Date',
+      title: this.translate.instant('Act. Date'),
       compare: (a: any, b: any) => a.actionDate.localeCompare(b.actionDate),
     },
 
     {
-      title: 'Date',
+      title: this.translate.instant('Date'),
       compare: (a: any, b: any) => a.date.localeCompare(b.date),
     },
 
     {
-      title: 'Time',
+      title: this.translate.instant('Time'),
       compare: (a: any, b: any) => a.time.localeCompare(b.time),
     },
   ];
@@ -175,6 +176,7 @@ export class BetOfficeComponent implements OnInit {
     public dataService: DataService,
     private message: NzMessageService,
     private excel: ExcelService,
+    public translate: TranslateService,
     public authService: AuthenticationService
   ) {
     this.debounceSubject

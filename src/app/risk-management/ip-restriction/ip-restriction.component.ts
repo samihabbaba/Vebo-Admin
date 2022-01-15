@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Subject } from 'rxjs';
@@ -45,11 +46,11 @@ export class IpRestrictionComponent implements OnInit {
 
   orderColumn = [
     {
-      title: 'Id',
+      title: this.translate.instant('Id'),
     },
 
     {
-      title: 'Delete',
+      title: this.translate.instant('Delete'),
     },
   ];
 
@@ -59,7 +60,8 @@ export class IpRestrictionComponent implements OnInit {
     private message: NzMessageService,
     private modalService: NzModalService,
     private dataService: DataService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public translate: TranslateService
   ) {
     this.debounceSubject
       .pipe(debounceTime(500), distinctUntilChanged())

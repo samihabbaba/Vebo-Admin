@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DataService } from 'src/app/shared/services/data.service';
@@ -68,30 +69,30 @@ export class PaymentComponent implements OnInit {
 
   orderColumn = [
     {
-      title: 'Id',
+      title: this.translate.instant('Id'),
       compare: (a: DataItem, b: DataItem) => a.id.localeCompare(b.id),
     },
     {
-      title: 'Name',
+      title: this.translate.instant('Name'),
       compare: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name),
     },
     {
-      title: 'Balance',
+      title: this.translate.instant('Balance'),
       compare: (a: DataItem, b: DataItem) => a.balance.localeCompare(b.balance),
     },
     {
-      title: 'Deposit Percent',
+      title: this.translate.instant('Deposit Percent'),
       compare: (a: DataItem, b: DataItem) =>
         a.depositPercent.localeCompare(b.depositPercent),
     },
 
     {
-      title: 'Withdraw Percent',
+      title: this.translate.instant('Withdraw Percent'),
       compare: (a: DataItem, b: DataItem) =>
         a.withdrawPercent.localeCompare(b.withdrawPercent),
     },
     {
-      title: 'Active',
+      title: this.translate.instant('Active'),
       compare: (a: DataItem, b: DataItem) => a.isActive - b.isActive,
     },
     {
@@ -101,33 +102,33 @@ export class PaymentComponent implements OnInit {
 
   orderColumnTransactions = [
     {
-      title: 'Staff',
+      title: this.translate.instant('Staff'),
       compare: (a: any, b: any) => a.staff.localeCompare(b.staff),
     },
     {
-      title: 'Amount',
+      title: this.translate.instant('Amount'),
       compare: (a: any, b: any) => a.amount - b.amount,
     },
     {
-      title: 'Type',
+      title: this.translate.instant('Type'),
       compare: (a: any, b: any) => a.isDeposit - b.isDeposit,
     },
     {
-      title: 'Previous',
+      title: this.translate.instant('Previous'),
       compare: (a: any, b: any) => a.prevBalance - b.prevBalance,
     },
 
     {
-      title: 'Current',
+      title: this.translate.instant('Current'),
       compare: (a: any, b: any) => a.currentBalance - b.currentBalance,
     },
 
     {
-      title: 'Reference',
+      title: this.translate.instant('Reference'),
       compare: (a: any, b: any) => a.reference.localeCompare(b.reference),
     },
     {
-      title: 'Date',
+      title: this.translate.instant('Date'),
       compare: (a: any, b: any) => a.date.localeCompare(b.date),
     },
     // {
@@ -140,7 +141,8 @@ export class PaymentComponent implements OnInit {
     private message: NzMessageService,
     private modalService: NzModalService,
     public dataService: DataService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {

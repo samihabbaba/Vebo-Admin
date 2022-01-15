@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { DataService } from '../shared/services/data.service';
 
@@ -16,35 +17,36 @@ export class TransactionHistoryComponent implements OnInit {
   userTransactionsLoading: boolean = false;
   orderColumnTransactions = [
     {
-      title: 'User',
+      title: this.translate.instant('User'),
       compare: (a: any, b: any) => a.user.localeCompare(b.user),
     },
 
     {
-      title: 'Amount',
+      title: this.translate.instant('Amount'),
       compare: (a: any, b: any) => a.amount.localeCompare(b.amount),
     },
     {
-      title: 'Payment Type',
+      title: this.translate.instant('Payment Type'),
       compare: (a: any, b: any) => a.paymentType.localeCompare(b.paymentType),
     },
     {
-      title: 'Type',
+      title: this.translate.instant('Type'),
       compare: (a: any, b: any) => a.isDeposite - b.isDeposite,
     },
     {
-      title: 'Date',
+      title: this.translate.instant('Date'),
       compare: (a: any, b: any) => a.date.localeCompare(b.date),
     },
     {
-      title: 'Reference',
+      title: this.translate.instant('Reference'),
       compare: (a: any, b: any) => a.refrence.localeCompare(b.refrence),
     },
   ];
 
   constructor(
     private dataService: DataService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    public translate: TranslateService
   ) {}
 
   ngOnInit(): void {

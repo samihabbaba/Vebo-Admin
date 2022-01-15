@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DataService } from 'src/app/shared/services/data.service';
@@ -88,39 +89,39 @@ export class PromoterComponent implements OnInit {
 
   orderColumn = [
     {
-      title: 'Username',
+      title: this.translate.instant('Username'),
       compare: (a: DataItem, b: DataItem) =>
         a.username.localeCompare(b.username),
     },
     {
-      title: 'Name',
+      title: this.translate.instant('Name'),
       compare: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name),
     },
     {
-      title: 'Parent',
+      title: this.translate.instant('Parent'),
       compare: (a: DataItem, b: DataItem) => a.parent.localeCompare(b.parent),
     },
     {
-      title: 'Cash Balance',
+      title: this.translate.instant('Cash Balance'),
       compare: (a: DataItem, b: DataItem) =>
         a.cashBalance.localeCompare(b.cashBalance),
     },
     {
-      title: 'Credit Balance',
+      title: this.translate.instant('Credit Balance'),
       compare: (a: DataItem, b: DataItem) =>
         a.creditBalance.localeCompare(b.creditBalance),
     },
     {
-      title: 'Real Balance',
+      title: this.translate.instant('Real Balance'),
       compare: (a: DataItem, b: DataItem) =>
         a.realBalance.localeCompare(b.realBalance),
     },
     {
-      title: 'Active',
+      title: this.translate.instant('Active'),
       compare: (a: DataItem, b: DataItem) => a.isActive - b.isActive,
     },
     {
-      title: 'Suspended',
+      title: this.translate.instant('Suspended'),
       compare: (a: DataItem, b: DataItem) => a.isSuspended - b.isSuspended,
     },
     {
@@ -130,23 +131,23 @@ export class PromoterComponent implements OnInit {
 
   orderColumnTransactions = [
     {
-      title: 'Amount',
+      title: this.translate.instant('Amount'),
       compare: (a: any, b: any) => a.amount.localeCompare(b.amount),
     },
     {
-      title: 'Payment Type',
+      title: this.translate.instant('Payment Type'),
       compare: (a: any, b: any) => a.paymentType.localeCompare(b.paymentType),
     },
     {
-      title: 'Type',
+      title: this.translate.instant('Type'),
       compare: (a: any, b: any) => a.isDeposite - b.isDeposite,
     },
     {
-      title: 'Date',
+      title: this.translate.instant('Date'),
       compare: (a: any, b: any) => a.date.localeCompare(b.date),
     },
     {
-      title: 'Reference',
+      title: this.translate.instant('Reference'),
       compare: (a: any, b: any) => a.refrence.localeCompare(b.refrence),
     },
   ];
@@ -156,7 +157,8 @@ export class PromoterComponent implements OnInit {
     private message: NzMessageService,
     private modalService: NzModalService,
     public dataService: DataService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {

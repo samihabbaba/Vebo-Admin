@@ -14,6 +14,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Subscription } from 'rxjs';
@@ -41,19 +42,19 @@ export class LiveEventsComponent implements OnInit {
 
   orderColumn = [
     {
-      title: 'Home Team',
+      title: this.translate.instant('Home Team'),
       compare: (a: any, b: any) => a.homeTeam.localeCompare(b.homeTeam),
     },
     {
-      title: 'Away Team',
+      title: this.translate.instant('Away Team'),
       compare: (a: any, b: any) => a.awayTeam.localeCompare(b.awayTeam),
     },
     {
-      title: 'Date',
+      title: this.translate.instant('Date'),
       compare: (a: any, b: any) => a.date - b.date,
     },
     {
-      title: 'Odd Change',
+      title: this.translate.instant('Odd Change'),
       // compare: (a: any, b: any) => a.isActive - b.isActive,
     },
     {
@@ -67,7 +68,8 @@ export class LiveEventsComponent implements OnInit {
     private dataService: DataService,
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
-    private zone: NgZone
+    private zone: NgZone,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {

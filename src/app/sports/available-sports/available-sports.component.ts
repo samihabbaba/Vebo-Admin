@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DataService } from 'src/app/shared/services/data.service';
@@ -29,19 +30,19 @@ export class AvailableSportsComponent implements OnInit {
 
   orderColumn = [
     {
-      title: 'Id',
+      title: this.translate.instant('Id'),
       compare: (a: any, b: any) => a.sportId - b.sportId,
     },
     {
-      title: 'Name',
+      title: this.translate.instant('Name'),
       compare: (a: any, b: any) => a.name.localeCompare(b.name),
     },
     {
-      title: 'Category',
+      title: this.translate.instant('Category'),
       compare: (a: any, b: any) => a.category.localeCompare(b.category),
     },
     {
-      title: 'Active',
+      title: this.translate.instant('Active'),
       compare: (a: any, b: any) => a.isActive - b.isActive,
     },
     {
@@ -53,7 +54,8 @@ export class AvailableSportsComponent implements OnInit {
     private message: NzMessageService,
     private modalService: NzModalService,
     private dataService: DataService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {}

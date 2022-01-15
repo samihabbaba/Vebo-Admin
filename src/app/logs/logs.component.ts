@@ -4,6 +4,7 @@ import { AuthenticationService } from 'src/app/shared/services/authentication.se
 import { DataService } from 'src/app/shared/services/data.service';
 import { ExcelService } from 'src/app/shared/services/excel.service';
 import * as _ from 'lodash';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-logs',
@@ -33,40 +34,40 @@ export class LogsComponent implements OnInit {
 
   orderColumnTransactions = [
     {
-      title: 'Id',
+      title: this.translate.instant('Id'),
       compare: (a: any, b: any) => a.id.localeCompare(b.id),
     },
     {
-      title: 'Level',
+      title: this.translate.instant('Level'),
       compare: (a: any, b: any) => a.level.localeCompare(b.level),
     },
     {
-      title: 'Logged At',
+      title: this.translate.instant('Logged At'),
       compare: (a: any, b: any) => a.logged.localeCompare(b.logged),
     },
 
     {
-      title: 'Message',
+      title: this.translate.instant('Message'),
       compare: (a: any, b: any) => a.message.localeCompare(b.message),
     },
 
     {
-      title: 'Type',
+      title: this.translate.instant('Type'),
       compare: (a: any, b: any) => a.type.localeCompare(b.type),
     },
 
     {
-      title: 'User',
+      title: this.translate.instant('User'),
       compare: (a: any, b: any) => a.user.localeCompare(b.user),
     },
 
     {
-      title: 'IP',
+      title: this.translate.instant('IP'),
       compare: (a: any, b: any) => a.ip.localeCompare(b.ip),
     },
 
     {
-      title: 'User Agent',
+      title: this.translate.instant('User Agent'),
       compare: (a: any, b: any) => a.userAgent.localeCompare(b.userAgent),
     },
   ];
@@ -75,7 +76,8 @@ export class LogsComponent implements OnInit {
     public dataService: DataService,
     private message: NzMessageService,
     private excel: ExcelService,
-    public authService: AuthenticationService
+    public authService: AuthenticationService,
+    public translate: TranslateService
   ) {}
 
   ngOnInit(): void {
