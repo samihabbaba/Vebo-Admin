@@ -18,6 +18,11 @@ export class HeaderComponent {
   quickViewVisible: boolean = false;
   isFolded: boolean;
   isExpand: boolean;
+  companyLogo: string = 'E';
+
+  theme() {
+console.log(this.selectedHeaderColor)
+  }
 
   moreObj: any = {
     path: '',

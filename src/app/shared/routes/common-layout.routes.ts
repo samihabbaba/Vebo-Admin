@@ -1,10 +1,7 @@
 import { Routes } from '@angular/router';
 import { UserInfoComponent } from 'src/app/users/user-info/user-info.component';
 
-
 export const CommonLayout_ROUTES: Routes = [
-  // HERE IS MY PART
-
   { path: 'user-info/:id', component: UserInfoComponent },
 
   {

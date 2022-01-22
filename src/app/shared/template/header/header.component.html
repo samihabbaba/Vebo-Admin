@@ -1,6 +1,6 @@
 <div class="header">
   <div class="logo">
-    <a href="">
+    <!-- <a href="">
       <img src="assets/images/logo/logo-fold.png" alt="Logo" />
 
       <img
@@ -8,7 +8,11 @@
         src="assets/images/logo/logo-fold.png"
         alt="Logo"
       />
-    </a>
+    </a> -->
+    <div class="center">
+      <div class="hexagon  {{ selectedHeaderColor }}"></div>
+    </div>
+    <div class="companyLogo">{{ companyLogo }}</div>
   </div>
   <div class="nav-wrap">
     <ul class="nav-left">
@@ -156,7 +160,7 @@
         </span>
         <nz-dropdown-menu #profile="nzDropdownMenu">
           <ul nz-menu class="p-b-15 p-t-20">
-            <h5 class="m-b-0 m-l-10">{{'Color' | translate}}</h5>
+            <h5 class="m-b-0 m-l-10">{{ "Color" | translate }}</h5>
             <div class="m-t-10 theme-color-container">
               <nz-radio-group
                 class="color-selector"
