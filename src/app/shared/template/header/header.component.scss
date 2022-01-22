@@ -15,6 +15,23 @@ $hexagon-color-6: #886cff;
 $hexagon-color-7: #ff7c7c;
 $hexagon-color-8: #de4436;
 
+nz-avatar {
+  &.success {
+    color: #04d992;
+  }
+
+  &.default {
+    color: #3f87f5;
+  }
+
+  &.secondary {
+    color: #886cff;
+  }
+
+  &.danger {
+    color: #de4436;
+  }
+}
 
 .hexagon {
   $hexagon-size: 42px;

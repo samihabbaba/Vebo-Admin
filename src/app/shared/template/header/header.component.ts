@@ -20,10 +20,6 @@ export class HeaderComponent {
   isExpand: boolean;
   companyLogo: string = 'E';
 
-  theme() {
-console.log(this.selectedHeaderColor)
-  }
-
   moreObj: any = {
     path: '',
     title: 'More',
@@ -117,4 +113,6 @@ console.log(this.selectedHeaderColor)
   logOut() {
     this.authService.logout();
   }
+
+  companyLogoClick() {}
 }

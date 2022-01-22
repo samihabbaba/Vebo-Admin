@@ -6,8 +6,6 @@
   }
 }
 
-
-
 .ant-menu-inline,
 .ant-menu-vertical,
 .ant-menu-vertical-left {
@@ -38,7 +36,6 @@
   height: $menu-spacing-y;
 }
 
-
 .ant-menu-item {
   > a {
     color: $menu-text;
@@ -53,8 +50,6 @@
   font-weight: $font-weight-light;
   margin-top: 0.9375rem;
 }
-
-
 
 .ant-menu-dark {
   background-color: $menu-dark-bg;
@@ -133,16 +128,11 @@
   }
 }
 
-
 .ant-menu-dark .ant-menu-sub,
 .ant-menu.ant-menu-dark,
 .ant-menu.ant-menu-dark .ant-menu-sub {
   background: $menu-dark-bg;
 }
-
-
-
-
 
 .is-default {
   .ant-menu {
@@ -319,10 +309,6 @@
   }
 }
 
-
-
-
-
 .is-success {
   .ant-menu {
     font-size: $font-size-base;
@@ -497,7 +483,6 @@
     background-color: $brand-success;
   }
 }
-
 
 .is-secondary {
   .ant-menu {
@@ -674,7 +659,6 @@
   }
 }
 
-
 .is-danger {
   .ant-menu {
     font-size: $font-size-base;
@@ -783,11 +767,7 @@
         .ant-menu-submenu-arrow {
           &:after,
           &:before {
-            background: linear-gradient(
-              to right,
-              $brand-danger,
-              $brand-danger
-            );
+            background: linear-gradient(to right, $brand-danger, $brand-danger);
           }
         }
       }
@@ -796,11 +776,7 @@
         .ant-menu-submenu-arrow {
           &:after,
           &:before {
-            background: linear-gradient(
-              to right,
-              $brand-danger,
-              $brand-danger
-            );
+            background: linear-gradient(to right, $brand-danger, $brand-danger);
           }
         }
       }
@@ -849,3 +825,5 @@
     background-color: $brand-danger;
   }
 }
+
+

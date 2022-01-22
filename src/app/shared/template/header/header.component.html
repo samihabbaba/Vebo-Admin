@@ -9,7 +9,7 @@
         alt="Logo"
       />
     </a> -->
-    <div class="center">
+    <div class="center" (click)="companyLogoClick()">
       <div class="hexagon  {{ selectedHeaderColor }}"></div>
     </div>
     <div class="companyLogo">{{ companyLogo }}</div>
@@ -42,6 +42,7 @@
               *ngIf="item.submenu.length === 0"
               nz-menu-item
               routerLinkActive="ant-menu-item-selected"
+              [routerLinkActiveOptions]="{ exact: false }"
               [routerLink]="item.path"
             >
               <i nz-icon [nzType]="item.icon"></i>
@@ -156,7 +157,10 @@
           [nzTrigger]="'click'"
           [nzPlacement]="'bottomRight'"
         >
-          <nz-avatar [nzIcon]="'user'"></nz-avatar>
+          <nz-avatar
+            class="{{ selectedHeaderColor }}"
+            [nzIcon]="'user'"
+          ></nz-avatar>
         </span>
         <nz-dropdown-menu #profile="nzDropdownMenu">
           <ul nz-menu class="p-b-15 p-t-20">
