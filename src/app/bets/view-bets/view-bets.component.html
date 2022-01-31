@@ -2,36 +2,38 @@
   <div class="table-filter-container">
     <div class="twoRow">
       <div class="table-filter">
-        <span>Bet ID / Team name</span>
-        <input
-          nz-input
-          placeholder="Bet ID / Team name"
-          [(ngModel)]="betId"
-          (keyup)="debounceSubject.next($event)"
-        />
+        <span>Selection Mode</span>
+
+        <nz-select [(ngModel)]="selectionMode">
+          <nz-option nzValue="" nzLabel="All"></nz-option>
+          <nz-option nzValue="Live" nzLabel="Live"></nz-option>
+          <nz-option nzValue="Pre-Match" nzLabel="Pre-Match"></nz-option>
+          <nz-option nzValue="Mixed" nzLabel="Mixed"></nz-option>
+        </nz-select>
       </div>
 
       <div class="table-filter">
-        <span>Username</span>
-        <div class="example-input">
-          <input
-            placeholder="Username"
-            nz-input
-            [(ngModel)]="usernameValue"
-            (ngModelChange)="usernameChange($event)"
-            [nzAutocomplete]="auto"
-          />
-          <nz-autocomplete #auto>
-            <nz-auto-option
-              *ngFor="let option of filteredUsernames"
-              [nzValue]="option"
-              [nzLabel]="option.username"
-              (selectionChange)="onUsernameSelection($event)"
-            >
-              {{ option.username }}
-            </nz-auto-option>
-          </nz-autocomplete>
-        </div>
+        <span>Bet Type</span>
+
+        <nz-select [(ngModel)]="betType">
+          <nz-option nzValue="" nzLabel="All"></nz-option>
+          <nz-option nzValue="1" nzLabel="Single"></nz-option>
+          <nz-option nzValue="2" nzLabel="Multiple"></nz-option>
+          <nz-option nzValue="3" nzLabel="System"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="table-filter">
+        <span>Status</span>
+
+        <nz-select [(ngModel)]="status">
+          <nz-option nzValue="" nzLabel="All"></nz-option>
+          <nz-option nzValue="Win" nzLabel="Win"></nz-option>
+          <nz-option nzValue="Lose" nzLabel="Lose"></nz-option>
+          <nz-option nzValue="Pending" nzLabel="Pending"></nz-option>
+          <nz-option nzValue="Settled" nzLabel="Settled"></nz-option>
+          <nz-option nzValue="Void" nzLabel="Void"></nz-option>
+        </nz-select>
       </div>
     </div>
 
@@ -48,13 +50,6 @@
 
     <div class="twoRow">
       <div style="display: flex">
-        <div class="actionDate">
-          <nz-switch
-            [(ngModel)]="switchValue"
-            style="text-align: center"
-          ></nz-switch>
-          Action Date
-        </div>
         <button
           *ngIf="authService.decodedToken.role === 'Master'"
           nz-tooltip
@@ -94,11 +89,7 @@
     >
       <i
         nz-icon
-        [nzType]="
-          paramExpansion.classList.contains('active')
-            ? 'up'
-            : 'down'
-        "
+        [nzType]="paramExpansion.classList.contains('active') ? 'up' : 'down'"
       ></i>
     </button>
 
@@ -109,38 +100,36 @@
       appParamExpansion
     >
       <div class="table-filter">
-        <span>Selection Mode</span>
-
-        <nz-select [(ngModel)]="selectionMode">
-          <nz-option nzValue="" nzLabel="All"></nz-option>
-          <nz-option nzValue="Live" nzLabel="Live"></nz-option>
-          <nz-option nzValue="Pre-Match" nzLabel="Pre-Match"></nz-option>
-          <nz-option nzValue="Mixed" nzLabel="Mixed"></nz-option>
-        </nz-select>
+        <span>Bet ID / Team name</span>
+        <input
+          nz-input
+          placeholder="Bet ID / Team name"
+          [(ngModel)]="betId"
+          (keyup)="debounceSubject.next($event)"
+        />
       </div>
 
       <div class="table-filter">
-        <span>Bet Type</span>
-
-        <nz-select [(ngModel)]="betType">
-          <nz-option nzValue="" nzLabel="All"></nz-option>
-          <nz-option nzValue="1" nzLabel="Single"></nz-option>
-          <nz-option nzValue="2" nzLabel="Multiple"></nz-option>
-          <nz-option nzValue="3" nzLabel="System"></nz-option>
-        </nz-select>
-      </div>
-
-      <div class="table-filter">
-        <span>Status</span>
-
-        <nz-select [(ngModel)]="status">
-          <nz-option nzValue="" nzLabel="All"></nz-option>
-          <nz-option nzValue="Win" nzLabel="Win"></nz-option>
-          <nz-option nzValue="Lose" nzLabel="Lose"></nz-option>
-          <nz-option nzValue="Pending" nzLabel="Pending"></nz-option>
-          <nz-option nzValue="Settled" nzLabel="Settled"></nz-option>
-          <nz-option nzValue="Void" nzLabel="Void"></nz-option>
-        </nz-select>
+        <span>Username</span>
+        <div class="example-input">
+          <input
+            placeholder="Username"
+            nz-input
+            [(ngModel)]="usernameValue"
+            (ngModelChange)="usernameChange($event)"
+            [nzAutocomplete]="auto"
+          />
+          <nz-autocomplete #auto>
+            <nz-auto-option
+              *ngFor="let option of filteredUsernames"
+              [nzValue]="option"
+              [nzLabel]="option.username"
+              (selectionChange)="onUsernameSelection($event)"
+            >
+              {{ option.username }}
+            </nz-auto-option>
+          </nz-autocomplete>
+        </div>
       </div>
 
       <div class="table-filter">
@@ -176,6 +165,14 @@
           [nzMin]="0"
           [nzStep]="1"
         ></nz-input-number>
+      </div>
+
+      <div class="actionDate">
+        <nz-switch
+          [(ngModel)]="switchValue"
+          style="text-align: center"
+        ></nz-switch>
+        Action Date
       </div>
     </div>
   </div>
