@@ -91,7 +91,7 @@ export class RiskPlansComponent implements OnInit {
   laodPromoters() {
     if (this.authService.decodedToken.role === 'Shop') {
       this.disableShop = true;
-
+      this.disablePromoter = true;
       return;
     }
     if (this.authService.decodedToken.role === 'Promoter') {

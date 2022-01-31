@@ -132,6 +132,7 @@
           Action Date
         </div>
         <button
+          *ngIf="authService.decodedToken.role === 'Master'"
           nz-tooltip
           nzTooltipTitle="Download Bets"
           style="margin: 0.3rem"
@@ -238,7 +239,10 @@
               <i nz-icon nzType="stop"></i>
               {{ item.id }}
             </button>
-            <div style="text-align: center" *ngIf=" this.authService.decodedToken.role !== 'Master'">
+            <div
+              style="text-align: center"
+              *ngIf="this.authService.decodedToken.role !== 'Master'"
+            >
               {{ item.id }}
             </div>
           </td>

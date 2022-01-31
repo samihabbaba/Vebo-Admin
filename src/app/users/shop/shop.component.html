@@ -55,7 +55,15 @@
     <tbody>
       <ng-container *ngFor="let item of table.data; let i = index">
         <tr (click)="onExpandChange(item.id, $event)">
-          <td class="link-hover" [routerLink]="['/user-info/' + item.id]">
+          <td
+            class="link-hover"
+            *ngIf="authService.decodedToken.role === 'Master'"
+            [routerLink]="['/user-info/' + item.id]"
+          >
+            {{ item.username }}
+          </td>
+
+          <td *ngIf="authService.decodedToken.role !== 'Master'">
             {{ item.username }}
           </td>
           <td class="link-hover" (click)="showHistoryModal(item)">
@@ -179,8 +187,9 @@
               Change Password
             </li>
             <li
+
               nz-menu-item
-              *ngIf="!item.isSuspended"
+              *ngIf="!item.isSuspended && authService.decodedToken.role === 'Master'"
               (click)="suspendConfirm(item)"
             >
               <i
@@ -192,8 +201,9 @@
               Suspend
             </li>
             <li
+
               nz-menu-item
-              *ngIf="item.isSuspended"
+              *ngIf="item.isSuspended && authService.decodedToken.role === 'Master'"
               (click)="unsuspendConfirm(item)"
             >
               <i
@@ -205,8 +215,16 @@
               Unsuspend
             </li>
 
-            <li nz-menu-divider></li>
-            <li nz-menu-item nzDanger (click)="showDeleteConfirm(item)">
+            <li
+              nz-menu-divider
+              *ngIf="authService.decodedToken.role === 'Master'"
+            ></li>
+            <li
+              nz-menu-item
+              nzDanger
+              (click)="showDeleteConfirm(item)"
+              *ngIf="authService.decodedToken.role === 'Master'"
+            >
               <i
                 nz-icon
                 nzType="delete"
@@ -643,7 +661,6 @@
 
       <div style="display: flex">
         <label nz-checkbox formControlName="isActive">Active</label>
-
       </div>
     </form>
 
@@ -686,7 +703,6 @@
           ><i nz-icon nzType="folder"></i
         ></ng-template>
       </div>
-
 
       <div>
         <nz-form-label [nzSpan]="12">Bets Number</nz-form-label>
@@ -1055,7 +1071,7 @@
   <ng-container *nzModalContent>
     <div class="filters-container">
       <nz-range-picker
-       [nzAllowClear]="false"
+        [nzAllowClear]="false"
         nzFormat="dd-MM-yyyy"
         [(ngModel)]="userTransactionsDate"
       ></nz-range-picker>

@@ -8,6 +8,7 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { AuthenticationService } from 'src/app/shared/services/authentication.service';
 import { DataService } from 'src/app/shared/services/data.service';
 import { TableService } from 'src/app/shared/services/table.service';
 
@@ -162,7 +163,8 @@ export class CustomerComponent implements OnInit {
     private modalService: NzModalService,
     public dataService: DataService,
     private fb: FormBuilder,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public authService: AuthenticationService
   ) {}
 
   ngOnInit() {

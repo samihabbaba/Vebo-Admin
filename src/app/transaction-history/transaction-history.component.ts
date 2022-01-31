@@ -23,7 +23,7 @@ export class TransactionHistoryComponent implements OnInit {
 
     {
       title: this.translate.instant('Amount'),
-      compare: (a: any, b: any) => a.amount.localeCompare(b.amount),
+      compare: (a: any, b: any) => a.amount - b.amount,
     },
     {
       title: this.translate.instant('Payment Type'),

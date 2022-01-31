@@ -392,6 +392,7 @@ export const locale = {
     Decimal: 'Ondalık',
     Fractional: 'Kesirli',
     'BET SLIP': 'Bahis Kuponu',
+    'Self Transactions': 'Hareketlerim',
     Mapping: 'Eşleştirme',
     'Clear All': 'Hepsini Temizle',
     Save: 'Kaydet',

@@ -52,16 +52,18 @@ export class AuthGuard implements CanActivate {
     if (token) {
       const user = this.authService.decodedToken;
       // logged in so return true
-      console.log(state);
-      console.log(user);
       if (user.role === 'Master') {
         return true;
       }
-      if (user.role === 'Shop' && roles.shop.includes(state.url)) {
+      if (
+        (user.role === 'Shop' && roles.shop.includes(state.url))
+      ) {
         return true;
       }
 
-      if (user.role === 'Promoter' && roles.promoter.includes(state.url)) {
+      if (
+        (user.role === 'Promoter' && roles.promoter.includes(state.url)) 
+      ) {
         return true;
       }
 

@@ -49,7 +49,7 @@ export class HeaderComponent {
 
   constructor(
     private themeService: ThemeConstantService,
-    private authService: AuthenticationService,
+    public authService: AuthenticationService,
     private translationService: TranslationService,
     private router: Router
   ) {

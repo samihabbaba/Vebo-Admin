@@ -163,7 +163,14 @@
           ></nz-avatar>
         </span>
         <nz-dropdown-menu #profile="nzDropdownMenu">
-          <ul nz-menu class="p-b-15 p-t-20">
+          <ul
+            nz-menu
+            [ngClass]="{
+              'p-r-15': authService.decodedToken.role !== 'Master',
+              'p-l-15': authService.decodedToken.role !== 'Master'
+            }"
+            class="p-b-15 p-t-20"
+          >
             <h5 class="m-b-0 m-l-10">{{ "Color" | translate }}</h5>
             <div class="m-t-10 theme-color-container">
               <nz-radio-group
@@ -191,7 +198,11 @@
                                 </div>
                             </div>
                         </li> -->
-            <li nz-menu-item routerLink="/settings">
+            <li
+              nz-menu-item
+              *ngIf="authService.decodedToken.role === 'Master'"
+              routerLink="/settings"
+            >
               <a
                 style="color: #72849a"
                 class="p-v-5 d-flex align-items-center justify-content-between"
