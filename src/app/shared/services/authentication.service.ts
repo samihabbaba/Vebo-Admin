@@ -29,7 +29,7 @@ export class AuthenticationService {
       password: password,
     };
     // return this.http.post(`${environment.apiUrl}auth/admin/login`, model).pipe(
-    return this.http.post(`${environment.apiUrl}auth/admin/login`, model).pipe(
+    return this.http.post(`${environment.apiUrl}auth/master/login`, model).pipe(
       map((response: any) => {
         const user = response;
         if (user.token) {

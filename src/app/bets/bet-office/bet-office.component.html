@@ -1,4 +1,4 @@
-<nz-card>
+<nz-card style="position: relative">
   <div class="table-filter-container">
     <div class="twoRow">
       <div class="table-filter">
@@ -30,82 +30,6 @@
           [(ngModel)]="userTransactionsDate"
           [nzAllowClear]="false"
         ></nz-range-picker>
-      </div>
-    </div>
-
-    <div class="twoRow">
-      <div class="table-filter">
-        <span>Selection Mode</span>
-
-        <nz-select [(ngModel)]="selectionMode">
-          <nz-option nzValue="" nzLabel="All"></nz-option>
-          <nz-option nzValue="Live" nzLabel="Live"></nz-option>
-          <nz-option nzValue="Pre-Match" nzLabel="Pre-Match"></nz-option>
-          <nz-option nzValue="Mixed" nzLabel="Mixed"></nz-option>
-        </nz-select>
-      </div>
-
-      <div class="table-filter">
-        <span>Bet Type</span>
-
-        <nz-select [(ngModel)]="betType">
-          <nz-option nzValue="" nzLabel="All"></nz-option>
-          <nz-option nzValue="1" nzLabel="Single"></nz-option>
-          <nz-option nzValue="2" nzLabel="Multiple"></nz-option>
-          <nz-option nzValue="3" nzLabel="System"></nz-option>
-        </nz-select>
-      </div>
-
-      <div class="table-filter">
-        <span>Status</span>
-
-        <nz-select [(ngModel)]="status">
-          <nz-option nzValue="" nzLabel="All"></nz-option>
-          <nz-option nzValue="Win" nzLabel="Win"></nz-option>
-          <nz-option nzValue="Lose" nzLabel="Lose"></nz-option>
-          <nz-option nzValue="Pending" nzLabel="Pending"></nz-option>
-          <nz-option nzValue="Settled" nzLabel="Settled"></nz-option>
-          <nz-option nzValue="Void" nzLabel="Void"></nz-option>
-        </nz-select>
-      </div>
-    </div>
-
-    <div class="twoRow">
-      <div class="table-filter">
-        <span>Lower Stake</span>
-        <nz-input-number
-          [(ngModel)]="lowerStake"
-          [nzMin]="0"
-          [nzStep]="1"
-        ></nz-input-number>
-      </div>
-      <div class="table-filter">
-        <span>Higher Stake</span>
-        <nz-input-number
-          [(ngModel)]="higherStake"
-          [nzMin]="0"
-          [nzStep]="1"
-        ></nz-input-number>
-      </div>
-    </div>
-
-    <div class="twoRow">
-      <div class="table-filter">
-        <span>Lower Payout</span>
-        <nz-input-number
-          [(ngModel)]="lowerPayout"
-          [nzMin]="0"
-          [nzStep]="1"
-        ></nz-input-number>
-      </div>
-
-      <div class="table-filter">
-        <span>Higher Payout</span>
-        <nz-input-number
-          [(ngModel)]="higherPayout"
-          [nzMin]="0"
-          [nzStep]="1"
-        ></nz-input-number>
       </div>
     </div>
 
@@ -143,6 +67,98 @@
         <i nz-icon nzType="search"></i>
         Search
       </button>
+    </div>
+
+    <button
+      nz-tooltip
+      nzTooltipTitle="More"
+      class="expansion-button"
+      nz-button
+      nzType="primary"
+      (click)="this.arrowClick(); $event.stopPropagation()"
+      [nzSize]="'small'"
+    >
+      <i
+        nz-icon
+        [nzType]="paramExpansion.classList.contains('active') ? 'up' : 'down'"
+      ></i>
+    </button>
+
+    <div
+      #paramExpansion
+      class="expansion"
+      [ngClass]="{ active: paramExpanded }"
+      appParamExpansion
+    >
+      <div class="table-filter">
+        <span>Selection Mode</span>
+
+        <nz-select [(ngModel)]="selectionMode">
+          <nz-option nzValue="" nzLabel="All"></nz-option>
+          <nz-option nzValue="Live" nzLabel="Live"></nz-option>
+          <nz-option nzValue="Pre-Match" nzLabel="Pre-Match"></nz-option>
+          <nz-option nzValue="Mixed" nzLabel="Mixed"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="table-filter">
+        <span>Bet Type</span>
+
+        <nz-select [(ngModel)]="betType">
+          <nz-option nzValue="" nzLabel="All"></nz-option>
+          <nz-option nzValue="1" nzLabel="Single"></nz-option>
+          <nz-option nzValue="2" nzLabel="Multiple"></nz-option>
+          <nz-option nzValue="3" nzLabel="System"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="table-filter">
+        <span>Status</span>
+
+        <nz-select [(ngModel)]="status">
+          <nz-option nzValue="" nzLabel="All"></nz-option>
+          <nz-option nzValue="Win" nzLabel="Win"></nz-option>
+          <nz-option nzValue="Lose" nzLabel="Lose"></nz-option>
+          <nz-option nzValue="Pending" nzLabel="Pending"></nz-option>
+          <nz-option nzValue="Settled" nzLabel="Settled"></nz-option>
+          <nz-option nzValue="Void" nzLabel="Void"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="table-filter">
+        <span>Lower Stake</span>
+        <nz-input-number
+          [(ngModel)]="lowerStake"
+          [nzMin]="0"
+          [nzStep]="1"
+        ></nz-input-number>
+      </div>
+      <div class="table-filter">
+        <span>Higher Stake</span>
+        <nz-input-number
+          [(ngModel)]="higherStake"
+          [nzMin]="0"
+          [nzStep]="1"
+        ></nz-input-number>
+      </div>
+
+      <div class="table-filter">
+        <span>Lower Payout</span>
+        <nz-input-number
+          [(ngModel)]="lowerPayout"
+          [nzMin]="0"
+          [nzStep]="1"
+        ></nz-input-number>
+      </div>
+
+      <div class="table-filter">
+        <span>Higher Payout</span>
+        <nz-input-number
+          [(ngModel)]="higherPayout"
+          [nzMin]="0"
+          [nzStep]="1"
+        ></nz-input-number>
+      </div>
     </div>
   </div>
 

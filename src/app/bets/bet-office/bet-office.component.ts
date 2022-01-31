@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
 import { DataService } from 'src/app/shared/services/data.service';
@@ -44,6 +44,20 @@ export class BetOfficeComponent implements OnInit {
   debounceSubject = new Subject<any>();
 
   selectedParent: any = '';
+
+
+
+  paramExpanded: boolean = false;
+
+  @ViewChild('paramExpansion') paramExpansion: ElementRef;
+
+  arrowClick() {
+    if (this.paramExpansion.nativeElement.classList.contains('active')) {
+      this.paramExpansion.nativeElement.classList.remove('active');
+    } else {
+      this.paramExpansion.nativeElement.classList.add('active');
+    }
+  }
 
   orderColumnTransactions = [
     {

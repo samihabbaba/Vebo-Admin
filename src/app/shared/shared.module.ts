@@ -49,6 +49,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 import { TranslateModule } from '@ngx-translate/core';
+import { ParamExpansionDirective } from './directives/param-expansion.directive';
 
 const antdModule = [
   NzButtonModule,
@@ -102,6 +103,7 @@ const antdModule = [
         SubAccountShopComponent,
         TranslateModule,
         PrintSelectionComponent,
+        ParamExpansionDirective
     ],
     imports: [
         RouterModule,
@@ -122,6 +124,7 @@ const antdModule = [
         SubAccountPromoterComponent,
         SubAccountShopComponent,
         PrintSelectionComponent,
+        ParamExpansionDirective,
     ],
     providers: [
         ThemeConstantService,
