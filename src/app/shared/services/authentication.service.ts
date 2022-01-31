@@ -12,6 +12,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 const USER_AUTH_API_URL = '/api-url';
 
+
 @Injectable()
 export class AuthenticationService {
   decodedToken: any;
@@ -28,56 +29,16 @@ export class AuthenticationService {
       password: password,
     };
     // return this.http.post(`${environment.apiUrl}auth/admin/login`, model).pipe(
-      return this.http.post(`${environment.apiUrl}auth/master/login`, model).pipe(
+    return this.http.post(`${environment.apiUrl}auth/admin/login`, model).pipe(
       map((response: any) => {
-        console.log('reallogin  got from api back 3 - ' + new Date());
-
         const user = response;
         if (user.token) {
-          // localStorage.setItem("token", user.token);
-
-          if (
-            this.jwtHelper.decodeToken(user.token).role !== 'Master'
-            //   &&
-            // this.jwtHelper.decodeToken(user.token).role!=='Promoter'&&
-            // this.jwtHelper.decodeToken(user.token).role!=='Shop'&&
-            // this.jwtHelper.decodeToken(user.token).role!=='Office'
-          ) {
-            return null;
-          }
-          console.log('reallogin  4 - ' + new Date());
-
           localStorage.setItem('token', user.token);
           this.dataService.currentUser.token = user.token;
           this.decodedToken = this.jwtHelper.decodeToken(user.token);
 
-          // load signalR only if master admin
-          // if(this.decodedToken.master === "True"){
-          // if(this.decodedToken.role === "Master"){
-          //   this.signalR.startConnection();
-          //   this.signalR.addNewRiskApprovalListener();
-          //   this.signalR.addApprovedAndRejectedListener();
-          // }
-
-          // this.dataService.currentUser.name = this.decodedToken.name;
-          // this.dataService.currentUser.currency = this.decodedToken.currency;
-          // this.dataService.currentUser.symbol = this.decodedToken.symbol;
-          // this.dataService.currentUser.master = this.decodedToken.master;
-          // this.dataService.currentUser.agency = this.decodedToken.agency;
-          // this.dataService.currentUser.role = this.decodedToken.role;
-          // this.dataService.currentUser.id = this.decodedToken.id;
-
-          // this.dataService.httpOptions = {
-          //   headers: new HttpHeaders({
-          //     Authorization: "Bearer " + user.token,
-          //   }),
-          // };
-          console.log('reallogin  5 - ' + new Date());
-
           this.setCurrentUser();
-          console.log('reallogin  6 - ' + new Date());
 
-          // console.log(this.decodedToken);
           return user;
         } else {
           return null;
@@ -135,10 +96,10 @@ export class AuthenticationService {
     this.dataService.currentUser.token = token;
     this.decodedToken = this.jwtHelper.decodeToken(token);
 
-    if (this.decodedToken.role !== 'Master') {
-      this.logout();
-      return;
-    }
+    // if (this.decodedToken.role !== 'Master') {
+    //   this.logout();
+    //   return;
+    // }
 
     if (!this.validToken()) {
       this.logout();

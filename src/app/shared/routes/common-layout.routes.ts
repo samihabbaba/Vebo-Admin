@@ -69,6 +69,12 @@ export const CommonLayout_ROUTES: Routes = [
   },
 
   {
+    path: 'self-transactions',
+    loadChildren: () =>
+      import('../../self-transactions/self-transactions.module').then((m) => m.SelfTransactionsModule),
+  },
+
+  {
     path: 'settings',
     loadChildren: () =>
       import('../../account-settings/account-settings.module').then(

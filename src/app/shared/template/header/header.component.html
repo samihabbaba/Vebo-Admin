@@ -14,7 +14,7 @@
     </div>
     <div class="companyLogo">{{ companyLogo }}</div>
   </div>
-  <div class="nav-wrap">
+  <div class="nav-wrap" *ngIf="navItems">
     <ul class="nav-left">
       <!-- <li class="desktop-toggle">
                 <a (click)="toggleFold()">

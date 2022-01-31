@@ -13,7 +13,7 @@ import { NAVITEMS } from '../side-nav/side-nav-routes.config';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
-  navItems: SideNavInterface[] = [...NAVITEMS];
+  navItems: any[];
   searchVisible: boolean = false;
   quickViewVisible: boolean = false;
   isFolded: boolean;
@@ -63,6 +63,7 @@ export class HeaderComponent {
   }
 
   ngOnInit(): void {
+    this.setNavigation();
     this.setSelectedLanguage();
     this.router.events
       .pipe(filter((event) => event instanceof NavigationStart))
@@ -115,4 +116,142 @@ export class HeaderComponent {
   }
 
   companyLogoClick() {}
+
+  setNavigation() {
+    const items = [...NAVITEMS];
+
+    if (this.authService.decodedToken.role === 'Master') {
+      this.navItems = [...items];
+    }
+
+    if (this.authService.decodedToken.role === 'Promoter') {
+      this.navItems = [
+        {
+          path: '/home',
+          title: 'Dashboard',
+          iconTheme: 'outline',
+          iconType: 'nzIcon',
+          icon: 'dashboard',
+          submenu: [],
+        },
+
+        {
+          path: '/self-transactions',
+          title: 'Self Transactions',
+          iconTheme: 'outline',
+          iconType: 'nzIcon',
+          icon: 'setting',
+          submenu: [],
+        },
+
+        {
+          path: '',
+          title: 'Users',
+          iconTheme: 'outline',
+          iconType: 'nzIcon',
+          icon: 'team',
+          submenu: [
+            {
+              path: '/users/shop',
+              title: 'Shop',
+              iconType: '',
+              icon: '',
+              iconTheme: '',
+              submenu: [],
+            },
+
+            {
+              path: '/users/customer',
+              title: 'Customer',
+              iconType: '',
+              icon: '',
+              iconTheme: '',
+              submenu: [],
+            },
+          ],
+        },
+
+        {
+          path: '/risk-management/risk-plans',
+          title: 'Risk Plans',
+          iconTheme: 'outline',
+          iconType: 'nzIcon',
+          icon: 'warning',
+          submenu: [],
+        },
+
+        {
+          path: '/bets/view-bets',
+          title: 'View bets',
+          iconTheme: 'outline',
+          iconType: 'nzIcon',
+          icon: 'bank',
+          submenu: [],
+        },
+      ];
+    }
+
+    if (this.authService.decodedToken.role === 'Office') {
+      this.navItems = [
+        {
+          path: '/bets/bet-office',
+          title: 'Office Bets',
+          iconTheme: 'outline',
+          iconType: 'nzIcon',
+          icon: 'desktop',
+          submenu: [],
+        },
+      ];
+    }
+    if (this.authService.decodedToken.role === 'Shop') {
+
+
+      this.navItems = [
+        {
+          path: '/home',
+          title: 'Dashboard',
+          iconTheme: 'outline',
+          iconType: 'nzIcon',
+          icon: 'dashboard',
+          submenu: [],
+        },
+
+        {
+          path: '/self-transactions',
+          title: 'Self Transactions',
+          iconTheme: 'outline',
+          iconType: 'nzIcon',
+          icon: 'setting',
+          submenu: [],
+        },
+
+        {
+          path: '/users/customer',
+          title: 'Customer',
+          iconTheme: 'outline',
+          iconType: 'nzIcon',
+          icon: 'team',
+          submenu: [],
+        },
+
+        {
+          path: '/risk-management/risk-plans',
+          title: 'Risk Plans',
+          iconTheme: 'outline',
+          iconType: 'nzIcon',
+          icon: 'warning',
+          submenu: [],
+        },
+
+        {
+          path: '/bets/view-bets',
+          title: 'View bets',
+          iconTheme: 'outline',
+          iconType: 'nzIcon',
+          icon: 'bank',
+          submenu: [],
+        },
+      ];
+    }
+  }
 }

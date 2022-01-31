@@ -190,7 +190,8 @@
               *ngIf="
                 !item.isVoid &&
                 voidAvailable(item.date) &&
-                this.authService.decodedToken.master === 'False'
+                this.authService.decodedToken.master === 'False' &&
+                this.authService.decodedToken.role === 'Master'
               "
               nz-popconfirm
               [nzPopconfirmTitle]="
@@ -215,7 +216,8 @@
               *ngIf="
                 !item.isVoid &&
                 item.status == 'Pending' &&
-                this.authService.decodedToken.master === 'True'
+                this.authService.decodedToken.master === 'True' &&
+                this.authService.decodedToken.role === 'Master'
               "
               nz-popconfirm
               [nzPopconfirmTitle]="
@@ -236,8 +238,7 @@
               <i nz-icon nzType="stop"></i>
               {{ item.id }}
             </button>
-
-            <div style="text-align: center" *ngIf="item.status !== 'Pending'">
+            <div style="text-align: center" *ngIf=" this.authService.decodedToken.role !== 'Master'">
               {{ item.id }}
             </div>
           </td>
